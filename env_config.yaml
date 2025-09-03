@@ -1,0 +1,18 @@
+environments:
+  dev:
+    app_name: "MyApp Dev"
+    bundle_id: "com.example.myapp.dev"
+    variables:
+      API_URL: "https://api.dev.example.com"
+
+  staging:
+    app_name: "MyApp Staging"
+    bundle_id: "com.example.myapp.staging"
+    variables:
+      API_URL: "https://api.staging.example.com"
+
+  prod:
+    app_name: "MyApp"
+    bundle_id: "com.example.myapp"
+    variables:
+      API_URL: "https://api.example.com"

@@ -1,0 +1,151 @@
+name: Runner
+
+options:
+  deploymentTarget:
+    iOS: 15.0
+
+include:
+  - xcodegen/setting/base.yml
+
+configs:
+  Debug-dev: Debug-dev
+  Release-dev: Release-dev
+  Debug-staging: Debug-staging
+  Release-staging: Release-staging
+  Debug-prod: Debug-prod
+  Release-prod: Release-prod
+
+targets:
+  Runner:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug-dev: Flutter/Debug.xcconfig
+      Release-dev: Flutter/Release.xcconfig
+      Debug-staging: Flutter/Debug.xcconfig
+      Release-staging: Flutter/Release.xcconfig
+      Debug-prod: Flutter/Debug.xcconfig
+      Release-prod: Flutter/Release.xcconfig
+
+    sources:
+      #- GoogleService-Info.plist
+      - Flutter/AppFrameworkInfo.plist
+      - Flutter/Generated.xcconfig
+      - Flutter/Debug.xcconfig
+      - Flutter/Release.xcconfig
+      - path: Runner/
+
+    dependencies:
+      - sdk: Pods_Runner.framework
+        embed: false
+        link: true
+
+    preBuildScripts:
+      - name: '[CP] Check Pods Manifest.lock'
+        path: xcodegen/script/check_pods_manifest.sh
+        inputFiles:
+          - ${PODS_PODFILE_DIR_PATH}/Podfile.lock
+          - ${PODS_ROOT}/Manifest.lock
+        outputFiles:
+          - $(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt
+      - name: Run Script
+        path: xcodegen/script/run_script.sh
+
+    # If you use different Firebase Project for each environment, you can use this script.
+    # postCompileScripts:
+    #   - name: Select GoogleService-Info.plist
+    #     path: xcodegen/script/select_google_service_info_plist.sh
+    #     outputFiles:
+    #       - ${SRCROOT}/GoogleService-Info.plist
+
+    postBuildScripts:
+      - name: Thin Binary
+        path: xcodegen/script/thin_binary.sh
+        inputFiles:
+          - ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
+
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: NO
+        CLANG_ENABLE_MODULES: YES
+        CURRENT_PROJECT_VERSION: '$(FLUTTER_BUILD_NUMBER)'
+        # TODO: DEVELOPMENT_TEAM
+        # DEVELOPMENT_TEAM: YOUR_TEAM_ID
+        ENABLE_BITCODE: NO
+        INFOPLIST_FILE: Runner/Info.plist
+        SWIFT_OBJC_BRIDGING_HEADER: 'Runner/Runner-Bridging-Header.h'
+        SWIFT_VERSION: 5.0
+        VERSIONING_SYSTEM: 'apple-generic'
+      configs:
+        Release-dev:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-dev'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.dev
+          PRODUCT_NAME: 'MyApp Dev'
+        Debug-dev:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-dev'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.dev
+          PRODUCT_NAME: 'MyApp Dev'
+          SWIFT_OPTIMIZATION_LEVEL: '-Onone'
+        Release-staging:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-staging'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.staging
+          PRODUCT_NAME: 'MyApp Staging'
+        Debug-staging:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-staging'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.staging
+          PRODUCT_NAME: 'MyApp Staging'
+          SWIFT_OPTIMIZATION_LEVEL: '-Onone'
+        Release-prod:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-prod'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp
+          PRODUCT_NAME: 'MyApp'
+        Debug-prod:
+          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-prod'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp
+          PRODUCT_NAME: 'MyApp'
+          SWIFT_OPTIMIZATION_LEVEL: '-Onone'
+
+schemes:
+  dev:
+    build:
+      targets:
+        Runner: all
+    run:
+      config: Debug-dev
+    test:
+      config: Debug-dev
+    profile:
+      config: Release-dev
+    analyze:
+      config: Debug-dev
+    archive:
+      config: Release-dev
+  staging:
+    build:
+      targets:
+        Runner: all
+    run:
+      config: Debug-staging
+    test:
+      config: Debug-staging
+    profile:
+      config: Release-staging
+    analyze:
+      config: Debug-staging
+    archive:
+      config: Release-staging
+  prod:
+    build:
+      targets:
+        Runner: all
+    run:
+      config: Debug-prod
+    test:
+      config: Debug-prod
+    profile:
+      config: Release-prod
+    analyze:
+      config: Debug-prod
+    archive:
+      config: Release-prod
+

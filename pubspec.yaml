@@ -1,0 +1,71 @@
+name: root
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+
+workspace:
+  - app
+  - network
+  - shared
+  - translate
+  - domain
+  - tools
+
+dev_dependencies:
+  melos: ^7.1.0
+
+melos:
+  command:
+    bootstrap:
+      runPubGetInParallel: false
+
+  scripts:
+    # Package Management
+    pub_get:
+      run: flutter pub get
+      description: Run 'flutter pub get' in all packages.
+
+    pub_get_domain:
+      run: dart pub global run melos exec --fail-fast --scope="*domain*" "flutter pub get"
+      description: pub get domain module.
+
+    pub_get_network:
+      run: dart pub global run melos exec --fail-fast --scope="*network*" "flutter pub get"
+      description: pub get network module.
+
+    pub_get_shared:
+      run: dart pub global run melos exec --fail-fast --scope="*shared*" "flutter pub get"
+      description: pub get shared module.
+
+    build_runner_all:
+      run: |
+        melos exec --scope=shared -- "dart run build_runner build --delete-conflicting-outputs"
+        melos exec --scope=domain -- "dart run build_runner build --delete-conflicting-outputs"
+        melos exec --scope=network -- "dart run build_runner build --delete-conflicting-outputs"
+        melos exec --scope=app -- "dart run build_runner build --delete-conflicting-outputs"
+      description: Run build_runner in all packages.
+
+    build_runner_network:
+      run: dart pub global run melos exec --fail-fast --scope="*network*" --depends-on="build_runner" "dart run build_runner build --delete-conflicting-outputs"
+      description: build_runner build network module.
+
+    build_runner_domain:
+      run: dart pub global run melos exec --fail-fast --scope="*domain*" --depends-on="build_runner" "dart run build_runner build --delete-conflicting-outputs"
+      description: build_runner build domain module.
+
+    build_runner_app:
+      run: dart pub global run melos exec --fail-fast --scope="*app*" --depends-on="build_runner" "dart run build_runner build --delete-conflicting-outputs"
+      description: build_runner build app module.
+
+    build_runner_shared:
+      run: dart pub global run melos exec --fail-fast --scope="*shared*" --depends-on="build_runner" "dart run build_runner build --delete-conflicting-outputs"
+      description: build_runner build shared module.
+
+    l10n:
+      run: dart pub global run melos exec --fail-fast --scope="*translate*" --flutter -- dart run intl_utils:generate
+      description: Generates l10n for all app packages.
+
+    gen_env:
+      run: melos exec -- "flutter test --coverage"
+      description: Run Flutter tests for all packages.
