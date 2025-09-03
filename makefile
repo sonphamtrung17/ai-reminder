@@ -29,4 +29,4 @@ pub_get:
 	@melos bootstrap
 
 build_runner_all:
-	@melos build_runner_all
+	@melos run build_runner_all

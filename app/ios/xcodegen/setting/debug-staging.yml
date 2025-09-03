@@ -1,7 +1,7 @@
 settings:
   configs:
     Debug-staging:
-      APP_NAME: 'STAGING'
+      APP_NAME: 'AI Reminder Staging'
       DEBUG_INFORMATION_FORMAT: 'dwarf'
       ENABLE_TESTABILITY: YES
       GCC_DYNAMIC_NO_PIC: NO
@@ -13,4 +13,4 @@ settings:
       IPHONEOS_DEPLOYMENT_TARGET: 16.0
       MTL_ENABLE_DEBUG_INFO: YES
       ONLY_ACTIVE_ARCH: YES
-      PRODUCT_NAME: 'STAGING'
+      PRODUCT_NAME: 'AI Reminder Staging'

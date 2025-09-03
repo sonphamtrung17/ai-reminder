@@ -125,11 +125,10 @@ void _updateGradle(String path, String newFlavors) {
     multiLine: true,
   );
   final replacement =
-  '''
-  // FLAVOR-GEN-START
-  // DO NOT EDIT MANUALLY
-  $newFlavors
-  // FLAVOR-GEN-END''';
+  '''// FLAVOR-GEN-START
+// DO NOT EDIT MANUALLY
+$newFlavors
+// FLAVOR-GEN-END''';
 
   final updated = content.contains(pattern)
       ? content.replaceFirst(pattern, replacement)
@@ -425,15 +424,31 @@ void _generateXcodegenSettingFiles({
     _ok('📁 Đã tạo thư mục ${settingDir.path}');
   }
 
-  // Tạo file debug-<env>.yml và release-<env>.yml nếu chưa có
+  // Lấy danh sách tất cả các file yml hiện tại trong thư mục
+  final currentFiles = settingDir
+      .listSync()
+      .whereType<File>()
+      .where((f) => f.path.endsWith('.yml'))
+      .where((f) => !f.path.endsWith('base.yml'))
+      .toList();
+
+  // Tập hợp các file cần giữ lại
+  final Set<String> requiredFiles = {};
+
+  // Tạo hoặc cập nhật file debug-<env>.yml và release-<env>.yml cho mỗi environment
   environments.forEach((envKey, values) {
     final env = envKey.toString();
     final cfg = (values as YamlMap?) ?? YamlMap();
     final appName = cfg['app_name']?.toString() ?? env.toUpperCase();
 
-    final debugFile = File('$settingDirPath/debug-$env.yml');
-    if (!debugFile.existsSync()) {
-      debugFile.writeAsStringSync('''settings:
+    // Thêm vào danh sách file cần giữ lại
+    final debugPath = '$settingDirPath/debug-$env.yml';
+    final releasePath = '$settingDirPath/release-$env.yml';
+    requiredFiles.add(debugPath);
+    requiredFiles.add(releasePath);
+
+    // Luôn tạo mới file debug
+    final debugContent = '''settings:
   configs:
     Debug-$env:
       APP_NAME: '$appName'
@@ -449,13 +464,12 @@ void _generateXcodegenSettingFiles({
       MTL_ENABLE_DEBUG_INFO: YES
       ONLY_ACTIVE_ARCH: YES
       PRODUCT_NAME: '$appName'
-''');
-      _ok('🧩 Đã tạo $settingDirPath/debug-$env.yml');
-    }
+''';
+    File(debugPath).writeAsStringSync(debugContent);
+    _ok('✨ Đã cập nhật $debugPath');
 
-    final releaseFile = File('$settingDirPath/release-$env.yml');
-    if (!releaseFile.existsSync()) {
-      releaseFile.writeAsStringSync('''settings:
+    // Luôn tạo mới file release
+    final releaseContent = '''settings:
   configs:
     Release-$env:
       APP_NAME: $appName
@@ -467,26 +481,54 @@ void _generateXcodegenSettingFiles({
       SWIFT_COMPILATION_MODE: wholemodule
       SWIFT_OPTIMIZATION_LEVEL: "-O"
       VALIDATE_PRODUCT: YES
-''');
-      _ok('🧩 Đã tạo $settingDirPath/release-$env.yml');
-    }
+''';
+    File(releasePath).writeAsStringSync(releaseContent);
+    _ok('✨ Đã cập nhật $releasePath');
   });
 
-  // Cập nhật include trong base.yml nếu thiếu
+  // Xóa các file không còn được sử dụng
+  for (final file in currentFiles) {
+    if (!requiredFiles.contains(file.path)) {
+      file.deleteSync();
+      _ok('🗑️ Đã xóa ${file.path} vì không còn được sử dụng');
+    }
+  }
+
+  // Cập nhật base.yml với danh sách includes mới
   final baseFile = File('$settingDirPath/base.yml');
   if (!baseFile.existsSync()) {
     _warn('Thiếu base.yml tại $settingDirPath, bỏ qua cập nhật include.');
     return;
   }
-  var baseContent = baseFile.readAsStringSync();
-  environments.keys.forEach((envKey) {
+
+  // Tạo nội dung includes mới với markers
+  final includesContent = environments.keys.map((envKey) {
     final env = envKey.toString();
-    if (!baseContent.contains("path: './debug-$env.yml'")) {
-      // Chèn trước khối settings: để giữ nguyên format đầu file
-      final insertion = "  - path: './debug-$env.yml'\n    relativePath: true\n  - path: './release-$env.yml'\n    relativePath: true\n\nsettings:";
-      baseContent = baseContent.replaceFirst('settings:', insertion);
-    }
-  });
+    return "  - path: './debug-$env.yml'\n    relativePath: true\n  - path: './release-$env.yml'\n    relativePath: true";
+  }).join('\n');
+
+  // Đọc nội dung base.yml hiện tại
+  var baseContent = baseFile.readAsStringSync();
+
+  // Tìm vị trí bắt đầu và kết thúc block INCLUDES
+  final startMarker = '# INCLUDES START';
+  final endMarker = '# INCLUDES END';
+  final startIdx = baseContent.indexOf(startMarker);
+  final endIdx = baseContent.indexOf(endMarker);
+
+  final newIncludesBlock = '$startMarker\ninclude:\n$includesContent\n$endMarker';
+
+  if (startIdx != -1 && endIdx != -1 && endIdx > startIdx) {
+    // Thay thế block includes cũ bằng block mới
+    final before = baseContent.substring(0, startIdx);
+    // endIdx + endMarker.length lấy hết marker
+    final after = baseContent.substring(endIdx + endMarker.length);
+    baseContent = before + newIncludesBlock + after;
+  } else {
+    // Nếu chưa có markers, thêm vào đầu file
+    baseContent = newIncludesBlock + baseContent;
+  }
+
   baseFile.writeAsStringSync(baseContent);
 }
 

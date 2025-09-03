@@ -8,8 +8,6 @@ include:
   - xcodegen/setting/base.yml
 
 configs:
-  Debug-dev: Debug-dev
-  Release-dev: Release-dev
   Debug-staging: Debug-staging
   Release-staging: Release-staging
   Debug-prod: Debug-prod
@@ -20,8 +18,6 @@ targets:
     type: application
     platform: iOS
     configFiles:
-      Debug-dev: Flutter/Debug.xcconfig
-      Release-dev: Flutter/Release.xcconfig
       Debug-staging: Flutter/Debug.xcconfig
       Release-staging: Flutter/Release.xcconfig
       Debug-prod: Flutter/Debug.xcconfig
@@ -77,49 +73,26 @@ targets:
         SWIFT_VERSION: 5.0
         VERSIONING_SYSTEM: 'apple-generic'
       configs:
-        Release-dev:
-          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-dev'
-          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.dev
-          PRODUCT_NAME: 'MyApp Dev'
-        Debug-dev:
-          ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-dev'
-          PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.dev
-          PRODUCT_NAME: 'MyApp Dev'
-          SWIFT_OPTIMIZATION_LEVEL: '-Onone'
         Release-staging:
           ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-staging'
           PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.staging
-          PRODUCT_NAME: 'MyApp Staging'
+          PRODUCT_NAME: 'AI Reminder Staging'
         Debug-staging:
           ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-staging'
           PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp.staging
-          PRODUCT_NAME: 'MyApp Staging'
+          PRODUCT_NAME: 'AI Reminder Staging'
           SWIFT_OPTIMIZATION_LEVEL: '-Onone'
         Release-prod:
           ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-prod'
           PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp
-          PRODUCT_NAME: 'MyApp'
+          PRODUCT_NAME: 'AI Reminder'
         Debug-prod:
           ASSETCATALOG_COMPILER_APPICON_NAME: 'AppIcon-prod'
           PRODUCT_BUNDLE_IDENTIFIER: com.example.myapp
-          PRODUCT_NAME: 'MyApp'
+          PRODUCT_NAME: 'AI Reminder'
           SWIFT_OPTIMIZATION_LEVEL: '-Onone'
 
 schemes:
-  dev:
-    build:
-      targets:
-        Runner: all
-    run:
-      config: Debug-dev
-    test:
-      config: Debug-dev
-    profile:
-      config: Release-dev
-    analyze:
-      config: Debug-dev
-    archive:
-      config: Release-dev
   staging:
     build:
       targets:

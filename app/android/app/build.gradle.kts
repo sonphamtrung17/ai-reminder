@@ -35,31 +35,25 @@ android {
         }
     }
 
-        // FLAVOR-GEN-START
-  // DO NOT EDIT MANUALLY
-  flavorDimensions += "default"
+              // FLAVOR-GEN-START
+// DO NOT EDIT MANUALLY
+flavorDimensions += "default"
 productFlavors {
-    create("dev") {
-        dimension = "default"
-        applicationId = "com.example.myapp.dev"
-        resValue("string", "app_name", "MyApp Dev")
-    }
-
     create("staging") {
         dimension = "default"
         applicationId = "com.example.myapp.staging"
-        resValue("string", "app_name", "MyApp Staging")
+        resValue("string", "app_name", "AI Reminder Staging")
     }
 
     create("prod") {
         dimension = "default"
         applicationId = "com.example.myapp"
-        resValue("string", "app_name", "MyApp")
+        resValue("string", "app_name", "AI Reminder")
     }
 
 }
 
-  // FLAVOR-GEN-END
+// FLAVOR-GEN-END
 }
 
 flutter {

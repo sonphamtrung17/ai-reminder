@@ -1,8 +1,8 @@
 settings:
   configs:
     Debug-prod:
-      APP_NAME: PROD
-      DEBUG_INFORMATION_FORMAT: dwarf
+      APP_NAME: 'AI Reminder'
+      DEBUG_INFORMATION_FORMAT: 'dwarf'
       ENABLE_TESTABILITY: YES
       GCC_DYNAMIC_NO_PIC: NO
       GCC_OPTIMIZATION_LEVEL: 0
@@ -13,4 +13,4 @@ settings:
       IPHONEOS_DEPLOYMENT_TARGET: 16.0
       MTL_ENABLE_DEBUG_INFO: YES
       ONLY_ACTIVE_ARCH: YES
-      PRODUCT_NAME: PROD
+      PRODUCT_NAME: 'AI Reminder'

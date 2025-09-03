@@ -1,7 +1,7 @@
 settings:
   configs:
     Release-prod:
-      APP_NAME: PROD
+      APP_NAME: AI Reminder
       DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
       ENABLE_NS_ASSERTIONS: NO
       IPHONEOS_DEPLOYMENT_TARGET: 16.0

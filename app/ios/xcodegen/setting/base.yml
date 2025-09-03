@@ -1,8 +1,5 @@
+# INCLUDES START
 include:
-  - path: './debug-dev.yml'
-    relativePath: true
-  - path: './release-dev.yml'
-    relativePath: true
   - path: './debug-staging.yml'
     relativePath: true
   - path: './release-staging.yml'
@@ -11,6 +8,7 @@ include:
     relativePath: true
   - path: './release-prod.yml'
     relativePath: true
+# INCLUDES END
 
 settings:
   base:
