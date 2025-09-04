@@ -27,19 +27,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "badCertificateException": MessageLookupByLibrary.simpleMessage(
       "badCertificateException",
     ),
+    "bangViecSuDung": MessageLookupByLibrary.simpleMessage(
+      "Bằng việc sử dụng H-AI Reminder, bạn đồng ý với ",
+    ),
     "canNotConnectToHost": MessageLookupByLibrary.simpleMessage(
       "Can not connect to this host",
     ),
-    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancel": MessageLookupByLibrary.simpleMessage("Huỷ bỏ"),
     "cancellationException": MessageLookupByLibrary.simpleMessage(
       "cancellationException",
     ),
-    "close": MessageLookupByLibrary.simpleMessage("Close"),
-    "darkTheme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
+    "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
+      "Điều khoản dịch vụ của chúng tôi.",
+    ),
     "emptyEmail": MessageLookupByLibrary.simpleMessage("emptyEmail"),
-    "fakeLogin": MessageLookupByLibrary.simpleMessage("Fake Login"),
-    "home": MessageLookupByLibrary.simpleMessage("Home"),
+    "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
+      "Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU",
+    ),
+    "hAIReminder": MessageLookupByLibrary.simpleMessage("H-AI Reminder"),
+    "hayGhiLai": MessageLookupByLibrary.simpleMessage(
+      "Hãy ghi lại, ghi nhớ và trân trọng những khoảnh khắc ý nghĩa.",
+    ),
+    "hoac": MessageLookupByLibrary.simpleMessage("Hoặc"),
     "invalidDateTime": MessageLookupByLibrary.simpleMessage("invalidDateTime"),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("invalidEmail"),
     "invalidPassword": MessageLookupByLibrary.simpleMessage("invalidPassword"),
@@ -47,25 +57,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "invalidPhoneNumber",
     ),
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
-    "japanese": MessageLookupByLibrary.simpleMessage("Japanese"),
-    "login": MessageLookupByLibrary.simpleMessage("Login"),
-    "logout": MessageLookupByLibrary.simpleMessage("Logout"),
-    "myPage": MessageLookupByLibrary.simpleMessage("My Page"),
+    "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
+    "nhacBanNgayDacBiet": MessageLookupByLibrary.simpleMessage(
+      "Nhắc bạn ngày đặc biệt",
+    ),
+    "nhacNhoNgaySinh": MessageLookupByLibrary.simpleMessage(
+      "Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.",
+    ),
+    "nhacNhoSuKien": MessageLookupByLibrary.simpleMessage(
+      "Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.",
+    ),
     "noInternetException": MessageLookupByLibrary.simpleMessage(
       "noInternetException",
     ),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "parseException": MessageLookupByLibrary.simpleMessage("parseException"),
-    "password": MessageLookupByLibrary.simpleMessage("Password"),
     "passwordsAreNotMatch": MessageLookupByLibrary.simpleMessage(
       "passwordsAreNotMatch",
     ),
-    "retry": MessageLookupByLibrary.simpleMessage("Retry"),
-    "search": MessageLookupByLibrary.simpleMessage("Search"),
+    "retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
     ),
     "tokenExpired": MessageLookupByLibrary.simpleMessage("tokenExpired"),
     "unknownException": m0,
+    "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
   };
 }

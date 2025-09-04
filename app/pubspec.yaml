@@ -26,36 +26,38 @@ dependencies:
     path: ../network
 
   #Flutter Launcher Icons
-  flutter_launcher_icons: ^0.14.4
+  flutter_launcher_icons:
 
   #Flutter Native Splash
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash:
 
-  flutter_bloc: ^9.1.1
-  auto_route: ^10.1.2
-  flutter_screenutil: ^5.9.3
+  flutter_bloc:
+  auto_route:
+  flutter_screenutil:
 
   #Dependency Injection
-  get_it: ^8.2.0
-  injectable: ^2.5.1
+  get_it:
+  injectable:
 
   #Model
-  freezed_annotation: ^3.1.0
-  json_annotation: ^4.9.0
+  freezed_annotation:
+  json_annotation:
+
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^6.0.0
-  build_runner: ^2.7.0
-  injectable_generator: ^2.8.1
-  auto_route_generator: ^10.2.4
+  flutter_lints:
+  build_runner:
+  injectable_generator:
+  auto_route_generator:
 
   #Model
-  freezed: ^3.2.0
-  json_serializable: ^6.11.0
-  melos: ^7.1.0
+  freezed:
+  json_serializable:
+  melos:
 
 flutter:
 
@@ -63,6 +65,7 @@ flutter:
   assets:
     - env/
     - assets/images/
+    - assets/icons/
 
 flutter_intl:
   enabled: false

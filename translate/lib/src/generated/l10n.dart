@@ -54,31 +54,6 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Login`
-  String get login {
-    return Intl.message('Login', name: 'login', desc: '', args: []);
-  }
-
-  /// `Fake Login`
-  String get fakeLogin {
-    return Intl.message('Fake Login', name: 'fakeLogin', desc: '', args: []);
-  }
-
-  /// `Logout`
-  String get logout {
-    return Intl.message('Logout', name: 'logout', desc: '', args: []);
-  }
-
-  /// `Email`
-  String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
-  }
-
-  /// `Password`
-  String get password {
-    return Intl.message('Password', name: 'password', desc: '', args: []);
-  }
-
   /// `unknownException ({errorCode})`
   String unknownException(Object errorCode) {
     return Intl.message(
@@ -229,44 +204,114 @@ class S {
     return Intl.message('OK', name: 'ok', desc: '', args: []);
   }
 
-  /// `Cancel`
+  /// `Huỷ bỏ`
   String get cancel {
-    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+    return Intl.message('Huỷ bỏ', name: 'cancel', desc: '', args: []);
   }
 
-  /// `Retry`
+  /// `Thử lại`
   String get retry {
-    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+    return Intl.message('Thử lại', name: 'retry', desc: '', args: []);
   }
 
-  /// `Close`
-  String get close {
-    return Intl.message('Close', name: 'close', desc: '', args: []);
+  /// `H-AI Reminder`
+  String get hAIReminder {
+    return Intl.message(
+      'H-AI Reminder',
+      name: 'hAIReminder',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Search`
-  String get search {
-    return Intl.message('Search', name: 'search', desc: '', args: []);
+  /// `Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.`
+  String get nhacNhoNgaySinh {
+    return Intl.message(
+      'Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.',
+      name: 'nhacNhoNgaySinh',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `My Page`
-  String get myPage {
-    return Intl.message('My Page', name: 'myPage', desc: '', args: []);
+  /// `Đăng nhập`
+  String get dangNhap {
+    return Intl.message('Đăng nhập', name: 'dangNhap', desc: '', args: []);
   }
 
-  /// `Home`
-  String get home {
-    return Intl.message('Home', name: 'home', desc: '', args: []);
+  /// `Nhắc bạn ngày đặc biệt`
+  String get nhacBanNgayDacBiet {
+    return Intl.message(
+      'Nhắc bạn ngày đặc biệt',
+      name: 'nhacBanNgayDacBiet',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Dark Theme`
-  String get darkTheme {
-    return Intl.message('Dark Theme', name: 'darkTheme', desc: '', args: []);
+  /// `Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU`
+  String get giupBanKhongQuen {
+    return Intl.message(
+      'Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU',
+      name: 'giupBanKhongQuen',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Japanese`
-  String get japanese {
-    return Intl.message('Japanese', name: 'japanese', desc: '', args: []);
+  /// `Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.`
+  String get nhacNhoSuKien {
+    return Intl.message(
+      'Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.',
+      name: 'nhacNhoSuKien',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Xin chào !`
+  String get xinChao {
+    return Intl.message('Xin chào !', name: 'xinChao', desc: '', args: []);
+  }
+
+  /// `Hãy ghi lại, ghi nhớ và trân trọng những khoảnh khắc ý nghĩa.`
+  String get hayGhiLai {
+    return Intl.message(
+      'Hãy ghi lại, ghi nhớ và trân trọng những khoảnh khắc ý nghĩa.',
+      name: 'hayGhiLai',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mật khẩu`
+  String get matKhau {
+    return Intl.message('Mật khẩu', name: 'matKhau', desc: '', args: []);
+  }
+
+  /// `Hoặc`
+  String get hoac {
+    return Intl.message('Hoặc', name: 'hoac', desc: '', args: []);
+  }
+
+  /// `Bằng việc sử dụng H-AI Reminder, bạn đồng ý với `
+  String get bangViecSuDung {
+    return Intl.message(
+      'Bằng việc sử dụng H-AI Reminder, bạn đồng ý với ',
+      name: 'bangViecSuDung',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Điều khoản dịch vụ của chúng tôi.`
+  String get dieuKhoanDichVu {
+    return Intl.message(
+      'Điều khoản dịch vụ của chúng tôi.',
+      name: 'dieuKhoanDichVu',
+      desc: '',
+      args: [],
+    );
   }
 }
 

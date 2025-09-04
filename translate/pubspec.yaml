@@ -16,8 +16,6 @@ dependencies:
 dev_dependencies:
   intl_utils: ^2.8.11
 
-flutter:
-
 flutter_intl:
   enabled: true
   main_locale: en

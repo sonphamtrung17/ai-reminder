@@ -44,7 +44,7 @@ Sau khi có đủ file flutter_launcher_icons, ta chạy lệnh để generate i
 make update_app_icon
 ```
 
-- Sau đó chạy lệnh để genrate flavor
+- Sau đó chạy lệnh để generate flavor
 ```sh
 make gen_env
 ```
