@@ -39,11 +39,7 @@ melos:
       description: pub get shared module.
 
     build_runner_all:
-      run: |
-        melos exec --scope=shared -- "dart run build_runner build --delete-conflicting-outputs"
-        melos exec --scope=domain -- "dart run build_runner build --delete-conflicting-outputs"
-        melos exec --scope=network -- "dart run build_runner build --delete-conflicting-outputs"
-        melos exec --scope=app -- "dart run build_runner build --delete-conflicting-outputs"
+      run: dart pub global run melos exec --concurrency 1 --order-dependents --depends-on="build_runner" "dart run build_runner build --delete-conflicting-outputs"
       description: Run build_runner in all packages.
 
     build_runner_network:
