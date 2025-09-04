@@ -28,6 +28,9 @@ dependencies:
   #Flutter Launcher Icons
   flutter_launcher_icons: ^0.14.4
 
+  #Flutter Native Splash
+  flutter_native_splash: ^2.4.6
+
   flutter_bloc: ^9.1.1
   auto_route: ^10.1.2
   flutter_screenutil: ^5.9.3
@@ -59,6 +62,7 @@ flutter:
   uses-material-design: true
   assets:
     - env/
+    - assets/images/
 
 flutter_intl:
   enabled: false

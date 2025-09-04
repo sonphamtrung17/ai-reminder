@@ -7,6 +7,12 @@ endif
 update_app_icon:
 	cd app && dart run flutter_launcher_icons
 
+update_splash:
+	cd app && dart run flutter_native_splash:create --path=splash/splash.yaml
+
+remove_splash:
+	cd app && dart run flutter_native_splash:remove --path=splash/splash.yaml
+
 l10n:
 	@melos run l10n
 
