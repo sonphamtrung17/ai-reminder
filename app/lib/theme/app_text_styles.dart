@@ -9,6 +9,8 @@ import 'theme.dart';
 class AppTextStyles {
   AppTextStyles._();
 
+  static const fontFamily = 'PlusJakartaSans';
+
   static const _defaultLetterSpacing = 0.03;
 
   static const _baseTextStyle = TextStyle(letterSpacing: _defaultLetterSpacing);
