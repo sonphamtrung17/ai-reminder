@@ -11,6 +11,10 @@ class AppCubit extends BaseCubit<AppState> {
 
   AppCubit(this._appPreferences) : super(const AppState());
 
+  void setIndexBottomTab(int index) {
+    emit(state.copyWith(indexBottomTab: index));
+  }
+
   Future<void> onAppInitiated() async {
     await runBlocCatching(
       handleLoading: false,

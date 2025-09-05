@@ -5,13 +5,12 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:injectable/injectable.dart';
 import 'package:shared/shared.dart';
+
 import 'navigation.dart';
 
 @LazySingleton(as: AppNavigator)
 class AppNavigatorImpl extends AppNavigator with LogMixin {
   AppNavigatorImpl(this._appRouter, this._appPopupInfoMapper);
-
-  // final tabBottomRoutes = const [HomeTab(), CardTab(), SettingTab()];
 
   TabsRouter? tabsRouter;
 

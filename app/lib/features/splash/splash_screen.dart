@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/shared.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/splash/splash_cubit.dart';

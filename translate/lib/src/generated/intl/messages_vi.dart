@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bangViecSuDung": MessageLookupByLibrary.simpleMessage(
       "Bằng việc sử dụng H-AI Reminder, bạn đồng ý với ",
     ),
+    "caiDat": MessageLookupByLibrary.simpleMessage("Cài đặt"),
     "canNotConnectToHost": MessageLookupByLibrary.simpleMessage(
       "Can not connect to this host",
     ),
@@ -57,6 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "invalidPhoneNumber",
     ),
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
+    "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
     "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "nhacBanNgayDacBiet": MessageLookupByLibrary.simpleMessage(
       "Nhắc bạn ngày đặc biệt",
@@ -79,7 +81,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
     ),
+    "tinNhan": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
     "tokenExpired": MessageLookupByLibrary.simpleMessage("tokenExpired"),
+    "trangChu": MessageLookupByLibrary.simpleMessage("Trang chủ"),
     "unknownException": m0,
     "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
   };

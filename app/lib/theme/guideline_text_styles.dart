@@ -131,28 +131,28 @@ class GuidelineTextStyle {
   static final headingXsRegular = _baseTextStyle.merge(
     const TextStyle(
       fontSize: Dimens.d20,
-      height: Dimens.d28 / Dimens.d20,
+      height: Dimens.d32 / Dimens.d20,
       fontWeight: FontWeight.w400,
     ),
   );
   static final headingXsMedium = _baseTextStyle.merge(
     const TextStyle(
       fontSize: Dimens.d20,
-      height: Dimens.d28 / Dimens.d20,
+      height: Dimens.d32 / Dimens.d20,
       fontWeight: FontWeight.w500,
     ),
   );
   static final headingXsSemiBold = _baseTextStyle.merge(
     const TextStyle(
       fontSize: Dimens.d20,
-      height: Dimens.d28 / Dimens.d20,
+      height: Dimens.d32 / Dimens.d20,
       fontWeight: FontWeight.w600,
     ),
   );
   static final headingXsBold = _baseTextStyle.merge(
     const TextStyle(
       fontSize: Dimens.d20,
-      height: Dimens.d28 / Dimens.d20,
+      height: Dimens.d32 / Dimens.d20,
       fontWeight: FontWeight.w700,
     ),
   );
@@ -226,71 +226,71 @@ class GuidelineTextStyle {
     ),
   );
 
-  // ===== Body S (13px) =====
+  // ===== Body S (12px) =====
   static final bodySRegular = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d13,
-      height: Dimens.d18 / Dimens.d13,
+      fontSize: Dimens.d12,
+      height: Dimens.d18 / Dimens.d12,
       fontWeight: FontWeight.w400,
     ),
   );
   static final bodySMedium = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d13,
-      height: Dimens.d18 / Dimens.d13,
+      fontSize: Dimens.d12,
+      height: Dimens.d18 / Dimens.d12,
       fontWeight: FontWeight.w500,
     ),
   );
   static final bodySSemiBold = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d13,
-      height: Dimens.d18 / Dimens.d13,
+      fontSize: Dimens.d12,
+      height: Dimens.d18 / Dimens.d12,
       fontWeight: FontWeight.w600,
     ),
   );
 
-  // ===== Body SS (12px) =====
+  // ===== Body SS (10px) =====
   static final bodySSRegular = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d12,
-      height: Dimens.d16 / Dimens.d12,
+      fontSize: Dimens.d10,
+      height: Dimens.d15 / Dimens.d10,
       fontWeight: FontWeight.w400,
     ),
   );
   static final bodySSMedium = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d12,
-      height: Dimens.d16 / Dimens.d12,
+      fontSize: Dimens.d10,
+      height: Dimens.d15 / Dimens.d10,
       fontWeight: FontWeight.w500,
     ),
   );
   static final bodySSSemiBold = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d12,
-      height: Dimens.d16 / Dimens.d12,
+      fontSize: Dimens.d10,
+      height: Dimens.d15 / Dimens.d10,
       fontWeight: FontWeight.w600,
     ),
   );
 
-  // ===== Body SSS (11px) =====
+  // ===== Body SSS (8px) =====
   static final bodySSSRegular = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d11,
-      height: Dimens.d16 / Dimens.d11,
+      fontSize: Dimens.d8,
+      height: Dimens.d12 / Dimens.d8,
       fontWeight: FontWeight.w400,
     ),
   );
   static final bodySSSMedium = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d11,
-      height: Dimens.d16 / Dimens.d11,
+      fontSize: Dimens.d8,
+      height: Dimens.d12 / Dimens.d8,
       fontWeight: FontWeight.w500,
     ),
   );
   static final bodySSSSemiBold = _baseTextStyle.merge(
     const TextStyle(
-      fontSize: Dimens.d11,
-      height: Dimens.d16 / Dimens.d11,
+      fontSize: Dimens.d8,
+      height: Dimens.d12 / Dimens.d8,
       fontWeight: FontWeight.w600,
     ),
   );

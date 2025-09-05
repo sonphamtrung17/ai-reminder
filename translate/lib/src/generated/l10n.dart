@@ -313,6 +313,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Trang chủ`
+  String get trangChu {
+    return Intl.message('Trang chủ', name: 'trangChu', desc: '', args: []);
+  }
+
+  /// `Lịch`
+  String get lich {
+    return Intl.message('Lịch', name: 'lich', desc: '', args: []);
+  }
+
+  /// `Tin nhắn`
+  String get tinNhan {
+    return Intl.message('Tin nhắn', name: 'tinNhan', desc: '', args: []);
+  }
+
+  /// `Cài đặt`
+  String get caiDat {
+    return Intl.message('Cài đặt', name: 'caiDat', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

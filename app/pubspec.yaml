@@ -51,6 +51,7 @@ dev_dependencies:
 
   flutter_lints:
   build_runner:
+  flutter_gen_runner:
   injectable_generator:
   auto_route_generator:
 
@@ -59,6 +60,9 @@ dev_dependencies:
   json_serializable:
   melos:
 
+flutter_gen:
+  output: lib/resource/generated
+
 flutter:
 
   uses-material-design: true
@@ -66,6 +70,7 @@ flutter:
     - env/
     - assets/images/
     - assets/fonts/
+    - assets/icons/
 
   fonts:
     - family: PlusJakartaSans

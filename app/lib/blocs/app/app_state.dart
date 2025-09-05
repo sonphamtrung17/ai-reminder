@@ -14,5 +14,6 @@ sealed class AppState extends BaseCubitState with _$AppState {
     @Default(false) bool isDarkTheme,
     @Default(LanguageCode.vi) LanguageCode languageCode,
     @Default(AppThemeType.light) AppThemeType appThemeType,
+    @Default(0) int indexBottomTab,
   }) = _AppState;
 }
