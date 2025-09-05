@@ -42,8 +42,21 @@ class _AppState extends BaseScreenState<App, AppCubit> {
       builder: (context, _) => BlocBuilder<AppCubit, AppState>(
         buildWhen: (previous, current) =>
             previous.isDarkTheme != current.isDarkTheme ||
+            previous.appThemeType != current.appThemeType ||
             previous.languageCode != current.languageCode,
         builder: (context, state) {
+          ThemeData theme;
+          ThemeData darkTheme;
+
+          switch (state.appThemeType) {
+            case AppThemeType.light:
+              theme = AppTheme.light().data;
+              darkTheme = AppTheme.dark().data;
+            case AppThemeType.dark:
+              theme = AppTheme.dark().data;
+              darkTheme = AppTheme.dark().data;
+          }
+
           return MaterialApp.router(
             builder: (context, child) {
               final data = MediaQuery.of(context);
@@ -60,7 +73,7 @@ class _AppState extends BaseScreenState<App, AppCubit> {
             title: UiConstants.materialAppTitle,
             color: UiConstants.taskMenuMaterialAppColor,
             themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-            theme: lightTheme,
+            theme: theme,
             darkTheme: darkTheme,
             debugShowCheckedModeBanner: false,
             localeResolutionCallback:

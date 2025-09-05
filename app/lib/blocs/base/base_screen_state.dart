@@ -6,8 +6,7 @@ import 'package:shared/shared.dart';
 
 import '../../exception_handler/exception_handler.dart';
 import '../../exception_handler/exception_message_mapper.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/dimens/app_dimen.dart';
+import '../../theme/theme.dart';
 import '../app/app_cubit.dart';
 import '../common/common_cubit.dart';
 import '../common/common_state.dart';
@@ -48,11 +47,6 @@ abstract class BaseScreenStateDelegate<
 
   @override
   Widget build(BuildContext context) {
-    if (!isAppWidget) {
-      AppDimen.of(context);
-      AppColors.of(context);
-    }
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => bloc),
@@ -89,7 +83,7 @@ abstract class BaseScreenStateDelegate<
   Widget buildPageListeners({required Widget child}) => child;
 
   Widget buildPageLoading() => Container(
-    color: AppColors.current.secondaryColor.withValues(alpha: 0.2),
+    color: context.color.secondary.withValues(alpha: 0.2),
     child: const Center(child: CircularProgressIndicator()),
   );
 

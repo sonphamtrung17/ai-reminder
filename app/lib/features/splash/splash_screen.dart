@@ -4,6 +4,7 @@ import 'package:shared/shared.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/splash/splash_cubit.dart';
+import '../../theme/theme.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -24,7 +25,10 @@ class _SplashScreenState extends BaseScreenState<SplashScreen, SplashCubit> {
             // commonCubit.onLoadingVisibilityEmitted(isLoading: true);
             // print(dotenv.env['API_URL']);
           },
-          child: const Text('Press me'),
+          child: Text(
+            'Sự kiện sắp diễn ra',
+            style: context.textStyle.headingXsBold.black(context),
+          ),
         ),
       ),
     );

@@ -21,6 +21,9 @@ class AppPreferences with LogMixin {
   String get languageCode =>
       _sharedPreference.getString(SharedPreferenceKeys.languageCode) ?? '';
 
+  String get appThemeType =>
+      _sharedPreference.getString(SharedPreferenceKeys.appThemeType) ?? '';
+
   bool get isFirstLogin =>
       _sharedPreference.getBool(SharedPreferenceKeys.isFirstLogin) ?? true;
 
@@ -92,6 +95,13 @@ class AppPreferences with LogMixin {
   //     json.encode(preferenceUserData),
   //   );
   // }
+
+  Future<bool> saveAppThemeType(String appThemeType) {
+    return _sharedPreference.setString(
+      SharedPreferenceKeys.appThemeType,
+      appThemeType,
+    );
+  }
 
   Future<bool> saveIsDarkMode(bool isDarkMode) {
     return _sharedPreference.setBool(

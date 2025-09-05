@@ -66,15 +66,17 @@ class CommonDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (commonPopupType) {
       case PopupType.android:
-        return _buildAndroidDialog();
+        return _buildAndroidDialog(context);
       case PopupType.ios:
-        return _buildIosDialog();
+        return _buildIosDialog(context);
       case PopupType.adaptive:
-        return Platform.isIOS ? _buildIosDialog() : _buildAndroidDialog();
+        return Platform.isIOS
+            ? _buildIosDialog(context)
+            : _buildAndroidDialog(context);
     }
   }
 
-  Widget _buildAndroidDialog() {
+  Widget _buildAndroidDialog(BuildContext context) {
     return AlertDialog(
       actions: actions
           .map(
@@ -83,22 +85,34 @@ class CommonDialog extends StatelessWidget {
               child: Text(
                 e.text ?? S.current.ok,
                 style: e.isDefault
-                    ? AppTextStyles.s14w400Secondary()
-                    : AppTextStyles.s14w400Primary(),
+                    ? context.textStyle.bodySMedium.black(context)
+                    : context.textStyle.bodySMedium.copyWith(
+                        color: context.color.primary,
+                      ),
               ),
             ),
           )
           .toList(growable: false),
       title: title != null
-          ? Text(title ?? '', style: AppTextStyles.s14w400Primary())
+          ? Text(
+              title ?? '',
+              style: context.textStyle.bodySMedium.copyWith(
+                color: context.color.primary,
+              ),
+            )
           : null,
       content: message != null
-          ? Text(message ?? '', style: AppTextStyles.s14w400Primary())
+          ? Text(
+              message ?? '',
+              style: context.textStyle.bodySMedium.copyWith(
+                color: context.color.primary,
+              ),
+            )
           : null,
     );
   }
 
-  Widget _buildIosDialog() {
+  Widget _buildIosDialog(BuildContext context) {
     return CupertinoAlertDialog(
       actions: actions
           .map(
@@ -107,17 +121,31 @@ class CommonDialog extends StatelessWidget {
               child: Text(
                 e.text ?? S.current.ok,
                 style: e.isDefault
-                    ? AppTextStyles.s14w400Secondary()
-                    : AppTextStyles.s14w400Primary(),
+                    ? context.textStyle.bodySMedium.copyWith(
+                        color: context.color.secondary,
+                      )
+                    : context.textStyle.bodySMedium.copyWith(
+                        color: context.color.primary,
+                      ),
               ),
             ),
           )
           .toList(growable: false),
       title: title != null
-          ? Text(title ?? '', style: AppTextStyles.s14w400Primary())
+          ? Text(
+              title ?? '',
+              style: context.textStyle.bodySMedium.copyWith(
+                color: context.color.primary,
+              ),
+            )
           : null,
       content: message != null
-          ? Text(message ?? '', style: AppTextStyles.s14w400Primary())
+          ? Text(
+              message ?? '',
+              style: context.textStyle.bodySMedium.copyWith(
+                color: context.color.primary,
+              ),
+            )
           : null,
     );
   }

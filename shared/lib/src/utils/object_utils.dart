@@ -24,6 +24,14 @@ extension ObjectUtils<T> on T? {
 
     return cb?.call(that);
   }
+
+  String get name {
+    if (this is Enum) {
+      return toString().split('.').last;
+    }
+
+    return toString();
+  }
 }
 
 T? safeCast<T>(dynamic value) {

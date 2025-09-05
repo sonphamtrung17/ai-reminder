@@ -19,9 +19,15 @@ class AppCubit extends BaseCubit<AppState> {
         final languageCode = LanguageCode.fromLocaleCode(
           _appPreferences.languageCode,
         );
-        _updateThemeSetting(isDarkTheme);
+        final appThemeType = AppThemeType.fromName(
+          _appPreferences.appThemeType,
+        );
         emit(
-          state.copyWith(isDarkTheme: isDarkTheme, languageCode: languageCode),
+          state.copyWith(
+            isDarkTheme: isDarkTheme,
+            languageCode: languageCode,
+            appThemeType: appThemeType,
+          ),
         );
       },
     );
@@ -38,19 +44,21 @@ class AppCubit extends BaseCubit<AppState> {
     );
   }
 
-  Future<void> onAppThemeChanged({required bool isDarkTheme}) async {
+  Future<void> onAppThemeChanged({required AppThemeType type}) async {
     await runBlocCatching(
       action: () async {
-        await _appPreferences.saveIsDarkMode(isDarkTheme);
-        _updateThemeSetting(isDarkTheme);
-        emit(state.copyWith(isDarkTheme: isDarkTheme));
+        await _appPreferences.saveAppThemeType(type.name);
+        emit(state.copyWith(appThemeType: type));
       },
     );
   }
 
-  void _updateThemeSetting(bool isDarkTheme) {
-    AppThemeSetting.currentAppThemeType = isDarkTheme
-        ? AppThemeType.dark
-        : AppThemeType.light;
+  Future<void> onAppIsDarkThemeChanged({required bool isDarkTheme}) async {
+    await runBlocCatching(
+      action: () async {
+        await _appPreferences.saveIsDarkMode(isDarkTheme);
+        emit(state.copyWith(isDarkTheme: isDarkTheme));
+      },
+    );
   }
 }

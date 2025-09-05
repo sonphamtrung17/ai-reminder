@@ -1,66 +1,35 @@
 import 'package:flutter/material.dart';
-import 'app_themes.dart';
 
 class AppColors {
-  const AppColors({
-    required this.primaryColor,
-    required this.secondaryColor,
-    required this.primaryTextColor,
-    required this.secondaryTextColor,
-    required this.primaryGradient,
-  });
+  const AppColors._();
 
-  static late AppColors current;
+  static const Color white = Color(0xffffffff);
+  static const Color black = Color(0xFF000000);
 
-  final Color primaryColor;
-  final Color secondaryColor;
-  final Color primaryTextColor;
-  final Color secondaryTextColor;
+  static const Color primary = Color(0xff252C6D);
+  static const Color secondary = Color(0xFFF9AA33);
 
-  /// gradient
-  final LinearGradient primaryGradient;
+  static const Color blue = Color(0xFF3872FF);
+  static const Color cyan = Color(0xFF00CAA1);
+  static const Color green = Color(0xFF07C160);
+  static const Color yellow = Color(0xFFFAAB0C);
+  static const Color red = Color(0xFFEE0A24);
 
-  static const defaultAppColor = AppColors(
-    primaryColor: Color.fromARGB(255, 166, 168, 254),
-    secondaryColor: Color.fromARGB(255, 62, 62, 70),
-    primaryTextColor: Color.fromARGB(255, 62, 62, 70),
-    secondaryTextColor: Color.fromARGB(255, 166, 168, 254),
-    primaryGradient: LinearGradient(
-      colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)],
-    ),
-  );
+  static const Color gray1 = Color(0xFFF5F5F5);
+  static const Color gray2 = Color(0xFFE4E4E7);
+  static const Color gray3 = Color(0xFFD4D4D8);
+  static const Color gray4 = Color(0xFFBFBFC2);
+  static const Color gray5 = Color(0xFFA1A1AA);
+  static const Color gray6 = Color(0xFF71717A);
+  static const Color gray7 = Color(0xFF52525B);
+  static const Color gray8 = Color(0xFF3F3F46);
+  static const Color gray9 = Color(0xFF27272A);
+  static const Color gray10 = Color(0xFF151517);
 
-  static const darkThemeColor = AppColors(
-    primaryColor: Color.fromARGB(255, 62, 62, 70),
-    secondaryColor: Color.fromARGB(255, 166, 168, 254),
-    primaryTextColor: Color.fromARGB(255, 166, 168, 254),
-    secondaryTextColor: Color.fromARGB(255, 62, 62, 70),
-    primaryGradient: LinearGradient(
-      colors: [Color(0xFFFFFFFF), Color(0xFFFE6C30)],
-    ),
-  );
-
-  static AppColors of(BuildContext context) {
-    final appColor = Theme.of(context).appColor;
-
-    current = appColor;
-
-    return current;
-  }
-
-  AppColors copyWith({
-    Color? primaryColor,
-    Color? secondaryColor,
-    Color? primaryTextColor,
-    Color? secondaryTextColor,
-    LinearGradient? primaryGradient,
-  }) {
-    return AppColors(
-      primaryColor: primaryColor ?? this.primaryColor,
-      secondaryColor: secondaryColor ?? this.secondaryColor,
-      primaryTextColor: primaryTextColor ?? this.primaryTextColor,
-      secondaryTextColor: secondaryTextColor ?? this.secondaryTextColor,
-      primaryGradient: primaryGradient ?? this.primaryGradient,
-    );
-  }
+  static const Color danger = Color(0xFFEE0A24);
+  static const Color success = Color(0xFF07C160);
+  static const Color warning = Color(0xFFFF9F0A);
+  static const Color border = Color(0xFFEDEDED);
+  static const Color background = Color(0xFFF7F8FA);
+  static const Color background2 = Color(0xFFF5F5F5);
 }
