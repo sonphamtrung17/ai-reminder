@@ -333,6 +333,16 @@ class S {
   String get caiDat {
     return Intl.message('Cài đặt', name: 'caiDat', desc: '', args: []);
   }
+
+  /// `Xin chào! Hôm nay bạn thế nào?`
+  String get xinChaoHomNayBanTheNao {
+    return Intl.message(
+      'Xin chào! Hôm nay bạn thế nào?',
+      name: 'xinChaoHomNayBanTheNao',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -45,6 +45,10 @@ dependencies:
 
   flutter_svg:
 
+  cached_network_image:
+
+  shimmer:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

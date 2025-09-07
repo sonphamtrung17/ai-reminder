@@ -8,14 +8,13 @@ import '../../exception_handler/exception_handler.dart';
 import '../../exception_handler/exception_message_mapper.dart';
 import '../app/app_cubit.dart';
 import '../common/common_cubit.dart';
-import 'base_cubit_state.dart';
+import 'base_state.dart';
 
-abstract class BaseCubit<S extends BaseCubitState> extends BaseCubitDelegate<S>
-    with LogMixin {
+abstract class BaseCubit<S extends BaseState> extends BaseCubitDelegate<S> with LogMixin {
   BaseCubit(super.initialState);
 }
 
-abstract class BaseCubitDelegate<S extends BaseCubitState> extends Cubit<S> {
+abstract class BaseCubitDelegate<S extends BaseState> extends Cubit<S> {
   BaseCubitDelegate(super.initialState);
 
   late final AppNavigator navigator;
@@ -28,8 +27,7 @@ abstract class BaseCubitDelegate<S extends BaseCubitState> extends Cubit<S> {
     _commonCubit = commonCubit;
   }
 
-  CommonCubit get commonCubit =>
-      this is CommonCubit ? this as CommonCubit : _commonCubit;
+  CommonCubit get commonCubit => this is CommonCubit ? this as CommonCubit : _commonCubit;
 
   Future<void> addException(AppExceptionWrapper appExceptionWrapper) async {
     commonCubit.onExceptionEmitted(appExceptionWrapper: appExceptionWrapper);
@@ -117,7 +115,6 @@ abstract class BaseCubitDelegate<S extends BaseCubitState> extends Cubit<S> {
   }
 
   bool _forceHandleError(AppException appException) {
-    return appException is RemoteException &&
-        appException.kind == RemoteExceptionKind.refreshTokenFailed;
+    return appException is RemoteException && appException.kind == RemoteExceptionKind.refreshTokenFailed;
   }
 }

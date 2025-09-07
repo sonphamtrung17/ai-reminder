@@ -9,6 +9,8 @@ extension BuildContextExtensions on BuildContext {
 
   double get screenHeight => screenSize.height;
 
+  double get statusBarHeight => mediaQuery.viewPadding.top;
+
   EdgeInsets get padding => mediaQuery.padding;
 
   EdgeInsets get viewInsets => mediaQuery.viewInsets;

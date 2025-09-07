@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as dev;
 
-import 'package:flutter/foundation.dart';
 import 'package:shared/shared.dart';
 
 class Log {
   const Log._();
 
-  static const _enableLog = kDebugMode;
+  static const _enableLog = LogConfig.enableGeneralLog;
 
   static void d(Object? message, {String? name, DateTime? time}) {
     _log('💡 $message', name: name ?? '', time: time);

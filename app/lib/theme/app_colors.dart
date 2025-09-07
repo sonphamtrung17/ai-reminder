@@ -32,4 +32,19 @@ class AppColors {
   static const Color border = Color(0xFFEDEDED);
   static const Color background = Color(0xFFF7F8FA);
   static const Color background2 = Color(0xFFF5F5F5);
+
+  static List<BoxShadow> buttonShadows = [
+    BoxShadow(
+      color: const Color(0xFF252C6D).withValues(alpha: 0.24),
+      offset: const Offset(0, 2),
+      blurRadius: 3,
+      spreadRadius: 0,
+    ),
+    BoxShadow(
+      color: const Color(0xFF252C6D).withValues(alpha: 0.24),
+      offset: const Offset(0, 6),
+      blurRadius: 10,
+      spreadRadius: 4,
+    ),
+  ];
 }

@@ -8,8 +8,8 @@ class LogConfig {
 
   /// bloc observer
   static const logOnBlocChange = false;
-  static const logOnBlocCreate = false;
-  static const logOnBlocClose = false;
+  static const logOnBlocCreate = true;
+  static const logOnBlocClose = true;
   static const logOnBlocError = false;
   static const logOnBlocEvent = kDebugMode;
   static const logOnBlocTransition = false;

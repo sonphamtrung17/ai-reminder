@@ -1,12 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared/shared.dart';
 import '../../theme/theme.dart';
-import '../base/base_cubit_state.dart';
+import '../base/base_state.dart';
 
 part 'app_state.freezed.dart';
 
 @freezed
-sealed class AppState extends BaseCubitState with _$AppState {
+sealed class AppState extends BaseState with _$AppState {
   const AppState._();
 
   const factory AppState({

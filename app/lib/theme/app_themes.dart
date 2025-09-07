@@ -169,6 +169,7 @@ class AppTheme {
 extension ThemeContext on BuildContext {
   GuidelineColor get color => Theme.of(this).extension<GuidelineColor>()!;
 
-  GuidelineTypography get textStyle =>
-      Theme.of(this).extension<GuidelineTypography>()!;
+  ThemeData get theme => Theme.of(this);
+
+  GuidelineTypography get textStyle => Theme.of(this).extension<GuidelineTypography>()!;
 }

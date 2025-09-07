@@ -86,5 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "trangChu": MessageLookupByLibrary.simpleMessage("Trang chủ"),
     "unknownException": m0,
     "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
+    "xinChaoHomNayBanTheNao": MessageLookupByLibrary.simpleMessage(
+      "Xin chào! Hôm nay bạn thế nào?",
+    ),
   };
 }

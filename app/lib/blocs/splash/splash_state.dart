@@ -2,12 +2,12 @@ import 'package:domain/domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared/shared.dart';
 
-import '../base/base_cubit_state.dart';
+import '../base/base_state.dart';
 
 part 'splash_state.freezed.dart';
 
 @freezed
-sealed class SplashState extends BaseCubitState with _$SplashState {
+sealed class SplashState extends BaseState with _$SplashState {
   const SplashState._();
 
   factory SplashState({
