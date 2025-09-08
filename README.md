@@ -20,7 +20,14 @@ Project này là một template Flutter sử dụng flutter_bloc, được tổ 
 ```sh
 dart pub global activate melos
 ```
+- Đối với macOS dùng makefile, Windows dùng bat file
+```sh
+#macOS
+make sync
 
+#Windows
+build.bat sync
+```
 ### 1. Cài đặt dependencies
 - Chạy lệnh sau ở root để cài đặt tất cả các package:
 ```sh
