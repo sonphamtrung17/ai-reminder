@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
     "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
     "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
+    "ngay": MessageLookupByLibrary.simpleMessage("ngày"),
+    "ngayLeSapDen": MessageLookupByLibrary.simpleMessage("Ngày lễ sắp đến"),
     "nhacBanNgayDacBiet": MessageLookupByLibrary.simpleMessage(
       "Nhắc bạn ngày đặc biệt",
     ),
@@ -78,6 +80,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "passwordsAreNotMatch",
     ),
     "retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
+    "sinhNhat": MessageLookupByLibrary.simpleMessage("Sinh nhật"),
+    "suKienSapDienRa": MessageLookupByLibrary.simpleMessage(
+      "Sự kiện sắp diễn ra",
+    ),
+    "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
     ),

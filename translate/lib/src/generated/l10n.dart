@@ -343,6 +343,43 @@ class S {
       args: [],
     );
   }
+
+  /// `Sự kiện sắp diễn ra`
+  String get suKienSapDienRa {
+    return Intl.message(
+      'Sự kiện sắp diễn ra',
+      name: 'suKienSapDienRa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sinh nhật`
+  String get sinhNhat {
+    return Intl.message('Sinh nhật', name: 'sinhNhat', desc: '', args: []);
+  }
+
+  /// `Ngày lễ sắp đến`
+  String get ngayLeSapDen {
+    return Intl.message(
+      'Ngày lễ sắp đến',
+      name: 'ngayLeSapDen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ngày`
+  String get ngay {
+    return Intl.message('ngày', name: 'ngay', desc: '', args: []);
+  }
+
+  // skipped getter for the 'dâToBoiBan' key
+
+  /// `Thông báo`
+  String get thongBao {
+    return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

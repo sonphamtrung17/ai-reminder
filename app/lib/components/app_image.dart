@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// url: load image from network
 /// file: load image from File
@@ -238,13 +238,21 @@ class AppImage extends StatelessWidget {
   }
 
   Widget _shimmerWidget() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[500]!,
-      highlightColor: Colors.grey[200]!,
+    return Skeletonizer(
+      enabled: true,
+      effect: ShimmerEffect(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        duration: const Duration(seconds: 2),
+      ),
       child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius ?? 0), color: Colors.white),
+        width: width ?? double.infinity,
+        height: height ?? 150,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(borderRadius ?? 0),
+          shape: type == AppImageType.circle ? BoxShape.circle : BoxShape.rectangle,
+        ),
       ),
     );
   }

@@ -52,4 +52,6 @@ dependency_overrides:
 
   cached_network_image: ^3.4.1
 
-  shimmer: ^3.0.0
+  skeletonizer: ^2.1.0+1
+
+  collection: ^1.19.1

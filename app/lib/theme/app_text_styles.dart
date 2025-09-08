@@ -13,6 +13,12 @@ extension TextStyleExtension on TextStyle {
   TextStyle primary(BuildContext context, {double? fontSize}) =>
       merge(TextStyle(fontSize: fontSize, color: context.color.primary));
 
+  TextStyle gray8(BuildContext context, {double? fontSize}) =>
+      merge(TextStyle(fontSize: fontSize, color: context.color.gray8));
+
   TextStyle gray9(BuildContext context, {double? fontSize}) =>
       merge(TextStyle(fontSize: fontSize, color: context.color.gray9));
+
+  TextStyle blue(BuildContext context, {double? fontSize}) =>
+      merge(TextStyle(fontSize: fontSize, color: context.color.blue));
 }

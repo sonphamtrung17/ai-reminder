@@ -16,6 +16,28 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends BaseScreenState<HomeTab, HomeCubit> {
+  final _carouselController = CarouselController();
+  final _flexWeights = [278, 57];
+
+  int _currentHeroIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _carouselController.addListener(() {
+      final position = _carouselController.position;
+      if (position.hasPixels) {
+        final width = context.screenWidth - 32;
+        final index = (position.pixels / width).round();
+        // setState(() {
+        //   _currentHeroIndex = index;
+        // });
+        print('current index: $_currentHeroIndex');
+      }
+    });
+  }
+
   @override
   Widget buildPage(BuildContext context) {
     return Scaffold(
@@ -70,6 +92,86 @@ class _HomeTabState extends BaseScreenState<HomeTab, HomeCubit> {
                   ),
                 ],
               ).wrapPadding(const EdgeInsets.symmetric(vertical: 12, horizontal: 16)),
+              Text(
+                S.current.suKienSapDienRa,
+                style: context.textStyle.headingXsBold.black(context),
+              ).wrapPadding(const EdgeInsets.only(bottom: 9, left: 16, right: 16, top: 16)),
+              SizedBox(
+                height: 160,
+                child: CarouselView.weighted(
+                  controller: _carouselController,
+                  flexWeights: _flexWeights,
+                  itemSnapping: true,
+                  padding: const EdgeInsets.only(right: 8),
+                  scrollDirection: Axis.horizontal,
+                  onTap: (int value) {
+                    print('item tapped $value');
+                  },
+                  children: List.generate(2, (index) {
+                    return AppImage.url(
+                      url: url,
+                      boxFit: BoxFit.cover,
+                    );
+                  }),
+                ),
+              ).wrapPadding(const EdgeInsets.only(left: 16, right: 8)),
+              Space.h8(),
+              Row(
+                children: [
+                  Expanded(
+                    flex: _flexWeights.first,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            AppImage.asset(path: Assets.icons.icHomeClock),
+                            Space.w4(),
+                            Expanded(
+                              child: Text(
+                                '3 ${S.current.ngay}',
+                                style: context.textStyle.bodySMedium.primary(context),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: context.color.blue.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                              child: Text(
+                                'Sinh nhật',
+                                style: context.textStyle.bodySMedium.blue(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'Mừng sinh nhật Tuấn Anh',
+                          style: context.textStyle.bodyMMedium.black(context),
+                        ).wrapPadding(const EdgeInsetsGeometry.symmetric(vertical: 6)),
+                        Row(
+                          children: [
+                            AppImage.asset(path: Assets.icons.icHomeCalendar),
+                            Space.w4(),
+                            Expanded(
+                              child: Text(
+                                'T4, 23/08/2025',
+                                style: context.textStyle.bodySRegular.gray8(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Space.w16(),
+                  Expanded(
+                    flex: _flexWeights[1],
+                    child: const SizedBox.shrink(),
+                  ),
+                ],
+              ).wrapPadding(const EdgeInsets.only(left: 16)),
             ],
           ),
         ),
@@ -77,3 +179,6 @@ class _HomeTabState extends BaseScreenState<HomeTab, HomeCubit> {
     );
   }
 }
+
+const String url =
+    'https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*';
