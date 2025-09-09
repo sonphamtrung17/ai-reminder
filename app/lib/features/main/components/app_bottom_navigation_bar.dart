@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared/shared.dart';
 
 import '../../../blocs/app/app_cubit.dart';
 import '../../../blocs/app/app_state.dart';
@@ -10,7 +9,12 @@ import '../../../theme/theme.dart';
 import '../main_screen.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
-  const AppBottomNavigationBar({super.key});
+  final double height;
+
+  const AppBottomNavigationBar({
+    required this.height,
+    super.key,
+  });
 
   @override
   State<AppBottomNavigationBar> createState() => _AppBottomNavigationBarState();
@@ -22,9 +26,8 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
     return BlocBuilder<AppCubit, AppState>(
       buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
       builder: (context, state) {
-        final double paddingBottom = context.padding.bottom > 0 ? (context.padding.bottom / 2) : 0;
         return Container(
-          padding: EdgeInsets.only(bottom: paddingBottom),
+          height: widget.height,
           decoration: BoxDecoration(
             color: const Color(0xFFF4F6FF).withValues(alpha: 0.8),
             boxShadow: [
@@ -36,6 +39,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
             ],
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: BottomTab.values.map((e) {
               final index = BottomTab.values.indexOf(e);
               final isSelected = index == state.indexBottomTab;

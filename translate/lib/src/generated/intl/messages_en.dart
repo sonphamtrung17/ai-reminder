@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancellationException": MessageLookupByLibrary.simpleMessage(
       "cancellationException",
     ),
+    "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ của chúng tôi.",

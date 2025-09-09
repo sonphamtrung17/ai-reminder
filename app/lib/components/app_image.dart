@@ -251,7 +251,7 @@ class AppImage extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: double.infinity, maxHeight: double.infinity),
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(borderRadius ?? 0),
+          borderRadius: type == AppImageType.circle ? null : BorderRadius.circular(borderRadius ?? 0),
           shape: type == AppImageType.circle ? BoxShape.circle : BoxShape.rectangle,
         ),
       ),

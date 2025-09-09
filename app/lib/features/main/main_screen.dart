@@ -2,11 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../blocs/app/app_cubit.dart';
 import '../../blocs/app/app_state.dart';
-import '../../resource/generated/assets.gen.dart';
+import '../../components/components.dart';
+import '../../resource/resource.dart';
 import '../calendar/calendar_tab.dart';
 import '../home/home_tab.dart';
 import '../message/message_tab.dart';
@@ -26,6 +28,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double heightBottomNavigationBar = 71 + (context.padding.bottom > 0 ? (context.padding.bottom / 2) : 0);
+
     return BlocProvider<AppCubit>(
       create: (context) => _appCubit,
       child: BlocBuilder<AppCubit, AppState>(
@@ -43,11 +47,26 @@ class _MainScreenState extends State<MainScreen> {
                     const SettingTab(),
                   ],
                 ),
-                const Positioned(
+                Visibility(
+                  visible: state.indexBottomTab == 0,
+                  child: Positioned(
+                    bottom: heightBottomNavigationBar + 24,
+                    right: 16,
+                    child: AppButton.icon(
+                      iconPath: Assets.icons.icHomeAdd,
+                      onPressed: () {},
+                      padding: const EdgeInsets.all(10),
+                      iconWidth: 32,
+                      iconHeight: 32,
+                      iconColor: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: AppBottomNavigationBar(),
+                  child: AppBottomNavigationBar(height: heightBottomNavigationBar),
                 ),
               ],
             ),
