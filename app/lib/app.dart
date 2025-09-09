@@ -70,7 +70,7 @@ class _AppState extends BaseScreenState<App, AppCubit> {
               navigatorObservers: () => [AppNavigatorObserver()],
             ),
             routeInformationParser: _appRouter.defaultRouteParser(),
-            title: UiConstants.materialAppTitle,
+            title: EnvConstants.envValues['APP_NAME'] ?? UiConstants.materialAppTitle,
             color: UiConstants.taskMenuMaterialAppColor,
             themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
             theme: theme,

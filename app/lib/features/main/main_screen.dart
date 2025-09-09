@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
                   index: state.indexBottomTab,
                   children: [
                     const HomeTab(),
-                    const CalendarTab(),
+                    CalendarTab(heightBottomNavigationBar: heightBottomNavigationBar),
                     const MessageTab(),
                     const SettingTab(),
                   ],

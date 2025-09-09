@@ -36,6 +36,7 @@ class AppButton extends StatelessWidget {
     required this.type,
     required this.variant,
     required this.buttonWidth,
+    super.key,
     this.text,
     this.iconPath,
     this.onPressed,
@@ -55,6 +56,7 @@ class AppButton extends StatelessWidget {
   /// Text button
   factory AppButton.text({
     required String text,
+    Key? key,
     VoidCallback? onPressed,
     double? height,
     TextStyle? textStyle,
@@ -66,6 +68,7 @@ class AppButton extends StatelessWidget {
     AppButtonVariant variant = AppButtonVariant.filled,
   }) {
     return AppButton._(
+      key: key,
       type: AppButtonType.text,
       variant: variant,
       buttonWidth: buttonWidth,
@@ -83,6 +86,7 @@ class AppButton extends StatelessWidget {
   /// Icon button
   factory AppButton.icon({
     required String iconPath,
+    Key? key,
     VoidCallback? onPressed,
     double? iconHeight,
     double? iconWidth,
@@ -97,6 +101,7 @@ class AppButton extends StatelessWidget {
     AppButtonVariant variant = AppButtonVariant.filled,
   }) {
     return AppButton._(
+      key: key,
       type: AppButtonType.icon,
       variant: variant,
       buttonWidth: buttonWidth,
@@ -118,6 +123,7 @@ class AppButton extends StatelessWidget {
   factory AppButton.textIcon({
     required String text,
     required String iconPath,
+    Key? key,
     VoidCallback? onPressed,
     double? iconHeight,
     double? iconWidth,
@@ -134,6 +140,7 @@ class AppButton extends StatelessWidget {
     AppButtonVariant variant = AppButtonVariant.filled,
   }) {
     return AppButton._(
+      key: key,
       type: AppButtonType.textIcon,
       variant: variant,
       buttonWidth: buttonWidth,

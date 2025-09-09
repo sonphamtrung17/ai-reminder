@@ -180,7 +180,9 @@ class AppImage extends StatelessWidget {
       placeholder: (context, url) {
         return loadingBuilder ?? _shimmerWidget();
       },
-      errorWidget: (_, _, _) => errorBuilder ?? const SizedBox(),
+      errorWidget: (context, url, error) => errorBuilder ?? const SizedBox(),
+      fadeInDuration: const Duration(milliseconds: 500),
+      fadeOutDuration: const Duration(milliseconds: 200),
     );
   }
 
@@ -240,19 +242,17 @@ class AppImage extends StatelessWidget {
   Widget _shimmerWidget() {
     return Skeletonizer(
       enabled: true,
-      effect: ShimmerEffect(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        duration: const Duration(seconds: 2),
-      ),
-      child: Container(
-        width: width,
-        height: height,
-        constraints: const BoxConstraints(maxWidth: double.infinity, maxHeight: double.infinity),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: type == AppImageType.circle ? null : BorderRadius.circular(borderRadius ?? 0),
-          shape: type == AppImageType.circle ? BoxShape.circle : BoxShape.rectangle,
+      enableSwitchAnimation: true,
+      child: Skeleton.shade(
+        child: Container(
+          width: width,
+          height: height,
+          constraints: const BoxConstraints(maxWidth: double.infinity, maxHeight: double.infinity),
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: type == AppImageType.circle ? null : BorderRadius.circular(borderRadius ?? 0),
+            shape: type == AppImageType.circle ? BoxShape.circle : BoxShape.rectangle,
+          ),
         ),
       ),
     );

@@ -388,6 +388,21 @@ class S {
   String get thongBao {
     return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
   }
+
+  /// `Năm`
+  String get nam {
+    return Intl.message('Năm', name: 'nam', desc: '', args: []);
+  }
+
+  /// `Tháng`
+  String get thang {
+    return Intl.message('Tháng', name: 'thang', desc: '', args: []);
+  }
+
+  /// `Tuần`
+  String get tuan {
+    return Intl.message('Tuần', name: 'tuan', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
