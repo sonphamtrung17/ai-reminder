@@ -374,7 +374,15 @@ class S {
     return Intl.message('ngày', name: 'ngay', desc: '', args: []);
   }
 
-  // skipped getter for the 'dâToBoiBan' key
+  /// `Đã tạo bởi bạn`
+  String get daTaoBoiBan {
+    return Intl.message(
+      'Đã tạo bởi bạn',
+      name: 'daTaoBoiBan',
+      desc: '',
+      args: [],
+    );
+  }
 
   /// `Thông báo`
   String get thongBao {
