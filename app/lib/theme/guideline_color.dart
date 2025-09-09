@@ -26,6 +26,7 @@ class GuidelineColor extends ThemeExtension<GuidelineColor> {
   final Color border;
   final Color background;
   final Color background2;
+  final Color bgBrand;
 
   const GuidelineColor({
     required this.white,
@@ -53,6 +54,7 @@ class GuidelineColor extends ThemeExtension<GuidelineColor> {
     required this.border,
     required this.background,
     required this.background2,
+    required this.bgBrand,
   });
 
   @override
@@ -92,6 +94,7 @@ class GuidelineColor extends ThemeExtension<GuidelineColor> {
       border: lerp(border, other.border, t),
       background: lerp(background, other.background, t),
       background2: lerp(background2, other.background2, t),
+      bgBrand: lerp(bgBrand, other.bgBrand, t),
     );
   }
 
@@ -122,6 +125,7 @@ class GuidelineColor extends ThemeExtension<GuidelineColor> {
     Color? border,
     Color? background,
     Color? background2,
+    Color? bgBrand,
   }) {
     return GuidelineColor(
       white: white ?? this.white,
@@ -149,6 +153,7 @@ class GuidelineColor extends ThemeExtension<GuidelineColor> {
       border: border ?? this.border,
       background: background ?? this.background,
       background2: background2 ?? this.background2,
+      bgBrand: bgBrand ?? this.bgBrand,
     );
   }
 }

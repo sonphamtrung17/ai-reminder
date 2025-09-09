@@ -26,6 +26,7 @@ class AppTheme {
       brightness: Brightness.light,
       splashColor: Colors.transparent,
       fontFamily: fontFamily,
+      scaffoldBackgroundColor: AppColors.bgBrand,
       extensions: [
         /// Guideline Typography Token
         const GuidelineColor(
@@ -54,6 +55,7 @@ class AppTheme {
           border: AppColors.border,
           background: AppColors.background,
           background2: AppColors.background2,
+          bgBrand: AppColors.bgBrand,
         ),
 
         /// Guideline Typography
@@ -67,6 +69,7 @@ class AppTheme {
       brightness: Brightness.dark,
       splashColor: Colors.transparent,
       fontFamily: fontFamily,
+      scaffoldBackgroundColor: AppColors.bgBrand,
       extensions: [
         /// Guideline Typography Token
         const GuidelineColor(
@@ -95,6 +98,7 @@ class AppTheme {
           border: AppColors.border,
           background: AppColors.background,
           background2: AppColors.background2,
+          bgBrand: AppColors.bgBrand,
         ),
 
         /// Guideline Typography

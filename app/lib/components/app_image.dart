@@ -246,8 +246,9 @@ class AppImage extends StatelessWidget {
         duration: const Duration(seconds: 2),
       ),
       child: Container(
-        width: width ?? double.infinity,
-        height: height ?? 150,
+        width: width,
+        height: height,
+        constraints: const BoxConstraints(maxWidth: double.infinity, maxHeight: double.infinity),
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
           borderRadius: BorderRadius.circular(borderRadius ?? 0),

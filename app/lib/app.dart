@@ -76,11 +76,8 @@ class _AppState extends BaseScreenState<App, AppCubit> {
             theme: theme,
             darkTheme: darkTheme,
             debugShowCheckedModeBanner: false,
-            localeResolutionCallback:
-                (Locale? locale, Iterable<Locale> supportedLocales) =>
-                    supportedLocales.contains(locale)
-                    ? locale
-                    : Locale(LanguageCode.defaultValue.localeCode),
+            localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) =>
+                supportedLocales.contains(locale) ? locale : Locale(LanguageCode.defaultValue.localeCode),
             locale: Locale(state.languageCode.localeCode),
             supportedLocales: S.delegate.supportedLocales,
             localizationsDelegates: const [
