@@ -380,6 +380,21 @@ class S {
   String get thongBao {
     return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
   }
+
+  /// `Đối tượng quan tâm`
+  String get doiTuongQuanTam {
+    return Intl.message(
+      'Đối tượng quan tâm',
+      name: 'doiTuongQuanTam',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tạo`
+  String get tao {
+    return Intl.message('Tạo', name: 'tao', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -42,6 +42,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ của chúng tôi.",
     ),
+    "doiTuongQuanTam": MessageLookupByLibrary.simpleMessage(
+      "Đối tượng quan tâm",
+    ),
     "emptyEmail": MessageLookupByLibrary.simpleMessage("emptyEmail"),
     "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
       "Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU",
@@ -84,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "suKienSapDienRa": MessageLookupByLibrary.simpleMessage(
       "Sự kiện sắp diễn ra",
     ),
+    "tao": MessageLookupByLibrary.simpleMessage("Tạo"),
     "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
