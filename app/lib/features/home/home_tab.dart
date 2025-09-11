@@ -59,13 +59,13 @@ class _HomeTabState extends BaseScreenState<HomeTab, HomeCubit> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            S.current.xinChaoHomNayBanTheNao,
+                          AppTypingTextStream(
+                            text: S.current.xinChaoHomNayBanTheNao,
                             style: context.textStyle.bodyMSemiBold.black(context),
                           ),
                           Space.h4(),
-                          Text(
-                            'Còn 3 hôm nữa là sinh nhật Tuấn Anh, bạn đã chuẩn  bị cho sự kiện này chưa? ',
+                          AppTypingTextStream(
+                            text: 'Còn 3 hôm nữa là sinh nhật Tuấn Anh, bạn đã chuẩn  bị cho sự kiện này chưa? ',
                             style: context.textStyle.bodyMMedium.gray9(context),
                           ),
                         ],
