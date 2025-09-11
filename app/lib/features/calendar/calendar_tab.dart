@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/calendar/calendar_cubit.dart';
-import '../../components/components.dart';
+import '../../blocs/calendar/calendar_state.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
 import 'components/app_bar_calendar.dart';
+import 'components/calendar_month_view.dart';
+import 'components/calendar_year_view.dart';
 
 class CalendarTab extends StatefulWidget {
   final double heightBottomNavigationBar;
@@ -18,278 +21,239 @@ class CalendarTab extends StatefulWidget {
   State<CalendarTab> createState() => _CalendarTabState();
 }
 
-class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> {
-  final _scrollController = ScrollController();
+class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with TickerProviderStateMixin {
+  late final ScrollController _scrollController;
 
-  final int _startYear = 1975;
-  final int _endYear = 2100;
+  static const int _startYear = 1975;
+  static const int _endYear = 2100;
+  static const int _currentYear = 2025;
 
-  int _currentYear = 2025;
   double _yearHeight = 800;
+  int _displayedYear = _currentYear;
+
+  // Cache cho các controller để tránh tạo mới liên tục
+  // Cache for smooth transitions
+  final Map<String, GlobalKey> _monthKeys = {};
+  final Map<CalendarViewMode, ScrollController> _scrollControllers = {};
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          _yearHeight =
-              context.screenHeight -
-              UiConstants.appBarCalendarHeight -
-              context.statusBarHeight -
-              widget.heightBottomNavigationBar;
-        });
-      }
-    });
+    _initializeControllers();
 
-    _scrollController.addListener(_updateCurrentYear);
-
-    // Scroll to current year after widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final initialOffset = (_currentYear - _startYear) * _yearHeight;
-      _scrollController.jumpTo(initialOffset);
+      _calculateYearHeight();
+      _performInitialScroll();
     });
   }
 
-  void _updateCurrentYear() {
-    if (_scrollController.hasClients) {
-      final offset = _scrollController.offset;
-      final newYear = _startYear + (offset / _yearHeight).round();
-      if (newYear != _currentYear && newYear >= _startYear && newYear <= _endYear) {
-        setState(() {
-          _currentYear = newYear;
-        });
+  void _initializeControllers() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(_updateCurrentYear);
+  }
+
+  void _calculateYearHeight() {
+    if (!mounted) {
+      return;
+    }
+
+    final newHeight =
+        context.screenHeight -
+        UiConstants.appBarCalendarHeight -
+        context.statusBarHeight -
+        widget.heightBottomNavigationBar;
+
+    if (newHeight != _yearHeight) {
+      setState(() {
+        _yearHeight = newHeight;
+      });
+    }
+  }
+
+  void _performInitialScroll() {
+    if (!mounted) {
+      return;
+    }
+
+    if (bloc.state.calendarViewMode == CalendarViewMode.year) {
+      _scrollToCurrentYear();
+    }
+  }
+
+  void _scrollToCurrentYear() {
+    // Kiểm tra xem controller đã được attach chưa
+    if (!_scrollController.hasClients) {
+      // Nếu chưa được attach, delay việc scroll
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _scrollController.hasClients) {
+          _scrollToCurrentYearImmediate();
+        }
+      });
+      return;
+    }
+    _scrollToCurrentYearImmediate();
+  }
+
+  void _scrollToCurrentYearImmediate() {
+    final initialOffset = (_displayedYear - _startYear) * _yearHeight;
+
+    // Đảm bảo offset không vượt quá giới hạn
+    final maxOffset = _scrollController.position.maxScrollExtent;
+    final targetOffset = initialOffset.clamp(0.0, maxOffset);
+
+    try {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(targetOffset);
+      }
+    } catch (e) {
+      // Fallback: sử dụng animateTo thay vì jumpTo
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          targetOffset,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       }
     }
+  }
+
+  void _updateCurrentYear() {
+    if (!_scrollController.hasClients) {
+      return;
+    }
+
+    final offset = _scrollController.offset;
+    final newYear = _startYear + (offset / _yearHeight).round();
+
+    if (newYear != _displayedYear && newYear >= _startYear && newYear <= _endYear) {
+      setState(() {
+        _displayedYear = newYear;
+      });
+    }
+  }
+
+  void _handleViewModeChange(CalendarViewMode newMode) {
+    if (!mounted) {
+      return;
+    }
+
+    // switch (newMode) {
+    //   case CalendarViewMode.year:
+    //     _animateToYearView();
+    //     break;
+    //   case CalendarViewMode.month:
+    //     _animateToMonthView();
+    //     break;
+    //   case CalendarViewMode.week:
+    //     _animateToWeekView();
+    //     break;
+    // }
+  }
+
+  Widget _buildYearView() {
+    return CustomScrollView(
+      controller: _scrollController,
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverList.builder(
+          itemCount: _endYear - _startYear + 1,
+          itemBuilder: (context, index) {
+            final year = _startYear + index;
+            return SizedBox(
+              height: _yearHeight,
+              child: CalendarYearView(
+                key: ValueKey('year_$year'),
+                year: year,
+                onMonthTap: (month) => _onMonthTapped(year, month),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMonthView() {
+    return const CalendarMonthView();
+  }
+
+  void _onMonthTapped(int year, int month) {
+    print('Month tapped: $month/$year');
+  }
+
+  Widget _buildWeekView() {
+    return Container(
+      padding: EdgeInsets.only(bottom: widget.heightBottomNavigationBar),
+      child: Center(
+        child: Text(
+          'Week View for $_displayedYear',
+          style: context.textStyle.headingLMedium,
+        ),
+      ),
+    );
+  }
+
+  // String get _displayTitle {
+  //   switch (bloc.state.calendarViewMode) {
+  //     case CalendarViewMode.year:
+  //       return '$_displayedYear';
+  //     case CalendarViewMode.month:
+  //       return 'Tháng $_displayedMonth, $_displayedYear';
+  //     case CalendarViewMode.week:
+  //       return 'Tuần $_displayedYear';
+  //   }
+  // }
+
+  @override
+  Widget buildPage(BuildContext context) {
+    return BlocBuilder<CalendarCubit, CalendarState>(
+      builder: (context, state) {
+        Widget body;
+        switch (state.calendarViewMode) {
+          case CalendarViewMode.year:
+            body = _buildYearView();
+          case CalendarViewMode.month:
+            body = _buildMonthView();
+          case CalendarViewMode.week:
+            body = _buildWeekView();
+        }
+
+        return Scaffold(
+          backgroundColor: context.color.bgBrand,
+          appBar: AppBarCalendar(title: '$_displayedYear'),
+          body: body.wrapPadding(EdgeInsetsGeometry.only(bottom: widget.heightBottomNavigationBar)),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildPageListeners({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CalendarCubit, CalendarState>(
+          listenWhen: (previous, current) => previous.calendarViewMode != current.calendarViewMode,
+          listener: (context, state) {
+            _handleViewModeChange(state.calendarViewMode);
+          },
+        ),
+      ],
+      child: child,
+    );
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+
+    // Dispose cached controllers
+    for (final controller in _scrollControllers.values) {
+      controller.dispose();
+    }
+    _scrollControllers.clear();
+
     super.dispose();
-  }
-
-  @override
-  Widget buildPage(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.color.bgBrand,
-      appBar: AppBarCalendar(title: '$_currentYear'),
-      body: CustomScrollView(
-        controller: _scrollController,
-        physics: const ClampingScrollPhysics(),
-        slivers: [
-          SliverList.builder(
-            itemCount: _endYear - _startYear + 1,
-            itemBuilder: (context, index) {
-              final year = _startYear + index;
-              return SizedBox(
-                height: _yearHeight,
-                child: YearView(year: year),
-              );
-            },
-          ),
-        ],
-      ).wrapPadding(EdgeInsets.only(bottom: widget.heightBottomNavigationBar)),
-    );
-  }
-}
-
-class YearView extends StatefulWidget {
-  final int year;
-
-  const YearView({required this.year, super.key});
-
-  @override
-  State<YearView> createState() => _YearViewState();
-}
-
-class _YearViewState extends State<YearView> with AutomaticKeepAliveClientMixin {
-  List<MonthWidget>? _monthWidgets;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    // Build months lazily
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          _monthWidgets = List.generate(12, (index) {
-            return MonthWidget(year: widget.year, month: index + 1);
-          });
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0.0),
-      child: _monthWidgets == null
-          ? Center(
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
-                ),
-              ),
-            )
-          : GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              childAspectRatio: 95 / 120,
-              padding: EdgeInsets.zero,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 35,
-              children: _monthWidgets!,
-            ),
-    );
-  }
-}
-
-class MonthWidget extends StatelessWidget {
-  final int year;
-  final int month;
-
-  const MonthWidget({required this.year, required this.month, super.key});
-
-  static const List<String> _monthNames = [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
-    'Tháng 6',
-    'Tháng 7',
-    'Tháng 8',
-    'Tháng 9',
-    'Tháng 10',
-    'Tháng 11',
-    'Tháng 12',
-  ];
-
-  static const List<String> _weekDays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-
-  int get _daysInMonth => DateTime(year, month + 1, 0).day;
-
-  int get _firstWeekday {
-    final firstDay = DateTime(year, month, 1);
-    return firstDay.weekday == 7 ? 7 : firstDay.weekday;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final isThisMonth = year == now.year && month == now.month;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Month name
-        Text(
-          _monthNames[month - 1],
-          style: context.textStyle.bodyLSemiBold.copyWith(
-            color: isThisMonth ? context.color.primary : context.color.black,
-          ),
-        ),
-        Space.h6(),
-
-        // Weekday headers
-        Row(
-          children: _weekDays
-              .map(
-                (day) => Expanded(
-                  child: Center(
-                    child: Text(
-                      day,
-                      style: context.textStyle.bodySssMedium.gray7(context),
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-        Space.h2(),
-
-        // Calendar grid
-        Expanded(
-          child: CalendarGrid(
-            year: year,
-            month: month,
-            daysInMonth: _daysInMonth,
-            firstWeekday: _firstWeekday,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class CalendarGrid extends StatelessWidget {
-  final int year;
-  final int month;
-  final int daysInMonth;
-  final int firstWeekday;
-
-  const CalendarGrid({
-    required this.year,
-    required this.month,
-    required this.daysInMonth,
-    required this.firstWeekday,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            childAspectRatio: constraints.maxWidth / (constraints.maxHeight * 7 / 6),
-          ),
-          itemCount: 42, // 6 weeks * 7 days
-          itemBuilder: (context, index) {
-            final dayNumber = index - firstWeekday + 2;
-
-            if (dayNumber < 1 || dayNumber > daysInMonth) {
-              return const SizedBox.shrink(); // Empty cell
-            }
-
-            // Check if it's today
-            final isToday = year == now.year && month == now.month && dayNumber == now.day;
-
-            return Center(
-              child: isToday
-                  ? Container(
-                      width: 15,
-                      height: 15,
-                      padding: const EdgeInsets.symmetric(vertical: 1.5, horizontal: 2),
-                      decoration: BoxDecoration(color: context.color.primary, borderRadius: BorderRadius.circular(4)),
-                      child: Center(
-                        child: Text(
-                          '$dayNumber',
-                          style: context.textStyle.bodySssSemiBold.white(context),
-                        ),
-                      ),
-                    )
-                  : Text('$dayNumber', style: context.textStyle.bodySssSemiBold.black(context)),
-            );
-          },
-        );
-      },
-    );
   }
 }
 
