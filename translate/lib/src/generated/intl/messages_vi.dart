@@ -38,10 +38,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancellationException": MessageLookupByLibrary.simpleMessage(
       "cancellationException",
     ),
-    "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ của chúng tôi.",
+    ),
+    "doiTuongQuanTam": MessageLookupByLibrary.simpleMessage(
+      "Đối tượng quan tâm",
     ),
     "emptyEmail": MessageLookupByLibrary.simpleMessage("emptyEmail"),
     "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
@@ -85,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "suKienSapDienRa": MessageLookupByLibrary.simpleMessage(
       "Sự kiện sắp diễn ra",
     ),
+    "tao": MessageLookupByLibrary.simpleMessage("Tạo"),
     "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",

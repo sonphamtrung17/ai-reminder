@@ -55,3 +55,7 @@ dependency_overrides:
   skeletonizer: ^2.1.0+1
 
   collection: ^1.19.1
+
+  image_picker: ^1.2.0
+
+  flutter_slidable: ^4.0.1

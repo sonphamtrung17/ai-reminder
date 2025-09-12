@@ -51,6 +51,10 @@ dependencies:
 
   skeletonizer:
 
+  flutter_slidable:
+
+  image_picker:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
