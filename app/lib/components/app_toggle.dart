@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_themes.dart';
+import '../theme/dimens/dimens.dart';
 
-class AnimatedToggle extends StatefulWidget {
+class AppToggle extends StatefulWidget {
   final List<String> values;
-  final ValueChanged<int> onToggleCallback;
+  final ValueChanged<bool> onToggleCallback;
   final Color backgroundColor;
   final Color buttonColor;
   final Color textColor;
-  final int initialValue;
+  final bool initialValue;
 
-  const AnimatedToggle({
+  const AppToggle({
     required this.values,
     required this.onToggleCallback,
     required this.initialValue,
     super.key,
-    this.backgroundColor = const Color(0xFFe7e7e8),
-    this.buttonColor = const Color(0xFFFFFFFF),
-    this.textColor = const Color(0xFF000000),
+    this.backgroundColor = Colors.grey,
+    this.buttonColor = Colors.white,
+    this.textColor = Colors.black,
   });
 
   @override
-  AnimatedToggleState createState() => AnimatedToggleState();
+  AppToggleState createState() => AppToggleState();
 }
 
-class AnimatedToggleState extends State<AnimatedToggle> {
+class AppToggleState extends State<AppToggle> {
   bool initialPosition = true;
 
   @override
   void initState() {
-    if (widget.initialValue == 0) {
-      initialPosition = true;
-    } else {
+    if (widget.initialValue == false) {
       initialPosition = false;
+    } else {
+      initialPosition = true;
     }
     super.initState();
   }
@@ -40,8 +41,8 @@ class AnimatedToggleState extends State<AnimatedToggle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 128,
-      height: 26,
+      width: Dimens.d128,
+      height: Dimens.d26,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: context.color.primary),
@@ -51,16 +52,12 @@ class AnimatedToggleState extends State<AnimatedToggle> {
           GestureDetector(
             onTap: () {
               initialPosition = !initialPosition;
-              var index = 0;
-              if (!initialPosition) {
-                index = 1;
-              }
-              widget.onToggleCallback(index);
+              widget.onToggleCallback(initialPosition);
               setState(() {});
             },
             child: Container(
-              width: 128,
-              height: 26,
+              width: Dimens.d128,
+              height: Dimens.d26,
               decoration: ShapeDecoration(
                 color: widget.backgroundColor,
                 shape: RoundedRectangleBorder(
@@ -72,7 +69,7 @@ class AnimatedToggleState extends State<AnimatedToggle> {
                 children: List.generate(
                   widget.values.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimens.d18),
                     child: Text(
                       widget.values[index],
                       style: context.textStyle.bodySSemiBold.copyWith(color: context.color.gray5),
@@ -85,10 +82,10 @@ class AnimatedToggleState extends State<AnimatedToggle> {
           AnimatedAlign(
             duration: const Duration(milliseconds: 250),
             curve: Curves.decelerate,
-            alignment: initialPosition ? Alignment.centerLeft : Alignment.centerRight,
+            alignment: !initialPosition ? Alignment.centerLeft : Alignment.centerRight,
             child: Container(
-              width: 64,
-              height: 26,
+              width: Dimens.d64,
+              height: Dimens.d26,
               decoration: ShapeDecoration(
                 color: widget.buttonColor,
                 shape: RoundedRectangleBorder(
@@ -97,7 +94,7 @@ class AnimatedToggleState extends State<AnimatedToggle> {
               ),
               alignment: Alignment.center,
               child: Text(
-                initialPosition ? widget.values[0] : widget.values[1],
+                !initialPosition ? widget.values[0] : widget.values[1],
                 style: context.textStyle.bodySSemiBold.copyWith(color: widget.textColor),
               ),
             ),

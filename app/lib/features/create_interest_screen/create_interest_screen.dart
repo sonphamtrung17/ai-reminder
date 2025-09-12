@@ -15,12 +15,12 @@ import '../../theme/theme.dart';
 enum AvatarType { url, assets, file }
 
 enum Gender {
-  male(value: 0),
-  female(value: 1);
+  male(value: false),
+  female(value: true);
 
   const Gender({required this.value});
 
-  final int value;
+  final bool value;
 }
 
 @RoutePage()
@@ -37,7 +37,7 @@ class _CreateInterestScreenState extends BaseScreenState<CreateInterestScreen, C
   final TextEditingController _birthDayController = TextEditingController();
   AvatarType imageType = AvatarType.assets;
   String? errorName;
-  int? isMale;
+  bool? isFeMale;
   List<File>? _mediaFileList;
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
@@ -240,11 +240,12 @@ class _CreateInterestScreenState extends BaseScreenState<CreateInterestScreen, C
                           return null;
                         },
                       ),
-                      AnimatedToggle(
+                      AppToggle(
                         values: [S.current.nam, S.current.nu],
                         onToggleCallback: (value) {
                           setState(() {
-                            isMale = value;
+                            isFeMale = value;
+                            print("value $isFeMale");
                           });
                         },
                         buttonColor: context.color.primary,

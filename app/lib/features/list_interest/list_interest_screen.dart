@@ -91,64 +91,53 @@ class _ListInterestScreenState extends BaseScreenState<ListInterestScreen, ListI
           ),
         ],
       ),
-      body: ListView.separated(
-        itemCount: _persons.length,
-        shrinkWrap: true,
-        separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            color: context.color.gray1,
-            height: Dimens.d1,
-            thickness: Dimens.d1,
-          );
-        },
-        itemBuilder: (context, index) {
-          final item = _persons[index];
-          return Slidable(
-            key: ValueKey(item.id),
-            startActionPane: ActionPane(
-              extentRatio: 0.2,
-              motion: const ScrollMotion(),
-              children: [
-                CustomSlidableAction(
-                  onPressed: (context) => doSomething(context),
-                  backgroundColor: Colors.transparent,
-                  padding: EdgeInsets.zero,
-                  child: Center(
-                    child: Icon(Icons.delete, size: Dimens.d30, color: context.color.red),
+      body: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          color: context.color.white
+        ),
+        child: ListView.separated(
+          itemCount: _persons.length,
+          shrinkWrap: true,
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              color: context.color.gray1,
+              height: Dimens.d1,
+              thickness: Dimens.d1,
+            );
+          },
+          itemBuilder: (context, index) {
+            final item = _persons[index];
+            return Slidable(
+              key: ValueKey(item.id),
+              startActionPane: ActionPane(
+                extentRatio: 0.2,
+                motion: const ScrollMotion(),
+                children: [
+                  CustomSlidableAction(
+                    onPressed: (context) => doSomething(context),
+                    backgroundColor: Colors.transparent,
+                    padding: EdgeInsets.zero,
+                    child: Center(
+                      child: Icon(Icons.delete, size: Dimens.d30, color: context.color.red),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            child: Container(
-              height: Dimens.d70,
-              decoration: index == 0
-                  ? BoxDecoration(
-                      color: context.color.white,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(Dimens.d12),
-                        topRight: Radius.circular(Dimens.d12),
-                      ),
-                    )
-                  : index == (_persons.length - 1)
-                  ? BoxDecoration(
-                      color: context.color.white,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(Dimens.d12),
-                        bottomRight: Radius.circular(Dimens.d12),
-                      ),
-                    )
-                  : BoxDecoration(color: context.color.white),
-              child: _itemInterest(context, item),
-            ),
-          );
-        },
+                ],
+              ),
+              child: SizedBox(
+                height: Dimens.d70,
+                child: _itemInterest(context, item),
+              ),
+            );
+          },
+        ),
       ).wrapPadding(const EdgeInsets.all(Dimens.d16)),
     );
   }
 
   void doSomething(BuildContext context) {}
 
-  Widget? _itemInterest(BuildContext context, Person item) {
+  Widget _itemInterest(BuildContext context, Person item) {
     return Row(
       children: [
         AppImage.circle(
