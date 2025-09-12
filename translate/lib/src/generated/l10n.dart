@@ -374,19 +374,26 @@ class S {
     return Intl.message('ngày', name: 'ngay', desc: '', args: []);
   }
 
-  /// `Đã tạo bởi bạn`
-  String get daTaoBoiBan {
+  // skipped getter for the 'dâToBoiBan' key
+
+  /// `Thông báo`
+  String get thongBao {
+    return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
+  }
+
+  /// `Đối tượng quan tâm`
+  String get doiTuongQuanTam {
     return Intl.message(
-      'Đã tạo bởi bạn',
-      name: 'daTaoBoiBan',
+      'Đối tượng quan tâm',
+      name: 'doiTuongQuanTam',
       desc: '',
       args: [],
     );
   }
 
-  /// `Thông báo`
-  String get thongBao {
-    return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
+  /// `Tạo`
+  String get tao {
+    return Intl.message('Tạo', name: 'tao', desc: '', args: []);
   }
 
   /// `Năm`

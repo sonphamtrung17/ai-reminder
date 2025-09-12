@@ -25,6 +25,7 @@ class AppButton extends StatelessWidget {
   final double? height;
   final double? iconHeight;
   final TextStyle? textStyle;
+  final TextAlign? textAlign;
   final Color? backgroundColor;
   final Color? borderColor;
   final Color? iconColor;
@@ -45,6 +46,7 @@ class AppButton extends StatelessWidget {
     this.height,
     this.iconHeight,
     this.textStyle,
+    this.textAlign,
     this.backgroundColor,
     this.borderColor,
     this.iconColor,
@@ -66,6 +68,7 @@ class AppButton extends StatelessWidget {
     EdgeInsets? padding,
     AppButtonWidth buttonWidth = AppButtonWidth.wrapContent,
     AppButtonVariant variant = AppButtonVariant.filled,
+    TextAlign textAlign = TextAlign.center,
   }) {
     return AppButton._(
       key: key,
@@ -80,6 +83,7 @@ class AppButton extends StatelessWidget {
       borderColor: borderColor,
       borderRadius: borderRadius,
       padding: padding,
+      textAlign: textAlign,
     );
   }
 
@@ -224,6 +228,7 @@ class AppButton extends StatelessWidget {
         return Text(
           text ?? '',
           style: textStyle ?? context.textStyle.bodyMMedium,
+          textAlign: textAlign,
         );
 
       case AppButtonType.icon:

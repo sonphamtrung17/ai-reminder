@@ -38,10 +38,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancellationException": MessageLookupByLibrary.simpleMessage(
       "cancellationException",
     ),
-    "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ của chúng tôi.",
+    ),
+    "doiTuongQuanTam": MessageLookupByLibrary.simpleMessage(
+      "Đối tượng quan tâm",
     ),
     "emptyEmail": MessageLookupByLibrary.simpleMessage("emptyEmail"),
     "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
@@ -61,7 +63,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
     "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
     "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
-    "nam": MessageLookupByLibrary.simpleMessage("Năm"),
     "ngay": MessageLookupByLibrary.simpleMessage("ngày"),
     "ngayLeSapDen": MessageLookupByLibrary.simpleMessage("Ngày lễ sắp đến"),
     "nhacBanNgayDacBiet": MessageLookupByLibrary.simpleMessage(
@@ -86,7 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "suKienSapDienRa": MessageLookupByLibrary.simpleMessage(
       "Sự kiện sắp diễn ra",
     ),
-    "thang": MessageLookupByLibrary.simpleMessage("Tháng"),
+    "tao": MessageLookupByLibrary.simpleMessage("Tạo"),
     "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
@@ -94,7 +95,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "tinNhan": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
     "tokenExpired": MessageLookupByLibrary.simpleMessage("tokenExpired"),
     "trangChu": MessageLookupByLibrary.simpleMessage("Trang chủ"),
-    "tuan": MessageLookupByLibrary.simpleMessage("Tuần"),
     "unknownException": m0,
     "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
     "xinChaoHomNayBanTheNao": MessageLookupByLibrary.simpleMessage(

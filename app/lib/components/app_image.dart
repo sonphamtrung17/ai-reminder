@@ -194,8 +194,22 @@ class AppImage extends StatelessWidget {
       height: height,
       fit: boxFit,
       errorBuilder: (_, _, _) => errorBuilder ?? const SizedBox(),
-      frameBuilder: (_, _, _, _) {
-        return loadingBuilder ?? _shimmerWidget();
+      frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        if (frame == null) {
+          /// Hiển thị shimmer khi chưa có frame
+          return loadingBuilder ?? _shimmerWidget();
+        } else {
+          /// Khi có frame rồi thì fade-in ảnh
+          return AnimatedOpacity(
+            opacity: 1,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+            child: child,
+          );
+        }
       },
     );
   }
