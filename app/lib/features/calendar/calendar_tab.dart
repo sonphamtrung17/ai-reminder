@@ -36,6 +36,11 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
   final Map<String, GlobalKey> _monthKeys = {};
   final Map<CalendarViewMode, ScrollController> _scrollControllers = {};
 
+  // Overlay variables for animation
+  OverlayEntry? _overlayEntry;
+  int? _selectedYear;
+  int? _selectedMonth;
+
   @override
   void initState() {
     super.initState();
@@ -138,17 +143,38 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
       return;
     }
 
-    // switch (newMode) {
-    //   case CalendarViewMode.year:
-    //     _animateToYearView();
-    //     break;
-    //   case CalendarViewMode.month:
-    //     _animateToMonthView();
-    //     break;
-    //   case CalendarViewMode.week:
-    //     _animateToWeekView();
-    //     break;
-    // }
+    // Implement transition logic if needed
+  }
+
+  void _showMonthDetail(BuildContext context, int year, int month, Rect itemRect) {
+    // Set selected month and year for the month view
+    _selectedYear = year;
+    _selectedMonth = month;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return AnimatedMonthOverlay(
+          year: year,
+          month: month,
+          startRect: itemRect,
+          heightBottomNavigationBar: widget.heightBottomNavigationBar,
+          onClose: () {
+            _overlayEntry?.remove();
+            _overlayEntry = null;
+            _selectedYear = null;
+            _selectedMonth = null;
+          },
+          onSwitchToMonthView: () {
+            // Switch to actual month view mode
+            bloc.setCalendarViewMode(CalendarViewMode.month);
+            _overlayEntry?.remove();
+            _overlayEntry = null;
+          },
+        );
+      },
+    );
+
+    Overlay.of(context, debugRequiredFor: widget)?.insert(_overlayEntry!);
   }
 
   Widget _buildYearView() {
@@ -165,7 +191,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
               child: CalendarYearView(
                 key: ValueKey('year_$year'),
                 year: year,
-                onMonthTap: (month) => _onMonthTapped(year, month),
+                onMonthTap: (month, rect) => _showMonthDetail(context, year, month, rect),
               ),
             );
           },
@@ -175,7 +201,10 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
   }
 
   Widget _buildMonthView() {
-    return const CalendarMonthView();
+    return CalendarMonthView(
+      year: _selectedYear,
+      month: _selectedMonth,
+    );
   }
 
   void _onMonthTapped(int year, int month) {
@@ -193,17 +222,6 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
       ),
     );
   }
-
-  // String get _displayTitle {
-  //   switch (bloc.state.calendarViewMode) {
-  //     case CalendarViewMode.year:
-  //       return '$_displayedYear';
-  //     case CalendarViewMode.month:
-  //       return 'Tháng $_displayedMonth, $_displayedYear';
-  //     case CalendarViewMode.week:
-  //       return 'Tuần $_displayedYear';
-  //   }
-  // }
 
   @override
   Widget buildPage(BuildContext context) {
@@ -245,6 +263,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
     _scrollController.dispose();
 
     // Dispose cached controllers
@@ -254,6 +273,258 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
     _scrollControllers.clear();
 
     super.dispose();
+  }
+}
+
+/// Widget overlay animating from a month widget to fullscreen month view
+class AnimatedMonthOverlay extends StatefulWidget {
+  final int year;
+  final int month;
+  final Rect startRect;
+  final double heightBottomNavigationBar;
+  final VoidCallback onClose;
+  final VoidCallback onSwitchToMonthView;
+
+  const AnimatedMonthOverlay({
+    super.key,
+    required this.year,
+    required this.month,
+    required this.startRect,
+    required this.heightBottomNavigationBar,
+    required this.onClose,
+    required this.onSwitchToMonthView,
+  });
+
+  @override
+  State<AnimatedMonthOverlay> createState() => _AnimatedMonthOverlayState();
+}
+
+class _AnimatedMonthOverlayState extends State<AnimatedMonthOverlay> with TickerProviderStateMixin {
+  late AnimationController _expansionController;
+  late AnimationController _contentController;
+
+  late Animation<Rect?> _rectAnimation;
+  late Animation<double> _borderRadiusAnimation;
+  late Animation<double> _contentOpacityAnimation;
+  late Animation<double> _backgroundOpacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Main expansion controller
+    _expansionController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+
+    // Content fade controller (delayed)
+    _contentController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final screenSize = MediaQuery.of(context).size;
+      final statusBarHeight = MediaQuery.of(context).padding.top;
+      final endRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
+
+      // Rect animation with custom curve
+      _rectAnimation =
+          RectTween(
+            begin: widget.startRect,
+            end: endRect,
+          ).animate(
+            CurvedAnimation(
+              parent: _expansionController,
+              curve: const Cubic(0.25, 0.46, 0.45, 0.94), // iOS-like easing
+            ),
+          );
+
+      // Border radius animation
+      _borderRadiusAnimation =
+          Tween<double>(
+            begin: 8.0,
+            end: 0.0,
+          ).animate(
+            CurvedAnimation(
+              parent: _expansionController,
+              curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+            ),
+          );
+
+      // Background overlay
+      _backgroundOpacityAnimation =
+          Tween<double>(
+            begin: 0.0,
+            end: 0.3,
+          ).animate(
+            CurvedAnimation(
+              parent: _expansionController,
+              curve: const Interval(0.2, 0.8, curve: Curves.easeOut),
+            ),
+          );
+
+      // Content opacity (delayed until expansion is mostly complete)
+      _contentOpacityAnimation =
+          Tween<double>(
+            begin: 0.0,
+            end: 1.0,
+          ).animate(
+            CurvedAnimation(
+              parent: _contentController,
+              curve: Curves.easeIn,
+            ),
+          );
+
+      // Start the animation sequence
+      _startAnimation();
+    });
+  }
+
+  void _startAnimation() async {
+    // Start expansion
+    await _expansionController.forward();
+
+    // Once expansion is complete, fade in content
+    await _contentController.forward();
+
+    // Auto-switch to month view after animation completes
+    await Future.delayed(const Duration(milliseconds: 100));
+    widget.onSwitchToMonthView();
+  }
+
+  void _close() async {
+    // Fade out content first
+    await _contentController.reverse();
+
+    // Then reverse expansion
+    await _expansionController.reverse();
+
+    widget.onClose();
+  }
+
+  @override
+  void dispose() {
+    _expansionController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_expansionController, _contentController]),
+        builder: (context, child) {
+          final rect = _rectAnimation.value!;
+          final isExpanding = _expansionController.isAnimating;
+          final showContent = _expansionController.value > 0.85;
+
+          return Stack(
+            children: [
+              // Semi-transparent background
+              if (_expansionController.value > 0.2)
+                Opacity(
+                  opacity: _backgroundOpacityAnimation.value,
+                  child: Container(
+                    color: Colors.black,
+                  ),
+                ),
+
+              // Main animated container
+              Positioned(
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height,
+                child: Material(
+                  borderRadius: BorderRadius.circular(_borderRadiusAnimation.value),
+                  color: context.color.bgBrand,
+                  elevation: _expansionController.value * 10,
+                  shadowColor: Colors.black.withOpacity(0.3),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(_borderRadiusAnimation.value),
+                    child: showContent
+                        ? AnimatedBuilder(
+                            animation: _contentController,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity: _contentOpacityAnimation.value,
+                                child: Column(
+                                  children: [
+                                    // App Bar with back button
+                                    SafeArea(
+                                      bottom: false,
+                                      child: Container(
+                                        height: 56,
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        decoration: BoxDecoration(
+                                          color: context.color.bgBrand,
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: context.color.border.withOpacity(0.3),
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: _close,
+                                              icon: Icon(
+                                                Icons.arrow_back_ios,
+                                                size: 20,
+                                                color: context.color.primary,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                'Tháng ${widget.month} ${widget.year}',
+                                                style: context.textStyle.headingMSemiBold,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 48),
+                                            // Balance the back button
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Month View Content
+                                    Expanded(
+                                      child: CalendarMonthView(
+                                        year: widget.year,
+                                        month: widget.month,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: context.color.bgBrand,
+                              borderRadius: BorderRadius.circular(_borderRadiusAnimation.value),
+                            ),
+                            child: Center(
+                              child: Transform.scale(
+                                scale: 1.0 + (_expansionController.value * 0.2),
+                                // Slight scale effect
+                                child: Text(
+                                  CalendarConstants.monthNames[widget.month - 1],
+                                  style: context.textStyle.bodyLSemiBold.copyWith(
+                                    fontSize: 14 + (8 * _expansionController.value),
+                                    color: context.color.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 

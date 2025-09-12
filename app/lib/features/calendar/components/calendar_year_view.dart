@@ -6,7 +6,7 @@ import '../../../theme/theme.dart';
 
 class CalendarYearView extends StatefulWidget {
   final int year;
-  final Function(int month) onMonthTap;
+  final Function(int month, Rect rect) onMonthTap;
 
   const CalendarYearView({required this.year, required this.onMonthTap, super.key});
 
@@ -38,8 +38,8 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
         return MonthInYearWidget(
           year: widget.year,
           month: index + 1,
-          onTap: () {
-            widget.onMonthTap.call(index + 1);
+          onTap: (rect) {
+            widget.onMonthTap.call(index + 1, rect);
           },
         );
       });
@@ -76,7 +76,7 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
 class MonthInYearWidget extends StatefulWidget {
   final int year;
   final int month;
-  final VoidCallback? onTap;
+  final Function(Rect rect)? onTap;
 
   const MonthInYearWidget({required this.year, required this.month, this.onTap, super.key});
 
@@ -122,7 +122,17 @@ class _MonthWidgetState extends State<MonthInYearWidget> with SingleTickerProvid
 
   void _handleTapUp(TapUpDetails details) {
     _scaleController.reverse();
-    widget.onTap?.call();
+
+    if (widget.onTap != null) {
+      // Get the widget's position and size in global coordinates
+      final renderBox = context.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        final offset = renderBox.localToGlobal(Offset.zero);
+        final size = renderBox.size;
+        final rect = Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
+        widget.onTap!(rect);
+      }
+    }
   }
 
   void _handleTapCancel() {
