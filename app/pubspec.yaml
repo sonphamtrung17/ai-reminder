@@ -53,6 +53,10 @@ dependencies:
 
   flutter_slidable: ^4.0.1
 
+  image_picker:
+
+  video_player: ^2.10.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -10,6 +10,7 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
     AutoRoute(page: SplashScreen.page),
     AutoRoute(page: MainScreen.page),
-    AutoRoute(page: ListInterestScreen.page, initial: true),
+    AutoRoute(page: ListInterestScreen.page),
+    AutoRoute(page: CreateInterestScreen.page, initial: true),
   ];
 }
