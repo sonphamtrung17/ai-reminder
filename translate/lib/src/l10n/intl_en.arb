@@ -39,7 +39,6 @@
   "ngayLeSapDen": "Ngày lễ sắp đến",
   "ngay": "ngày",
   "daTaoBoiBan": "Đã tạo bởi bạn",
-  "thongBao": "Thông báo",
   "doiTuongQuanTam": "Đối tượng quan tâm",
   "tao": "Tạo",
   "chonKieuAnh": "Chọn kiểu ảnh",
@@ -59,7 +58,7 @@
   "ghiChu": "Ghi chú",
   "luuLai": "Lưu lại",
   "thongBao": "Thông báo",
-  "nam": "Năm",
+  "year": "Năm",
   "thang": "Tháng",
   "tuan": "Tuần"
 }

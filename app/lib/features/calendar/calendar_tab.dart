@@ -536,7 +536,7 @@ enum CalendarViewMode {
   String get title {
     switch (this) {
       case CalendarViewMode.year:
-        return S.current.nam;
+        return S.current.year;
       case CalendarViewMode.month:
         return S.current.thang;
       case CalendarViewMode.week:
