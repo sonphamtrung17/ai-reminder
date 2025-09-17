@@ -32,6 +32,7 @@ class AppButton extends StatelessWidget {
   final BorderRadius? borderRadius;
   final EdgeInsets? padding;
   final double? spacing;
+  final bool? isLayoutVertical;
 
   const AppButton._({
     required this.type,
@@ -52,6 +53,7 @@ class AppButton extends StatelessWidget {
     this.borderRadius,
     this.padding,
     this.spacing,
+    this.isLayoutVertical,
   });
 
   /// Text button
@@ -136,6 +138,7 @@ class AppButton extends StatelessWidget {
     double spacing = 8,
     AppButtonWidth buttonWidth = AppButtonWidth.wrapContent,
     AppButtonVariant variant = AppButtonVariant.filled,
+    bool isLayoutVertical = false,
   }) {
     return AppButton._(
       type: AppButtonType.textIcon,
@@ -155,6 +158,7 @@ class AppButton extends StatelessWidget {
       borderRadius: borderRadius,
       padding: padding,
       spacing: spacing,
+      isLayoutVertical: isLayoutVertical,
     );
   }
 
@@ -228,18 +232,31 @@ class AppButton extends StatelessWidget {
         return _buildIcon();
 
       case AppButtonType.textIcon:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildIcon(),
-            SizedBox(width: spacing ?? 8),
-            Text(
-              text ?? '',
-              style: textStyle ?? context.textStyle.bodyMMedium,
-            ),
-          ],
-        );
+        return isLayoutVertical == true
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildIcon(),
+                  SizedBox(width: spacing ?? 8),
+                  Text(
+                    text ?? '',
+                    style: textStyle ?? context.textStyle.bodyMMedium,
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildIcon(),
+                  SizedBox(width: spacing ?? 8),
+                  Text(
+                    text ?? '',
+                    style: textStyle ?? context.textStyle.bodyMMedium,
+                  ),
+                ],
+              );
     }
   }
 

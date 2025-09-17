@@ -57,5 +57,10 @@
   "email": "Email",
   "diaChi": "Địa chỉ",
   "ghiChu": "Ghi chú",
-  "luuLai": "Lưu lại"
+  "luuLai": "Lưu lại",
+  "cacSuKienTrongNgay": "Các sự kiện trong ngày",
+  "goiYTuAI": "Gợi ý từ AI",
+  "nhanBan": "Nhân bản",
+  "chinhSua": "Chỉnh sửa",
+  "xoa": "Xoá"
 }

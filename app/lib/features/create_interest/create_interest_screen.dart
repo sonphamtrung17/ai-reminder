@@ -245,7 +245,6 @@ class _CreateInterestScreenState extends BaseScreenState<CreateInterestScreen, C
                         onToggleCallback: (value) {
                           setState(() {
                             isFeMale = value;
-                            print("value $isFeMale");
                           });
                         },
                         buttonColor: context.color.primary,

@@ -374,7 +374,15 @@ class S {
     return Intl.message('ngày', name: 'ngay', desc: '', args: []);
   }
 
-  // skipped getter for the 'dâToBoiBan' key
+  /// `Đã tạo bởi bạn`
+  String get daTaoBoiBan {
+    return Intl.message(
+      'Đã tạo bởi bạn',
+      name: 'daTaoBoiBan',
+      desc: '',
+      args: [],
+    );
+  }
 
   /// `Thông báo`
   String get thongBao {
@@ -394,6 +402,141 @@ class S {
   /// `Tạo`
   String get tao {
     return Intl.message('Tạo', name: 'tao', desc: '', args: []);
+  }
+
+  /// `Chọn kiểu ảnh`
+  String get chonKieuAnh {
+    return Intl.message(
+      'Chọn kiểu ảnh',
+      name: 'chonKieuAnh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Camera`
+  String get camera {
+    return Intl.message('Camera', name: 'camera', desc: '', args: []);
+  }
+
+  /// `Photo gallery`
+  String get photoGallery {
+    return Intl.message(
+      'Photo gallery',
+      name: 'photoGallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tạo đối tượng`
+  String get taoDoiTuong {
+    return Intl.message(
+      'Tạo đối tượng',
+      name: 'taoDoiTuong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Họ và tên`
+  String get hoVaTen {
+    return Intl.message('Họ và tên', name: 'hoVaTen', desc: '', args: []);
+  }
+
+  /// `Vui lòng nhập tên`
+  String get vuiLongNhapTen {
+    return Intl.message(
+      'Vui lòng nhập tên',
+      name: 'vuiLongNhapTen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nam`
+  String get nam {
+    return Intl.message('Nam', name: 'nam', desc: '', args: []);
+  }
+
+  /// `Nữ`
+  String get nu {
+    return Intl.message('Nữ', name: 'nu', desc: '', args: []);
+  }
+
+  /// `Ngày sinh`
+  String get ngaySinh {
+    return Intl.message('Ngày sinh', name: 'ngaySinh', desc: '', args: []);
+  }
+
+  /// `Mối quan hệ`
+  String get moiQuanHe {
+    return Intl.message('Mối quan hệ', name: 'moiQuanHe', desc: '', args: []);
+  }
+
+  /// `Nghề nghiệp`
+  String get ngheNghiep {
+    return Intl.message('Nghề nghiệp', name: 'ngheNghiep', desc: '', args: []);
+  }
+
+  /// `Số điện thoại`
+  String get soDienThoai {
+    return Intl.message(
+      'Số điện thoại',
+      name: 'soDienThoai',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message('Email', name: 'email', desc: '', args: []);
+  }
+
+  /// `Địa chỉ`
+  String get diaChi {
+    return Intl.message('Địa chỉ', name: 'diaChi', desc: '', args: []);
+  }
+
+  /// `Ghi chú`
+  String get ghiChu {
+    return Intl.message('Ghi chú', name: 'ghiChu', desc: '', args: []);
+  }
+
+  /// `Lưu lại`
+  String get luuLai {
+    return Intl.message('Lưu lại', name: 'luuLai', desc: '', args: []);
+  }
+
+  /// `Các sự kiện trong ngày`
+  String get cacSuKienTrongNgay {
+    return Intl.message(
+      'Các sự kiện trong ngày',
+      name: 'cacSuKienTrongNgay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gợi ý từ AI`
+  String get goiYTuAI {
+    return Intl.message('Gợi ý từ AI', name: 'goiYTuAI', desc: '', args: []);
+  }
+
+  /// `Nhân bản`
+  String get nhanBan {
+    return Intl.message('Nhân bản', name: 'nhanBan', desc: '', args: []);
+  }
+
+  /// `Chỉnh sửa`
+  String get chinhSua {
+    return Intl.message('Chỉnh sửa', name: 'chinhSua', desc: '', args: []);
+  }
+
+  /// `Xoá`
+  String get xoa {
+    return Intl.message('Xoá', name: 'xoa', desc: '', args: []);
   }
 }
 
