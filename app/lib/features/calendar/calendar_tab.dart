@@ -240,7 +240,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
         return Scaffold(
           backgroundColor: context.color.bgBrand,
           appBar: AppBarCalendar(title: '$_displayedYear'),
-          body: body.wrapPadding(EdgeInsetsGeometry.only(bottom: widget.heightBottomNavigationBar)),
+          body: body,
         );
       },
     );

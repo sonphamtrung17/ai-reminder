@@ -61,14 +61,25 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
               ),
             ),
           )
-        : GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            childAspectRatio: 105 / 120,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            crossAxisSpacing: 14,
-            mainAxisSpacing: 35,
-            children: _monthWidgets!,
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.year.toString(),
+                style: context.textStyle.bodyMSemiBold.primary(context),
+              ).wrapPadding(const EdgeInsets.only(left: 16, bottom: 6 + 16, top: 6 + 16)),
+              Expanded(
+                child: GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 3,
+                  childAspectRatio: 105 / 120,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  crossAxisSpacing: 14,
+                  mainAxisSpacing: 20,
+                  children: _monthWidgets!,
+                ),
+              ),
+            ],
           );
   }
 }

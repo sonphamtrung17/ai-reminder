@@ -101,8 +101,8 @@ class _CalendarViewModePopupState extends State<CalendarViewModePopup> with Sing
 
           // Animated menu
           Positioned(
-            left: buttonPosition.dx + 16,
-            top: buttonPosition.dy + 12,
+            right: 14,
+            top: buttonPosition.dy + 7 + 24 + 12,
             child: Transform.scale(
               scale: _scaleAnimation.value,
               child: Opacity(

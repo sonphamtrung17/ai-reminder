@@ -29,7 +29,6 @@ class AppBarCalendar extends StatefulWidget implements PreferredSizeWidget {
 
 class _AppBarCalendarState extends State<AppBarCalendar> {
   final _moreButtonKey = GlobalKey();
-  final _synchronizeButtonKey = GlobalKey();
 
   void _showCalendarMode() {
     final calendarCubit = context.read<CalendarCubit>();
@@ -59,6 +58,22 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Expanded(
+            child: Text(
+              widget.title,
+              style: context.textStyle.bodyXlSemiBold.primary(context),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ).wrapPadding(const EdgeInsets.only(bottom: 10, top: 10, left: 12)),
+          ),
+          AppButton.icon(
+            iconPath: Assets.icons.icCalendarAdd,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            backgroundColor: Colors.transparent,
+            onPressed: () {
+              // Navigator.of(context).pop();
+            },
+          ),
           AppButton.icon(
             key: _moreButtonKey,
             iconPath: Assets.icons.icCalendarMore,
@@ -66,33 +81,6 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
             backgroundColor: Colors.transparent,
             onPressed: _showCalendarMode,
           ),
-          Expanded(
-            child: Text(
-              widget.title,
-              style: context.textStyle.bodyXlSemiBold.primary(context),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ).wrapPadding(const EdgeInsets.only(bottom: 12, top: 12)),
-          ),
-          AppButton.icon(
-            key: _synchronizeButtonKey,
-            iconPath: Assets.icons.icCalendarTune,
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
-            backgroundColor: Colors.transparent,
-            onPressed: () {
-              // Navigator.of(context).pop();
-            },
-          ),
-          Space.w6(),
-          AppButton.icon(
-            iconPath: Assets.icons.icCalendarAdd,
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 14),
-            backgroundColor: Colors.transparent,
-            onPressed: () {
-              // Navigator.of(context).pop();
-            },
-          ),
-          Space.w6(),
         ],
       ),
     );
