@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-class MessageTab extends StatefulWidget {
-  const MessageTab({super.key});
+@RoutePage()
+class MessageScreen extends StatefulWidget {
+  const MessageScreen({super.key});
 
   @override
-  State<MessageTab> createState() => _MessageTabState();
+  State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _MessageTabState extends State<MessageTab> {
+class _MessageScreenState extends State<MessageScreen> {
   final months = List.generate(12, (i) => "Tháng ${i + 1}");
   final _overlayKey = GlobalKey();
 

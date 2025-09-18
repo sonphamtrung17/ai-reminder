@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
@@ -12,14 +13,15 @@ import 'components/holiday_coming_home.dart';
 import 'components/notification_home.dart';
 import 'components/upcoming_event_home.dart';
 
-class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+@RoutePage()
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeTab> createState() => _HomeTabState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeTabState extends BaseScreenState<HomeTab, HomeCubit> {
+class _HomeScreenState extends BaseScreenState<HomeScreen, HomeCubit> {
   @override
   Widget buildPage(BuildContext context) {
     return Scaffold(

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -7,12 +8,8 @@ import 'package:translate/translate.dart';
 
 import '../../blocs/app/app_cubit.dart';
 import '../../blocs/app/app_state.dart';
-import '../../components/components.dart';
+import '../../navigation/navigation.dart';
 import '../../resource/resource.dart';
-import '../calendar/calendar_tab.dart';
-import '../home/home_tab.dart';
-import '../message/message_tab.dart';
-import '../setting/setting_tab.dart';
 import 'components/app_bottom_navigation_bar.dart';
 
 @RoutePage()
@@ -25,6 +22,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final _appCubit = GetIt.instance.get<AppCubit>();
+  final _appNavigator = GetIt.instance.get<AppNavigator>() as AppNavigatorImpl;
 
   @override
   Widget build(BuildContext context) {
@@ -35,41 +33,54 @@ class _MainScreenState extends State<MainScreen> {
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
         builder: (context, state) {
-          return Scaffold(
-            body: Stack(
-              children: [
-                IndexedStack(
-                  index: state.indexBottomTab,
-                  children: [
-                    const HomeTab(),
-                    CalendarTab(heightBottomNavigationBar: heightBottomNavigationBar),
-                    const MessageTab(),
-                    CalendarScreen(),
-                  ],
-                ),
-                Visibility(
-                  visible: state.indexBottomTab == 0,
-                  child: Positioned(
-                    bottom: heightBottomNavigationBar + 24,
-                    right: 16,
-                    child: AppButton.icon(
-                      iconPath: Assets.icons.icHomeAdd,
-                      onPressed: () {},
-                      padding: const EdgeInsets.all(10),
-                      iconWidth: 32,
-                      iconHeight: 32,
-                      iconColor: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: AppBottomNavigationBar(height: heightBottomNavigationBar),
-                ),
-              ],
-            ),
+          // return Scaffold(
+          //   body: Stack(
+          //     children: [
+          //       IndexedStack(
+          //         index: state.indexBottomTab,
+          //         children: [
+          //           const HomeTab(),
+          //           CalendarTab(heightBottomNavigationBar: heightBottomNavigationBar),
+          //           const MessageTab(),
+          //           CalendarScreen(),
+          //         ],
+          //       ),
+          //       Visibility(
+          //         visible: state.indexBottomTab == 0,
+          //         child: Positioned(
+          //           bottom: heightBottomNavigationBar + 24,
+          //           right: 16,
+          //           child: AppButton.icon(
+          //             iconPath: Assets.icons.icHomeAdd,
+          //             onPressed: () {},
+          //             padding: const EdgeInsets.all(10),
+          //             iconWidth: 32,
+          //             iconHeight: 32,
+          //             iconColor: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //       Positioned(
+          //         bottom: 0,
+          //         left: 0,
+          //         right: 0,
+          //         child: AppBottomNavigationBar(height: heightBottomNavigationBar),
+          //       ),
+          //     ],
+          //   ),
+          // );
+          return AutoTabsScaffold(
+            routes: [
+              const HomeTab(),
+              const CalendarTab(),
+              const MessageTab(),
+              const SettingTab(),
+            ],
+            bottomNavigationBuilder: (context, tabsRouter) {
+              _appNavigator.tabsRouter = tabsRouter;
+
+              return AppBottomNavigationBar(height: heightBottomNavigationBar);
+            },
           );
         },
       ),

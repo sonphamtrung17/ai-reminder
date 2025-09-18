@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 import '../../../../components/components.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
-import '../month/calendar_switch_day_view_mode.dart';
 
+@RoutePage()
 class CalendarWeekView extends StatefulWidget {
   final int weekIndex;
   final int? year;

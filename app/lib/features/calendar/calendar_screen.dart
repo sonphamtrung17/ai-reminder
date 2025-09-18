@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
@@ -9,19 +10,18 @@ import '../../blocs/calendar/calendar_state.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
 import 'components/app_bar_calendar.dart';
-import 'components/month/calendar_month_view.dart';
 import 'components/calendar_year_view.dart';
+import 'components/month/calendar_month_view.dart';
 
-class CalendarTab extends StatefulWidget {
-  final double heightBottomNavigationBar;
-
-  const CalendarTab({required this.heightBottomNavigationBar, super.key});
+@RoutePage()
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({super.key});
 
   @override
-  State<CalendarTab> createState() => _CalendarTabState();
+  State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with TickerProviderStateMixin {
+class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit> with TickerProviderStateMixin {
   late final ScrollController _scrollController;
 
   static const int _startYear = 1975;

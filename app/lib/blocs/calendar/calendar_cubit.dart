@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 
-import '../../features/calendar/calendar_tab.dart';
+import '../../features/calendar/calendar_screen.dart';
 import '../../features/calendar/components/month/calendar_switch_day_view_mode.dart';
 import '../base/base_cubit.dart';
 import 'calendar_state.dart';

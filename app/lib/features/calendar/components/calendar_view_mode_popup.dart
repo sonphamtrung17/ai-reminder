@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../components/components.dart';
 import '../../../theme/theme.dart';
-import '../calendar_tab.dart';
+import '../calendar_screen.dart';
 
 class CalendarViewModePopup extends StatefulWidget {
   final GlobalKey globalKey;

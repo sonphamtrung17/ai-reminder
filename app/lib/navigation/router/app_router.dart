@@ -9,8 +9,63 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(page: SplashScreen.page),
-    AutoRoute(page: MainScreen.page, initial: true),
+    AutoRoute(
+      page: MainScreen.page,
+      initial: true,
+      children: [
+        AutoRoute(
+          page: HomeTab.page,
+          initial: true,
+          maintainState: true,
+          children: [
+            AutoRoute(page: HomeScreen.page, initial: true),
+          ],
+        ),
+        AutoRoute(
+          page: CalendarTab.page,
+          maintainState: true,
+          children: [
+            AutoRoute(page: CalendarScreen.page, initial: true),
+            AutoRoute(page: CalendarWeekView.page),
+          ],
+        ),
+        AutoRoute(
+          page: MessageTab.page,
+          maintainState: true,
+          children: [
+            AutoRoute(page: MessageScreen.page, initial: true),
+          ],
+        ),
+        AutoRoute(
+          page: SettingTab.page,
+          maintainState: true,
+          children: [
+            AutoRoute(page: SettingScreen.page, initial: true),
+          ],
+        ),
+      ],
+    ),
     AutoRoute(page: ListInterestScreen.page),
     AutoRoute(page: CreateInterestScreen.page),
   ];
+}
+
+@RoutePage(name: 'HomeTab')
+class HomeTabPage extends AutoRouter {
+  const HomeTabPage({super.key});
+}
+
+@RoutePage(name: 'CalendarTab')
+class CalendarTabPage extends AutoRouter {
+  const CalendarTabPage({super.key});
+}
+
+@RoutePage(name: 'MessageTab')
+class MessageTabPage extends AutoRouter {
+  const MessageTabPage({super.key});
+}
+
+@RoutePage(name: 'SettingTab')
+class SettingTabPage extends AutoRouter {
+  const SettingTabPage({super.key});
 }

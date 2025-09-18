@@ -1,10 +1,13 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../blocs/app/app_cubit.dart';
 import '../../../blocs/app/app_state.dart';
 import '../../../components/space.dart';
+import '../../../navigation/navigation.dart';
 import '../../../theme/theme.dart';
 import '../main_screen.dart';
 
@@ -21,6 +24,8 @@ class AppBottomNavigationBar extends StatefulWidget {
 }
 
 class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
+  final appNavigator = GetIt.instance.get<AppNavigator>() as AppNavigatorImpl;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
@@ -46,6 +51,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
               return Expanded(
                 child: InkWell(
                   onTap: () {
+                    appNavigator.navigateToBottomTab(index);
                     context.read<AppCubit>().setIndexBottomTab(index);
                   },
                   child: TweenAnimationBuilder<Color?>(
