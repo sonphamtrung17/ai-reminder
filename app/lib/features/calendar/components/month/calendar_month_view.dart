@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
-import '../../../components/components.dart';
-import '../../../theme/theme.dart';
+import '../../../../components/components.dart';
+import '../../../../resource/resource.dart';
+import '../../../../theme/theme.dart';
+import 'calendar_switch_day_view_mode.dart';
 
 class CalendarMonthView extends StatefulWidget {
   final int? year;
@@ -47,13 +49,28 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
     _initializeAnimations();
   }
 
-  void _initializeAnimations() {
-  }
+  void _initializeAnimations() {}
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            const CalendarSwitchViewMode(),
+            const Spacer(),
+            AppButton.textIcon(
+              text: 'Đồng bộ',
+              iconPath: Assets.icons.icCalendarSync,
+              backgroundColor: Colors.transparent,
+              textStyle: context.textStyle.bodyMMedium.primary(context),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              spacing: 4,
+              onPressed: () {},
+            ),
+          ],
+        ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
         // Weekday headers
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -71,7 +88,7 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
                 )
                 .toList(),
           ),
-        ),
+        ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
         Expanded(
           child: Column(
             children: List.generate(
@@ -90,10 +107,10 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
                 ),
               ),
             ),
-          ),
+          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
         ),
       ],
-    ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
+    );
   }
 
   Widget _buildCalendarCell(int index) {

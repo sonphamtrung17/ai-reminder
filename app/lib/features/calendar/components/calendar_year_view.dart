@@ -8,7 +8,11 @@ class CalendarYearView extends StatefulWidget {
   final int year;
   final Function(int month, Rect rect) onMonthTap;
 
-  const CalendarYearView({required this.year, required this.onMonthTap, super.key});
+  const CalendarYearView({
+    required this.year,
+    required this.onMonthTap,
+    super.key,
+  });
 
   @override
   State<CalendarYearView> createState() => _CalendarYearViewState();
@@ -62,25 +66,25 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
             ),
           )
         : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.year.toString(),
-                style: context.textStyle.bodyMSemiBold.primary(context),
-              ).wrapPadding(const EdgeInsets.only(left: 16, bottom: 6 + 16, top: 6 + 16)),
-              Expanded(
-                child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  childAspectRatio: 105 / 120,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 20,
-                  children: _monthWidgets!,
+              for (int row = 0; row < 4; row++)
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: row < 3 ? 20 : 0),
+                    child: Row(
+                      children: [
+                        for (int col = 0; col < 3; col++) ...[
+                          if (col > 0) Space.w14(),
+                          Expanded(
+                            child: _monthWidgets![row * 3 + col],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
             ],
-          );
+          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 16));
   }
 }
 
@@ -238,40 +242,54 @@ class CalendarDayInYearGrid extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            childAspectRatio: constraints.maxWidth / (constraints.maxHeight * 7 / 6),
-          ),
-          itemCount: 42, // 6 weeks * 7 days
-          itemBuilder: (context, index) {
-            final dayNumber = index - firstWeekday + 2;
+        final List<Widget> weeks = [];
+        int dayCounter = 2 - firstWeekday;
 
-            if (dayNumber < 1 || dayNumber > daysInMonth) {
-              return const SizedBox.shrink();
-            }
+        // Build 6 weeks
+        for (int week = 0; week < 6; week++) {
+          final List<Widget> days = [];
 
-            // Check if it's today
-            final isToday = year == now.year && month == now.month && dayNumber == now.day;
-
-            return Container(
-              width: 15,
-              height: 15,
-              decoration: BoxDecoration(
-                color: isToday ? context.color.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Center(
-                child: Text(
-                  '$dayNumber',
-                  style: context.textStyle.bodySssSemiBold.copyWith(
-                    color: isToday ? context.color.white : context.color.black,
+          // Build 7 days for each week
+          for (int weekday = 0; weekday < 7; weekday++) {
+            if (dayCounter < 1 || dayCounter > daysInMonth) {
+              days.add(
+                const Expanded(child: SizedBox.shrink()),
+              );
+            } else {
+              final isToday = year == now.year && month == now.month && dayCounter == now.day;
+              days.add(
+                Expanded(
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: isToday ? context.color.primary : Colors.transparent,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$dayCounter',
+                        style: context.textStyle.bodySssSemiBold.copyWith(
+                          color: isToday ? context.color.white : context.color.black,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            }
+            dayCounter++;
+          }
+
+          weeks.add(
+            Row(
+              children: days,
+            ),
+          );
+        }
+
+        return Column(
+          children: weeks,
         );
       },
     );

@@ -523,6 +523,11 @@ class S {
   String get tuan {
     return Intl.message('Tuần', name: 'tuan', desc: '', args: []);
   }
+
+  /// `Tất cả`
+  String get tatCa {
+    return Intl.message('Tất cả', name: 'tatCa', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
