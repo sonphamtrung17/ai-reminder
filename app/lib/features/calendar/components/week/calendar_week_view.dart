@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
-import '../../../components/components.dart';
-import '../../../theme/theme.dart';
+import '../../../../components/components.dart';
+import '../../../../resource/resource.dart';
+import '../../../../theme/theme.dart';
+import '../month/calendar_switch_day_view_mode.dart';
 
-class CalendarMonthView extends StatefulWidget {
+class CalendarWeekView extends StatefulWidget {
+  final int weekIndex;
   final int? year;
   final int? month;
 
-  const CalendarMonthView({this.year, this.month, super.key});
+  const CalendarWeekView({
+    required this.weekIndex,
+    this.year,
+    this.month,
+    super.key,
+  });
 
   @override
-  State<CalendarMonthView> createState() => _CalendarMonthViewState();
+  State<CalendarWeekView> createState() => _CalendarWeekViewState();
 }
 
-class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTickerProviderStateMixin {
+class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Rect?> _rectAnimation;
 
@@ -47,53 +55,62 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
     _initializeAnimations();
   }
 
-  void _initializeAnimations() {
-  }
+  void _initializeAnimations() {}
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Weekday headers
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-          ),
-          child: Row(
-            children: CalendarConstants.weekDays
-                .map(
-                  (day) => Expanded(
-                    child: Center(
-                      child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // const CalendarSwitchViewMode(),
+              // const Spacer(),
+              AppButton.textIcon(
+                text: 'Đồng bộ',
+                iconPath: Assets.icons.icCalendarSync,
+                backgroundColor: Colors.transparent,
+                textStyle: context.textStyle.bodyMMedium.primary(context),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                spacing: 4,
+                onPressed: () {},
+              ),
+            ],
+          ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+          // Weekday headers
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+            ),
+            child: Row(
+              children: CalendarConstants.weekDays
+                  .map(
+                    (day) => Expanded(
+                      child: Center(
+                        child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: List.generate(
-              6,
-              (weekIndex) => Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-                  ),
-                  child: Row(
-                    children: List.generate(7, (dayIndex) {
-                      final int index = weekIndex * 7 + dayIndex;
-                      return Expanded(child: _buildCalendarCell(index));
-                    }),
-                  ),
-                ),
+                  )
+                  .toList(),
+            ),
+          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+          Hero(
+            tag: 'week_${widget.weekIndex}',
+            child: Material(
+              color: Colors.transparent,
+              child: Row(
+                children: List.generate(7, (dayIndex) {
+                  final int index = widget.weekIndex * 7 + dayIndex;
+                  return Expanded(child: _buildCalendarCell(index));
+                }),
               ),
             ),
           ),
-        ),
-      ],
-    ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
+        ],
+      ),
+    );
   }
 
   Widget _buildCalendarCell(int index) {
@@ -163,37 +180,6 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
             child: Text(
               lunarDate,
               style: context.textStyle.bodySssRegular.black(context),
-            ),
-          ),
-          Space.h2(),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: dayEvents
-                    .map(
-                      (event) => Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(bottom: 2, left: 2, right: 2),
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        decoration: BoxDecoration(
-                          color: event.color.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Center(
-                          child: Text(
-                            event.title,
-                            style: context.textStyle.bodySssMedium.copyWith(color: event.color),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
             ),
           ),
         ],

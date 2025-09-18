@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                     const HomeTab(),
                     CalendarTab(heightBottomNavigationBar: heightBottomNavigationBar),
                     const MessageTab(),
-                    const SettingTab(),
+                    CalendarScreen(),
                   ],
                 ),
                 Visibility(

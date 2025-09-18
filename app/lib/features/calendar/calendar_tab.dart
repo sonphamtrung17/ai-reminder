@@ -9,7 +9,7 @@ import '../../blocs/calendar/calendar_state.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
 import 'components/app_bar_calendar.dart';
-import 'components/calendar_month_view.dart';
+import 'components/month/calendar_month_view.dart';
 import 'components/calendar_year_view.dart';
 
 class CalendarTab extends StatefulWidget {
@@ -204,7 +204,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
     return CalendarMonthView(
       year: _selectedYear,
       month: _selectedMonth,
-    );
+    ).wrapPadding(EdgeInsets.only(bottom: widget.heightBottomNavigationBar));
   }
 
   void _onMonthTapped(int year, int month) {
