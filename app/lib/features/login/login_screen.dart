@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
-                          SizedBox(height: screenHeight * 0.03),
+                          SizedBox(height: screenHeight * 0.10),
 
                           // Logo
                           Center(
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   obscureText: _obscurePassword,
                                   suffixIcon: IconButton(
                                     icon: Icon(
-                                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                      _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                                     ),
                                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                                   ),
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'Đăng nhập',
                                       style: _isFilled
                                           ? context.textStyle.bodyMSemiBold.white(context, fontSize: 16)
-                                          : context.textStyle.bodyMSemiBold.black(context, fontSize: 16),
+                                          : context.textStyle.bodyMSemiBold.gray(context, color: AppColors.gray3, fontSize: 16),
                                     ),
                                   ),
                                 ),
@@ -223,7 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: context.textStyle.bodyMSemiBold.primary(context, fontSize: 14),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // WebView hoặc route khác
                                         // context.pushRoute(WebViewRoute(url: "https://example.com/terms"));
                                       },
                                   ),
@@ -277,9 +276,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-///
-/// ✅ Reusable InlineLabelTextField
-///
 class InlineLabelTextField extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -322,9 +318,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
 
     final hasText = widget.controller.text.isNotEmpty;
 
-    // Hiển thị label khi KHÔNG focus.
-    // - Nếu không focus & rỗng  -> label normal (như hint)
-    // - Nếu không focus & có text -> label small (nằm trên value)
     final showLabel = !_isFocused;
     final labelIsSmall = !_isFocused && hasText;
 
@@ -348,8 +341,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
             keyboardType: widget.keyboardType,
             decoration: InputDecoration(
               border: InputBorder.none,
-              // Khi label small (blur & có text) => chừa thêm khoảng top
-              // Khi đang focus (ẩn label) => padding đều
               contentPadding: EdgeInsets.fromLTRB(
                 screenWidth * 0.04,
                 labelIsSmall ? screenHeight * 0.02 : screenHeight * 0.02,
@@ -360,7 +351,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
             ),
           ),
 
-          // Inline label (ẩn hoàn toàn khi focus)
           if (showLabel)
             AnimatedPositioned(
               duration: const Duration(milliseconds: 160),
