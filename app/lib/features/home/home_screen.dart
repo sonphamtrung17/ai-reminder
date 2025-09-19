@@ -46,7 +46,9 @@ class _HomeScreenState extends BaseScreenState<HomeScreen, HomeCubit> {
                         iconPath: Assets.icons.icHomeNoti,
                         backgroundColor: Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                        onPressed: () {},
+                        onPressed: () {
+                          navigator.push(const NotificationScreen());
+                        },
                       ),
                     ],
                   ),

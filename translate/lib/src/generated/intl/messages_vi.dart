@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "cacSuKienTrongNgay": MessageLookupByLibrary.simpleMessage(
       "Các sự kiện trong ngày",
     ),
+    "cacThongBaoMoiNhatSeXuatHienOday": MessageLookupByLibrary.simpleMessage(
+      "Các thông báo mới sẽ xuất hiện ở đây",
+    ),
     "caiDat": MessageLookupByLibrary.simpleMessage("Cài đặt"),
     "camera": MessageLookupByLibrary.simpleMessage("Camera"),
     "canNotConnectToHost": MessageLookupByLibrary.simpleMessage(
@@ -44,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chinhSua": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
     "chonKieuAnh": MessageLookupByLibrary.simpleMessage("Chọn kiểu ảnh"),
+    "chuaCoThongBao": MessageLookupByLibrary.simpleMessage("Chưa có thông báo"),
     "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "diaChi": MessageLookupByLibrary.simpleMessage("Địa chỉ"),

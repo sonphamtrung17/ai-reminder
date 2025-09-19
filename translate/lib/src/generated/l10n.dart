@@ -558,6 +558,26 @@ class S {
   String get xoa {
     return Intl.message('Xoá', name: 'xoa', desc: '', args: []);
   }
+
+  /// `Chưa có thông báo`
+  String get chuaCoThongBao {
+    return Intl.message(
+      'Chưa có thông báo',
+      name: 'chuaCoThongBao',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Các thông báo mới sẽ xuất hiện ở đây`
+  String get cacThongBaoMoiNhatSeXuatHienOday {
+    return Intl.message(
+      'Các thông báo mới sẽ xuất hiện ở đây',
+      name: 'cacThongBaoMoiNhatSeXuatHienOday',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1,8 +1,11 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../../components/components.dart';
+import '../../../navigation/router/app_router.gr.dart';
 import '../../../resource/resource.dart';
 import '../../../theme/theme.dart';
 import '../home_screen.dart';
@@ -15,6 +18,7 @@ class UpcomingEventHome extends StatefulWidget {
 }
 
 class _UpcomingEventHomeState extends State<UpcomingEventHome> {
+  final _navigator = GetIt.instance.get<AppNavigator>();
   final _carouselController = CarouselController();
   final _flexWeights = [278, 57];
 
@@ -54,6 +58,7 @@ class _UpcomingEventHomeState extends State<UpcomingEventHome> {
             scrollDirection: Axis.horizontal,
             onTap: (int value) {
               Log.d('item tapped $value');
+              _navigator.push(const ListEventScreen());
             },
             children: List.generate(6, (index) {
               return AppImage.url(
