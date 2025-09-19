@@ -499,11 +499,6 @@ class S {
     return Intl.message('Ghi chú', name: 'ghiChu', desc: '', args: []);
   }
 
-  /// `Lưu lại`
-  String get luuLai {
-    return Intl.message('Lưu lại', name: 'luuLai', desc: '', args: []);
-  }
-
   /// `Thông báo`
   String get thongBao {
     return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
@@ -527,6 +522,41 @@ class S {
   /// `Tất cả`
   String get tatCa {
     return Intl.message('Tất cả', name: 'tatCa', desc: '', args: []);
+  }
+
+  /// `Lưu lại`
+  String get luuLai {
+    return Intl.message('Lưu lại', name: 'luuLai', desc: '', args: []);
+  }
+
+  /// `Các sự kiện trong ngày`
+  String get cacSuKienTrongNgay {
+    return Intl.message(
+      'Các sự kiện trong ngày',
+      name: 'cacSuKienTrongNgay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gợi ý từ AI`
+  String get goiYTuAI {
+    return Intl.message('Gợi ý từ AI', name: 'goiYTuAI', desc: '', args: []);
+  }
+
+  /// `Nhân bản`
+  String get nhanBan {
+    return Intl.message('Nhân bản', name: 'nhanBan', desc: '', args: []);
+  }
+
+  /// `Chỉnh sửa`
+  String get chinhSua {
+    return Intl.message('Chỉnh sửa', name: 'chinhSua', desc: '', args: []);
+  }
+
+  /// `Xoá`
+  String get xoa {
+    return Intl.message('Xoá', name: 'xoa', desc: '', args: []);
   }
 }
 

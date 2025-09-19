@@ -30,6 +30,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bangViecSuDung": MessageLookupByLibrary.simpleMessage(
       "Bằng việc sử dụng H-AI Reminder, bạn đồng ý với ",
     ),
+    "cacSuKienTrongNgay": MessageLookupByLibrary.simpleMessage(
+      "Các sự kiện trong ngày",
+    ),
     "caiDat": MessageLookupByLibrary.simpleMessage("Cài đặt"),
     "camera": MessageLookupByLibrary.simpleMessage("Camera"),
     "canNotConnectToHost": MessageLookupByLibrary.simpleMessage(
@@ -39,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancellationException": MessageLookupByLibrary.simpleMessage(
       "cancellationException",
     ),
+    "chinhSua": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
     "chonKieuAnh": MessageLookupByLibrary.simpleMessage("Chọn kiểu ảnh"),
     "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
@@ -55,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
       "Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU",
     ),
+    "goiYTuAI": MessageLookupByLibrary.simpleMessage("Gợi ý từ AI"),
     "hAIReminder": MessageLookupByLibrary.simpleMessage("H-AI Reminder"),
     "hayGhiLai": MessageLookupByLibrary.simpleMessage(
       "Hãy ghi lại, ghi nhớ và trân trọng những khoảnh khắc ý nghĩa.",
@@ -86,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "nhacNhoSuKien": MessageLookupByLibrary.simpleMessage(
       "Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.",
     ),
+    "nhanBan": MessageLookupByLibrary.simpleMessage("Nhân bản"),
     "noInternetException": MessageLookupByLibrary.simpleMessage(
       "noInternetException",
     ),
@@ -120,6 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "xinChaoHomNayBanTheNao": MessageLookupByLibrary.simpleMessage(
       "Xin chào! Hôm nay bạn thế nào?",
     ),
+    "xoa": MessageLookupByLibrary.simpleMessage("Xoá"),
     "year": MessageLookupByLibrary.simpleMessage("Năm"),
   };
 }
