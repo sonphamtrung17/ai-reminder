@@ -5,7 +5,7 @@ import 'package:translate/translate.dart';
 import '../../../components/components.dart';
 import '../../../resource/resource.dart';
 import '../../../theme/theme.dart';
-import '../home_tab.dart';
+import '../home_screen.dart';
 
 class HolidayComingHome extends StatefulWidget {
   const HolidayComingHome({super.key});

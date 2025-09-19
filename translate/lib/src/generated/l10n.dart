@@ -384,11 +384,6 @@ class S {
     );
   }
 
-  /// `Thông báo`
-  String get thongBao {
-    return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
-  }
-
   /// `Đối tượng quan tâm`
   String get doiTuongQuanTam {
     return Intl.message(
@@ -502,6 +497,31 @@ class S {
   /// `Ghi chú`
   String get ghiChu {
     return Intl.message('Ghi chú', name: 'ghiChu', desc: '', args: []);
+  }
+
+  /// `Thông báo`
+  String get thongBao {
+    return Intl.message('Thông báo', name: 'thongBao', desc: '', args: []);
+  }
+
+  /// `Năm`
+  String get year {
+    return Intl.message('Năm', name: 'year', desc: '', args: []);
+  }
+
+  /// `Tháng`
+  String get thang {
+    return Intl.message('Tháng', name: 'thang', desc: '', args: []);
+  }
+
+  /// `Tuần`
+  String get tuan {
+    return Intl.message('Tuần', name: 'tuan', desc: '', args: []);
+  }
+
+  /// `Tất cả`
+  String get tatCa {
+    return Intl.message('Tất cả', name: 'tatCa', desc: '', args: []);
   }
 
   /// `Lưu lại`

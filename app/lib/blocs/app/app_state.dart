@@ -14,6 +14,5 @@ sealed class AppState extends BaseState with _$AppState {
     @Default(false) bool isDarkTheme,
     @Default(LanguageCode.vi) LanguageCode languageCode,
     @Default(AppThemeType.light) AppThemeType appThemeType,
-    @Default(0) int indexBottomTab,
   }) = _AppState;
 }

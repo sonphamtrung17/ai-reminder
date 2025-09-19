@@ -55,6 +55,8 @@ dependencies:
 
   image_picker:
 
+  lunar:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

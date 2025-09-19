@@ -110,6 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "tao": MessageLookupByLibrary.simpleMessage("Tạo"),
     "taoDoiTuong": MessageLookupByLibrary.simpleMessage("Tạo đối tượng"),
+    "tatCa": MessageLookupByLibrary.simpleMessage("Tất cả"),
+    "thang": MessageLookupByLibrary.simpleMessage("Tháng"),
     "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
@@ -117,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tinNhan": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
     "tokenExpired": MessageLookupByLibrary.simpleMessage("tokenExpired"),
     "trangChu": MessageLookupByLibrary.simpleMessage("Trang chủ"),
+    "tuan": MessageLookupByLibrary.simpleMessage("Tuần"),
     "unknownException": m0,
     "vuiLongNhapTen": MessageLookupByLibrary.simpleMessage("Vui lòng nhập tên"),
     "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
@@ -124,5 +127,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Xin chào! Hôm nay bạn thế nào?",
     ),
     "xoa": MessageLookupByLibrary.simpleMessage("Xoá"),
+    "year": MessageLookupByLibrary.simpleMessage("Năm"),
   };
 }
