@@ -17,6 +17,7 @@ export 'src/interceptor/header_interceptor.dart';
 export 'src/interceptor/refresh_token_interceptor.dart';
 export 'src/interceptor/retry_on_error_interceptor.dart';
 export 'src/mapper/api_user_data_mapper.dart';
+export 'src/mapper/api_notification_data_mapper.dart';
 export 'src/mapper/base/base_data_mapper.dart';
 export 'src/mapper/base/base_error_response_mapper.dart';
 export 'src/mapper/base/base_success_response_mapper.dart';
@@ -32,3 +33,6 @@ export 'src/model/refresh_token_data.dart';
 export 'src/model/user/api_user_data.dart';
 export 'src/services/refresh_token_api_service.dart';
 export 'src/services/user_service.dart';
+export 'src/services/notification_service.dart';
+export 'src/model/notification/api_notification_data.dart';
+
