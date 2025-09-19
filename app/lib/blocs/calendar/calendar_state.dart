@@ -13,5 +13,6 @@ sealed class CalendarState extends BaseState with _$CalendarState {
   factory CalendarState({
     @Default(CalendarViewMode.year) CalendarViewMode calendarViewMode,
     @Default(DayViewMode.all) DayViewMode dayViewMode,
+    DateTime? focusedDate,
   }) = _CalendarState;
 }

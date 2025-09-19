@@ -1,37 +1,38 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/shared.dart';
+import 'package:get_it/get_it.dart';
 
-class AppNavigatorObserver extends NavigatorObserver with LogMixin {
+import '../../blocs/calendar/calendar_cubit.dart';
+
+class CalendarRouteObserver extends AutoRouterObserver {
+  final _calendarCubit = GetIt.instance.get<CalendarCubit>();
   final _enableLog = kDebugMode;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
+    _calendarCubit.checkCurrentRoute();
     if (_enableLog) {
-      logD(
-        'didPush from ${previousRoute?.settings.name} to ${route.settings.name}',
-      );
+      debugPrint('📌 CalendarTab didPush → ${route.settings.name}');
     }
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
+    _calendarCubit.checkCurrentRoute();
     if (_enableLog) {
-      logD(
-        'didPop ${route.settings.name}, back to ${previousRoute?.settings.name}',
-      );
+      debugPrint('👈 CalendarTab didPop → ${route.settings.name}');
     }
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
+    _calendarCubit.checkCurrentRoute();
     if (_enableLog) {
-      logD(
-        'didRemove ${route.settings.name}, back to ${previousRoute?.settings.name}',
-      );
+      debugPrint('🔄 CalendarTab didRemove → ${previousRoute?.settings.name} → ${route.settings.name}');
     }
   }
 
@@ -39,9 +40,7 @@ class AppNavigatorObserver extends NavigatorObserver with LogMixin {
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (_enableLog) {
-      logD(
-        'didReplace ${oldRoute?.settings.name} by ${newRoute?.settings.name}',
-      );
+      debugPrint('🔄 CalendarTab didReplace → ${oldRoute?.settings.name} → ${newRoute?.settings.name}');
     }
   }
 }

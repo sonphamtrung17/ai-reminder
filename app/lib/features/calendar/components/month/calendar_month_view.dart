@@ -1,14 +1,14 @@
-import 'package:domain/domain.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 
 import '../../../../components/components.dart';
-import '../../../../navigation/navigation.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
+import '../week/calendar_week_view.dart';
 import 'calendar_switch_day_view_mode.dart';
 
+@RoutePage()
 class CalendarMonthView extends StatefulWidget {
   final int? year;
   final int? month;
@@ -103,27 +103,30 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
                     color: Colors.transparent,
                     child: GestureDetector(
                       onTap: () {
-                        // Navigator.of(context).push(
-                        //   PageRouteBuilder(
-                        //     pageBuilder: (context, animation, secondaryAnimation) =>
-                        //         CalendarWeekView(weekIndex: weekIndex,year: widget.year,month: widget.month,),
-                        //     transitionDuration: Duration(milliseconds: 500),
-                        //     reverseTransitionDuration: Duration(milliseconds: 500),
-                        //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        //       return FadeTransition(
-                        //         opacity: animation,
-                        //         child: child,
-                        //       );
-                        //     },
-                        //   ),
-                        // );
-                        (GetIt.instance.get<AppNavigator>() as AppNavigatorImpl).push(
-                          CalendarWeekView(
-                            weekIndex: weekIndex,
-                            year: widget.year,
-                            month: widget.month,
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => CalendarWeekView(
+                              weekIndex: weekIndex,
+                              year: widget.year,
+                              month: widget.month,
+                            ),
+                            transitionDuration: const Duration(milliseconds: 500),
+                            reverseTransitionDuration: const Duration(milliseconds: 500),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
                           ),
                         );
+                        // (GetIt.instance.get<AppNavigator>() as AppNavigatorImpl).push(
+                        //   CalendarWeekView(
+                        //     weekIndex: weekIndex,
+                        //     year: widget.year,
+                        //     month: widget.month,
+                        //   ),
+                        // );
                       },
                       child: Container(
                         decoration: BoxDecoration(

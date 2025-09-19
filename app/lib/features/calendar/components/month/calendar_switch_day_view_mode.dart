@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:translate/translate.dart';
 
 import '../../../../blocs/calendar/calendar_cubit.dart';
@@ -17,15 +18,18 @@ class CalendarSwitchViewMode extends StatefulWidget {
 }
 
 class _CalendarSwitchViewModeState extends State<CalendarSwitchViewMode> {
+  final _calendarCubit = GetIt.instance.get<CalendarCubit>();
+
   final duration = const Duration(milliseconds: 200);
 
   void _onTabSelected(DayViewMode dayViewMode) {
-    context.read<CalendarCubit>().setDayViewMode(dayViewMode);
+    _calendarCubit.setDayViewMode(dayViewMode);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarCubit, CalendarState>(
+      bloc: _calendarCubit,
       buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
       builder: (context, state) {
         final selectedIndex = DayViewMode.values.indexOf(state.dayViewMode);

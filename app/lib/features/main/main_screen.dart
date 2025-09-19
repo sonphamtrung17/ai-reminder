@@ -9,6 +9,7 @@ import '../../blocs/main/main_cubit.dart';
 import '../../blocs/main/main_state.dart';
 import '../../navigation/navigation.dart';
 import '../../resource/resource.dart';
+import '../calendar/components/app_bar_calendar.dart';
 import 'components/app_bottom_navigation_bar.dart';
 
 @RoutePage()
@@ -36,6 +37,15 @@ class _MainScreenState extends BaseScreenState<MainScreen, MainCubit> {
       buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
       builder: (context, state) {
         return AutoTabsScaffold(
+          appBarBuilder: (context, tabsRouter) {
+            if (tabsRouter.activeIndex == 1) {
+              return const AppBarCalendar();
+            }
+            return PreferredSize(
+              preferredSize: Size(0, context.statusBarHeight),
+              child: SizedBox(height: context.statusBarHeight),
+            );
+          },
           routes: [
             const HomeTab(),
             const CalendarTab(),

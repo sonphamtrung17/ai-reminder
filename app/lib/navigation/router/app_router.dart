@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import 'app_router.gr.dart';
+import '../navigation.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 @LazySingleton()
@@ -26,6 +27,7 @@ class AppRouter extends RootStackRouter {
           maintainState: true,
           children: [
             AutoRoute(page: CalendarScreen.page, initial: true),
+            AutoRoute(page: CalendarMonthView.page),
             AutoRoute(page: CalendarWeekView.page),
           ],
         ),
@@ -58,8 +60,13 @@ class HomeTabPage extends AutoRouter {
 }
 
 @RoutePage(name: 'CalendarTab')
-class CalendarTabPage extends AutoRouter {
+class CalendarTabPage extends StatelessWidget {
   const CalendarTabPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AutoRouter(navigatorObservers: () => [CalendarRouteObserver()]);
+  }
 }
 
 @RoutePage(name: 'MessageTab')

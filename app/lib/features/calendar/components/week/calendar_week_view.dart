@@ -5,6 +5,7 @@ import 'package:shared/shared.dart';
 import '../../../../components/components.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
+import '../month/calendar_switch_day_view_mode.dart';
 
 @RoutePage()
 class CalendarWeekView extends StatefulWidget {
@@ -66,8 +67,8 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
         children: [
           Row(
             children: [
-              // const CalendarSwitchViewMode(),
-              // const Spacer(),
+              const CalendarSwitchViewMode(),
+              const Spacer(),
               AppButton.textIcon(
                 text: 'Đồng bộ',
                 iconPath: Assets.icons.icCalendarSync,
