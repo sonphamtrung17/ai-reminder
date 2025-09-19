@@ -1,18 +1,21 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../../blocs/app/app_cubit.dart';
-import '../../../blocs/app/app_state.dart';
+import '../../../blocs/main/main_cubit.dart';
+import '../../../blocs/main/main_state.dart';
 import '../../../components/space.dart';
+import '../../../navigation/navigation.dart';
 import '../../../theme/theme.dart';
 import '../main_screen.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
-  final double height;
+  final Function(int) onTap;
 
   const AppBottomNavigationBar({
-    required this.height,
+    required this.onTap,
     super.key,
   });
 
@@ -21,13 +24,16 @@ class AppBottomNavigationBar extends StatefulWidget {
 }
 
 class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
+  final appNavigator = GetIt.instance.get<AppNavigator>() as AppNavigatorImpl;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
+    return BlocBuilder<MainCubit, MainState>(
+      buildWhen: (pre, cur) =>
+          pre.indexBottomTab != cur.indexBottomTab || pre.heightBottomNavigationBar != cur.heightBottomNavigationBar,
       builder: (context, state) {
         return Container(
-          height: widget.height,
+          height: state.heightBottomNavigationBar,
           decoration: BoxDecoration(
             color: const Color(0xFFF4F6FF).withValues(alpha: 0.8),
             boxShadow: [
@@ -45,9 +51,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
               final isSelected = index == state.indexBottomTab;
               return Expanded(
                 child: InkWell(
-                  onTap: () {
-                    context.read<AppCubit>().setIndexBottomTab(index);
-                  },
+                  onTap: () => widget.onTap(index),
                   child: TweenAnimationBuilder<Color?>(
                     tween: ColorTween(
                       begin: context.color.gray6,

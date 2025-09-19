@@ -1,27 +1,32 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/calendar/calendar_cubit.dart';
 import '../../blocs/calendar/calendar_state.dart';
+import '../../blocs/main/main_cubit.dart';
+import '../../blocs/main/main_state.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
 import 'components/app_bar_calendar.dart';
-import 'components/month/calendar_month_view.dart';
 import 'components/calendar_year_view.dart';
+import 'components/month/calendar_month_view.dart';
 
-class CalendarTab extends StatefulWidget {
-  final double heightBottomNavigationBar;
-
-  const CalendarTab({required this.heightBottomNavigationBar, super.key});
+@RoutePage()
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({super.key});
 
   @override
-  State<CalendarTab> createState() => _CalendarTabState();
+  State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with TickerProviderStateMixin {
+class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit> with TickerProviderStateMixin {
+  final _mainCubit = GetIt.instance.get<MainCubit>();
+
   late final ScrollController _scrollController;
 
   static const int _startYear = 1975;
@@ -67,7 +72,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
         context.screenHeight -
         UiConstants.appBarCalendarHeight -
         context.statusBarHeight -
-        widget.heightBottomNavigationBar;
+        _mainCubit.state.heightBottomNavigationBar;
 
     if (newHeight != _yearHeight) {
       setState(() {
@@ -151,30 +156,30 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
     _selectedYear = year;
     _selectedMonth = month;
 
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        return AnimatedMonthOverlay(
-          year: year,
-          month: month,
-          startRect: itemRect,
-          heightBottomNavigationBar: widget.heightBottomNavigationBar,
-          onClose: () {
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-            _selectedYear = null;
-            _selectedMonth = null;
-          },
-          onSwitchToMonthView: () {
-            // Switch to actual month view mode
-            bloc.setCalendarViewMode(CalendarViewMode.month);
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-          },
-        );
-      },
-    );
-
-    Overlay.of(context, debugRequiredFor: widget)?.insert(_overlayEntry!);
+    // _overlayEntry = OverlayEntry(
+    //   builder: (context) {
+    //     return AnimatedMonthOverlay(
+    //       year: year,
+    //       month: month,
+    //       startRect: itemRect,
+    //       heightBottomNavigationBar: widget.heightBottomNavigationBar,
+    //       onClose: () {
+    //         _overlayEntry?.remove();
+    //         _overlayEntry = null;
+    //         _selectedYear = null;
+    //         _selectedMonth = null;
+    //       },
+    //       onSwitchToMonthView: () {
+    //         // Switch to actual month view mode
+    //         bloc.setCalendarViewMode(CalendarViewMode.month);
+    //         _overlayEntry?.remove();
+    //         _overlayEntry = null;
+    //       },
+    //     );
+    //   },
+    // );
+    //
+    // Overlay.of(context, debugRequiredFor: widget)?.insert(_overlayEntry!);
   }
 
   Widget _buildYearView() {
@@ -204,7 +209,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
     return CalendarMonthView(
       year: _selectedYear,
       month: _selectedMonth,
-    ).wrapPadding(EdgeInsets.only(bottom: widget.heightBottomNavigationBar));
+    ).wrapPadding(EdgeInsets.only(bottom: _mainCubit.state.heightBottomNavigationBar));
   }
 
   void _onMonthTapped(int year, int month) {
@@ -213,7 +218,7 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
 
   Widget _buildWeekView() {
     return Container(
-      padding: EdgeInsets.only(bottom: widget.heightBottomNavigationBar),
+      padding: EdgeInsets.only(bottom: _mainCubit.state.heightBottomNavigationBar),
       child: Center(
         child: Text(
           'Week View for $_displayedYear',
@@ -248,16 +253,25 @@ class _CalendarTabState extends BaseScreenState<CalendarTab, CalendarCubit> with
 
   @override
   Widget buildPageListeners({required Widget child}) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<CalendarCubit, CalendarState>(
-          listenWhen: (previous, current) => previous.calendarViewMode != current.calendarViewMode,
-          listener: (context, state) {
-            _handleViewModeChange(state.calendarViewMode);
-          },
-        ),
-      ],
-      child: child,
+    return BlocProvider<MainCubit>(
+      create: (context) => _mainCubit,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CalendarCubit, CalendarState>(
+            listenWhen: (previous, current) => previous.calendarViewMode != current.calendarViewMode,
+            listener: (context, state) {
+              _handleViewModeChange(state.calendarViewMode);
+            },
+          ),
+          BlocListener<MainCubit, MainState>(
+            listenWhen: (previous, current) => previous.heightBottomNavigationBar != current.heightBottomNavigationBar,
+            listener: (context, state) {
+              _calculateYearHeight();
+            },
+          ),
+        ],
+        child: child,
+      ),
     );
   }
 

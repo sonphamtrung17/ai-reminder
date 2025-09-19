@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../features/calendar/calendar_tab.dart';
+import '../../features/calendar/calendar_screen.dart';
 import '../../features/calendar/components/month/calendar_switch_day_view_mode.dart';
 import '../base/base_state.dart';
 

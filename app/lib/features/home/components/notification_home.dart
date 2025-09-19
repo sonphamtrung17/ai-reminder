@@ -4,7 +4,7 @@ import 'package:translate/translate.dart';
 
 import '../../../components/components.dart';
 import '../../../theme/theme.dart';
-import '../home_tab.dart';
+import '../home_screen.dart';
 
 class NotificationHome extends StatefulWidget {
   const NotificationHome({super.key});

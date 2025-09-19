@@ -1,18 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
-import '../../blocs/app/app_cubit.dart';
-import '../../blocs/app/app_state.dart';
-import '../../components/components.dart';
+import '../../blocs/base/base_screen_state.dart';
+import '../../blocs/main/main_cubit.dart';
+import '../../blocs/main/main_state.dart';
+import '../../navigation/navigation.dart';
 import '../../resource/resource.dart';
-import '../calendar/calendar_tab.dart';
-import '../home/home_tab.dart';
-import '../message/message_tab.dart';
-import '../setting/setting_tab.dart';
 import 'components/app_bottom_navigation_bar.dart';
 
 @RoutePage()
@@ -23,56 +19,41 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  final _appCubit = GetIt.instance.get<AppCubit>();
+class _MainScreenState extends BaseScreenState<MainScreen, MainCubit> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final double heightBottomNavigationBar = 71 + (context.padding.bottom > 0 ? (context.padding.bottom / 2) : 0);
+      bloc.setHeightBottomNavigationBar(heightBottomNavigationBar);
+    });
+  }
 
   @override
-  Widget build(BuildContext context) {
-    final double heightBottomNavigationBar = 71 + (context.padding.bottom > 0 ? (context.padding.bottom / 2) : 0);
+  Widget buildPage(BuildContext context) {
+    return BlocBuilder<MainCubit, MainState>(
+      buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
+      builder: (context, state) {
+        return AutoTabsScaffold(
+          routes: [
+            const HomeTab(),
+            const CalendarTab(),
+            const MessageTab(),
+            const SettingTab(),
+          ],
+          bottomNavigationBuilder: (context, tabsRouter) {
+            (navigator as AppNavigatorImpl).tabsRouter = tabsRouter;
 
-    return BlocProvider<AppCubit>(
-      create: (context) => _appCubit,
-      child: BlocBuilder<AppCubit, AppState>(
-        buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
-        builder: (context, state) {
-          return Scaffold(
-            body: Stack(
-              children: [
-                IndexedStack(
-                  index: state.indexBottomTab,
-                  children: [
-                    const HomeTab(),
-                    CalendarTab(heightBottomNavigationBar: heightBottomNavigationBar),
-                    const MessageTab(),
-                    const CalendarPage(),
-                  ],
-                ),
-                Visibility(
-                  visible: state.indexBottomTab == 0,
-                  child: Positioned(
-                    bottom: heightBottomNavigationBar + 24,
-                    right: 16,
-                    child: AppButton.icon(
-                      iconPath: Assets.icons.icHomeAdd,
-                      onPressed: () {},
-                      padding: const EdgeInsets.all(10),
-                      iconWidth: 32,
-                      iconHeight: 32,
-                      iconColor: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: AppBottomNavigationBar(height: heightBottomNavigationBar),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+            return AppBottomNavigationBar(
+              onTap: (index) {
+                tabsRouter.setActiveIndex(index);
+                bloc.setIndexBottomTab(index);
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

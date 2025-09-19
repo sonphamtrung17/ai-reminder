@@ -1,7 +1,10 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 
 import '../../../../components/components.dart';
+import '../../../../navigation/navigation.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
 import 'calendar_switch_day_view_mode.dart';
@@ -94,15 +97,46 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
             children: List.generate(
               6,
               (weekIndex) => Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-                  ),
-                  child: Row(
-                    children: List.generate(7, (dayIndex) {
-                      final int index = weekIndex * 7 + dayIndex;
-                      return Expanded(child: _buildCalendarCell(index));
-                    }),
+                child: Hero(
+                  tag: 'week_$weekIndex',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Navigator.of(context).push(
+                        //   PageRouteBuilder(
+                        //     pageBuilder: (context, animation, secondaryAnimation) =>
+                        //         CalendarWeekView(weekIndex: weekIndex,year: widget.year,month: widget.month,),
+                        //     transitionDuration: Duration(milliseconds: 500),
+                        //     reverseTransitionDuration: Duration(milliseconds: 500),
+                        //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        //       return FadeTransition(
+                        //         opacity: animation,
+                        //         child: child,
+                        //       );
+                        //     },
+                        //   ),
+                        // );
+                        (GetIt.instance.get<AppNavigator>() as AppNavigatorImpl).push(
+                          CalendarWeekView(
+                            weekIndex: weekIndex,
+                            year: widget.year,
+                            month: widget.month,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+                        ),
+                        child: Row(
+                          children: List.generate(7, (dayIndex) {
+                            final int index = weekIndex * 7 + dayIndex;
+                            return Expanded(child: _buildCalendarCell(index));
+                          }),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
