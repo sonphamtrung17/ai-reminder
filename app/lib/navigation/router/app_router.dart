@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../navigation.dart';
@@ -60,13 +59,8 @@ class HomeTabPage extends AutoRouter {
 }
 
 @RoutePage(name: 'CalendarTab')
-class CalendarTabPage extends StatelessWidget {
+class CalendarTabPage extends AutoRouter {
   const CalendarTabPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AutoRouter(navigatorObservers: () => [CalendarRouteObserver()]);
-  }
 }
 
 @RoutePage(name: 'MessageTab')
@@ -77,4 +71,8 @@ class MessageTabPage extends AutoRouter {
 @RoutePage(name: 'SettingTab')
 class SettingTabPage extends AutoRouter {
   const SettingTabPage({super.key});
+}
+
+extension RouterX on StackRouter {
+  StackRouter? get calendarTab => root.innerRouterOf<StackRouter>(CalendarTab.name);
 }

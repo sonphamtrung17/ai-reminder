@@ -23,7 +23,7 @@ class _CalendarSwitchViewModeState extends State<CalendarSwitchViewMode> {
   final duration = const Duration(milliseconds: 200);
 
   void _onTabSelected(DayViewMode dayViewMode) {
-    _calendarCubit.setDayViewMode(dayViewMode);
+    _calendarCubit.onSetDayViewMode(dayViewMode);
   }
 
   @override

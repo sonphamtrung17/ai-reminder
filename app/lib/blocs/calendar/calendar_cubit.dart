@@ -9,35 +9,52 @@ import 'calendar_state.dart';
 class CalendarCubit extends BaseCubit<CalendarState> {
   CalendarCubit() : super(CalendarState(focusedDate: DateTime.now()));
 
-  // void checkTitleAppBar() {
-  //   if (state.calendarViewMode == CalendarViewMode.year) {
-  //     emit(state.copyWith(titleAppBar: 'Lịch năm'));
-  //   } else {
-  //     if (state.dayViewMode == DayViewMode.week) {
-  //       emit(state.copyWith(titleAppBar: 'Lịch tuần'));
-  //     } else {
-  //       emit(state.copyWith(titleAppBar: 'Lịch tháng'));
-  //     }
-  //   }
-  // }
+  String get titleAppBar {
+    if (state.focusedDate == null) {
+      return '';
+    }
 
-  void checkCurrentRoute() {
-    if (state.calendarViewMode == CalendarViewMode.year) {
-      emit(state.copyWith(currentRoute: CalendarRoute.year));
-    } else {
-      if (state.dayViewMode == DayViewMode.week) {
-        emit(state.copyWith(currentRoute: CalendarRoute.week));
-      } else {
-        emit(state.copyWith(currentRoute: CalendarRoute.month));
-      }
+    switch (state.calendarViewMode) {
+      case CalendarViewMode.year:
+        return '${state.focusedDate!.year}';
+      case CalendarViewMode.month:
+      case CalendarViewMode.week:
+        return 'Tháng ${state.focusedDate!.month} năm ${state.focusedDate!.year}';
     }
   }
 
-  void setDayViewMode(DayViewMode dayViewMode) {
+  void onSetCalendarViewMode(CalendarViewMode current) {
+    emit(state.copyWith(calendarViewMode: current));
+  }
+
+  void onSetDayViewMode(DayViewMode dayViewMode) {
     emit(state.copyWith(dayViewMode: dayViewMode));
   }
 
-  void setCalendarViewMode(CalendarViewMode calendarViewMode) {
-    emit(state.copyWith(calendarViewMode: calendarViewMode));
+  void onSetFocusedDate(DateTime date) {
+    emit(state.copyWith(focusedDate: date));
+  }
+
+  void onBackPressed() {
+    switch (state.calendarViewMode) {
+      case CalendarViewMode.year:
+        return;
+      case CalendarViewMode.month:
+        emit(
+          state.copyWith(
+            calendarViewMode: CalendarViewMode.year,
+            previousViewMode: null,
+          ),
+        );
+        break;
+      case CalendarViewMode.week:
+        emit(
+          state.copyWith(
+            calendarViewMode: CalendarViewMode.month,
+            previousViewMode: CalendarViewMode.year,
+          ),
+        );
+        break;
+    }
   }
 }

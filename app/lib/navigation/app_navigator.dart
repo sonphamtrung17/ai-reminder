@@ -18,20 +18,15 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
   final BasePopupInfoMapper _appPopupInfoMapper;
   final _shownPopups = <AppPopupInfo, Completer<dynamic>>{};
 
-  StackRouter? get _currentTabRouter =>
-      tabsRouter?.stackRouterOfIndex(currentBottomTab);
+  StackRouter? get _currentTabRouter => tabsRouter?.stackRouterOfIndex(currentBottomTab);
 
-  StackRouter get _currentTabRouterOrRootRouter =>
-      _currentTabRouter ?? _appRouter;
+  StackRouter get _currentTabRouterOrRootRouter => _currentTabRouter ?? _appRouter;
 
-  m.BuildContext get _rootRouterContext =>
-      _appRouter.navigatorKey.currentContext!;
+  m.BuildContext get _rootRouterContext => _appRouter.navigatorKey.currentContext!;
 
-  m.BuildContext? get _currentTabRouterContext =>
-      _currentTabRouter?.navigatorKey.currentContext;
+  m.BuildContext? get _currentTabRouterContext => _currentTabRouter?.navigatorKey.currentContext;
 
-  m.BuildContext get _currentTabContextOrRootContext =>
-      _currentTabRouterContext ?? _rootRouterContext;
+  m.BuildContext get _currentTabContextOrRootContext => _currentTabRouterContext ?? _rootRouterContext;
 
   @override
   int get currentBottomTab {
@@ -96,14 +91,22 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
   }
 
   @override
+  Future<void> replaceAll(List<PageRouteInfo> listAppRouteInfo) {
+    _shownPopups.clear();
+    if (LogConfig.enableNavigatorObserverLog) {
+      logD('replaceAll by $listAppRouteInfo');
+    }
+
+    return _appRouter.replaceAll(listAppRouteInfo);
+  }
+
+  @override
   void pop<T extends Object?>({T? result, bool useRootNavigator = false}) {
     if (LogConfig.enableNavigatorObserverLog) {
       logD('pop with result = $result, useRootNav = $useRootNavigator');
     }
 
-    return useRootNavigator
-        ? _appRouter.pop<T>(result)
-        : _currentTabRouterOrRootRouter.pop<T>(result);
+    return useRootNavigator ? _appRouter.pop<T>(result) : _currentTabRouterOrRootRouter.pop<T>(result);
   }
 
   @override
@@ -129,9 +132,7 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
       logD('popUntilRoot, useRootNav = $useRootNavigator');
     }
 
-    useRootNavigator
-        ? _appRouter.popUntilRoot()
-        : _currentTabRouterOrRootRouter.popUntilRoot();
+    useRootNavigator ? _appRouter.popUntilRoot() : _currentTabRouterOrRootRouter.popUntilRoot();
   }
 
   @override
@@ -185,9 +186,7 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
     _shownPopups[appPopupInfo] = Completer<T?>();
 
     return m.showDialog<T>(
-      context: useRootNavigator
-          ? _rootRouterContext
-          : _currentTabContextOrRootContext,
+      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
       builder: (_) => m.PopScope(
         onPopInvokedWithResult: (_, result) {
           logD('Dialog $appPopupInfo dismissed');
@@ -204,8 +203,7 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
   @override
   Future<T?> showGeneralDialog<T extends Object?>(
     AppPopupInfo appPopupInfo, {
-    Duration transitionDuration =
-        DurationConstants.defaultGeneralDialogTransitionDuration,
+    Duration transitionDuration = DurationConstants.defaultGeneralDialogTransitionDuration,
     m.Widget Function(
       m.BuildContext,
       m.Animation<double>,
@@ -225,9 +223,7 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
     _shownPopups[appPopupInfo] = Completer<T?>();
 
     return m.showGeneralDialog<T>(
-      context: useRootNavigator
-          ? _rootRouterContext
-          : _currentTabContextOrRootContext,
+      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
       barrierColor: barrierColor,
       useRootNavigator: useRootNavigator,
       barrierDismissible: barrierDismissible,
@@ -265,9 +261,7 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
     }
 
     return m.showModalBottomSheet<T>(
-      context: useRootNavigator
-          ? _rootRouterContext
-          : _currentTabContextOrRootContext,
+      context: useRootNavigator ? _rootRouterContext : _currentTabContextOrRootContext,
       builder: (_) => _appPopupInfoMapper.map(appPopupInfo, this),
       isDismissible: isDismissible,
       enableDrag: enableDrag,

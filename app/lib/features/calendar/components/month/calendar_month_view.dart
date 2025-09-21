@@ -1,10 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lunar/lunar.dart';
 import 'package:shared/shared.dart';
 
+import '../../../../blocs/calendar/calendar_cubit.dart';
+import '../../../../blocs/calendar/calendar_state.dart';
 import '../../../../components/components.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
+import '../../calendar_screen.dart';
 import '../week/calendar_week_view.dart';
 import 'calendar_switch_day_view_mode.dart';
 
@@ -19,173 +25,134 @@ class CalendarMonthView extends StatefulWidget {
   State<CalendarMonthView> createState() => _CalendarMonthViewState();
 }
 
-class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Rect?> _rectAnimation;
+class _CalendarMonthViewState extends State<CalendarMonthView> {
+  final _calendarCubit = GetIt.instance.get<CalendarCubit>();
 
-  late DateTime currentDate;
-  late int selectedDay;
+  late DateTime currentMonth;
+  late DateTime selectedDate;
 
   // Sample events data
-  Map<int, List<CalendarEvent>> events = {
-    1: [CalendarEvent('Gặp đối tác', AppColors.cyan)],
-    3: [
-      CalendarEvent('Sinh nhật', AppColors.blue),
-      CalendarEvent('Gặp đối tác', AppColors.cyan),
-      CalendarEvent('Kỉ niệm ngày cưới', const Color(0xFFEE0AA9)),
-    ],
-    14: [CalendarEvent('Sinh nhật', AppColors.blue)],
-    22: [CalendarEvent('Gặp đối tác', AppColors.cyan), CalendarEvent('Sinh nhật', AppColors.blue)],
-    29: [CalendarEvent('Kỉ niệm ngày cưới', const Color(0xFFEE0AA9))],
-  };
+  final Map<DateTime, List<CalendarEvent>> events = {};
 
   @override
   void initState() {
     super.initState();
 
     final now = DateTime.now();
-    currentDate = widget.year != null && widget.month != null
+    currentMonth = widget.year != null && widget.month != null
         ? DateTime(widget.year!, widget.month!, 1)
         : DateTime(now.year, now.month, 1);
-    selectedDay = now.day;
+    selectedDate = now;
 
-    _initializeAnimations();
+    // Fake sample events
+    events[DateTime(now.year, now.month, 1)] = [CalendarEvent('Gặp đối tác', AppColors.cyan)];
+    events[DateTime(now.year, now.month, 3)] = [
+      CalendarEvent('Sinh nhật', AppColors.blue),
+      CalendarEvent('Gặp đối tác', AppColors.cyan),
+      CalendarEvent('Kỉ niệm ngày cưới', const Color(0xFFEE0AA9)),
+    ];
   }
 
-  void _initializeAnimations() {}
+  void _onWeekTap(int weekIndex) {
+    _calendarCubit.onSetCalendarViewMode(CalendarViewMode.week);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const CalendarSwitchViewMode(),
-            const Spacer(),
-            AppButton.textIcon(
-              text: 'Đồng bộ',
-              iconPath: Assets.icons.icCalendarSync,
-              backgroundColor: Colors.transparent,
-              textStyle: context.textStyle.bodyMMedium.primary(context),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              spacing: 4,
-              onPressed: () {},
+    final gridDates = DateTimeUtils.generateDayInMonth(currentMonth);
+
+    return BlocListener<CalendarCubit, CalendarState>(
+      bloc: _calendarCubit,
+      listenWhen: (previous, current) => previous.calendarViewMode != current.calendarViewMode,
+      listener: (context, state) {
+        if (state.calendarViewMode == CalendarViewMode.week) {
+          final weekIndex = DateTimeUtils.getWeekOfMonth(selectedDate);
+          Navigator.of(context).push(
+              PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  CalendarWeekView(weekIndex: week, year: currentMonth.year, month: currentMonth.month),
+              transitionDuration: const Duration(milliseconds: 500),
+              reverseTransitionDuration: const Duration(milliseconds: 500),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
             ),
-          ],
-        ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-        // Weekday headers
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-          ),
-          child: Row(
-            children: CalendarConstants.weekDays
-                .map(
-                  (day) => Expanded(
-                    child: Center(
-                      child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const CalendarSwitchViewMode(),
+              const Spacer(),
+              AppButton.textIcon(
+                text: 'Đồng bộ',
+                iconPath: Assets.icons.icCalendarSync,
+                backgroundColor: Colors.transparent,
+                textStyle: context.textStyle.bodyMMedium.primary(context),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                spacing: 4,
+                onPressed: () {},
+              ),
+            ],
+          ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+            ),
+            child: Row(
+              children: CalendarConstants.weekDays
+                  .map(
+                    (day) => Expanded(
+                      child: Center(
+                        child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-          ),
-        ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-        Expanded(
-          child: Column(
-            children: List.generate(
-              6,
-              (weekIndex) => Expanded(
-                child: Hero(
-                  tag: 'week_$weekIndex',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => CalendarWeekView(
-                              weekIndex: weekIndex,
-                              year: widget.year,
-                              month: widget.month,
-                            ),
-                            transitionDuration: const Duration(milliseconds: 500),
-                            reverseTransitionDuration: const Duration(milliseconds: 500),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                        // (GetIt.instance.get<AppNavigator>() as AppNavigatorImpl).push(
-                        //   CalendarWeekView(
-                        //     weekIndex: weekIndex,
-                        //     year: widget.year,
-                        //     month: widget.month,
-                        //   ),
-                        // );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-                        ),
-                        child: Row(
-                          children: List.generate(7, (dayIndex) {
-                            final int index = weekIndex * 7 + dayIndex;
-                            return Expanded(child: _buildCalendarCell(index));
-                          }),
-                        ),
+                  )
+                  .toList(),
+            ),
+          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+          Expanded(
+            child: Column(
+              children: List.generate(6, (week) {
+                final rowDates = gridDates.skip(week * 7).take(7).toList();
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => _onWeekTap(week),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+                      ),
+                      child: Row(
+                        children: rowDates.map((d) => Expanded(child: _buildCalendarCell(d))).toList(),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-        ),
-      ],
+                );
+              }),
+            ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildCalendarCell(int index) {
-    // Calculate the day number
-    final int firstDayOfWeek = DateTime(currentDate.year, currentDate.month, 1).weekday;
-    final int adjustedFirstDay = firstDayOfWeek == 7 ? 0 : firstDayOfWeek; // Adjust Sunday to 0
+  Widget _buildCalendarCell(DateTime cellDate) {
+    final isCurrentMonth = cellDate.month == currentMonth.month;
+    final isSelected =
+        cellDate.year == selectedDate.year && cellDate.month == selectedDate.month && cellDate.day == selectedDate.day;
 
-    final int dayNumber = index - adjustedFirstDay + 1;
-    final int daysInMonth = DateTime(currentDate.year, currentDate.month + 1, 0).day;
-    final int daysInPrevMonth = DateTime(currentDate.year, currentDate.month, 0).day;
-
-    final bool isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth;
-    final bool isPrevMonth = dayNumber <= 0;
-    final bool isNextMonth = dayNumber > daysInMonth;
-
-    int displayDay;
-    String lunarDate = '';
-
-    if (isPrevMonth) {
-      displayDay = daysInPrevMonth + dayNumber;
-      lunarDate = '${displayDay + 3}/${currentDate.month - 1 == 0 ? 12 : currentDate.month - 1}';
-    } else if (isNextMonth) {
-      displayDay = dayNumber - daysInMonth;
-      lunarDate = '${displayDay + 7}/${currentDate.month + 1 > 12 ? 1 : currentDate.month + 1}';
-    } else {
-      displayDay = dayNumber;
-      lunarDate = '${displayDay + 3}/6'; // Sample lunar dates
-    }
-
-    final bool isSelected = isCurrentMonth && displayDay == selectedDay;
-
-    final List<CalendarEvent> dayEvents = isCurrentMonth ? (events[displayDay] ?? []) : [];
+    final dayEvents = events[cellDate] ?? [];
+    final lunar = Lunar.fromDate(cellDate);
 
     return GestureDetector(
       onTap: () {
         if (isCurrentMonth) {
           setState(() {
-            selectedDay = displayDay;
+            selectedDate = cellDate;
           });
         }
       },
@@ -203,7 +170,7 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
               ),
               child: Center(
                 child: Text(
-                  displayDay.toString(),
+                  '${cellDate.day}',
                   style: context.textStyle.bodyMSemiBold.copyWith(
                     color: isSelected ? context.color.white : context.color.black,
                   ),
@@ -211,11 +178,10 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
               ),
             ),
           ).wrapPadding(const EdgeInsets.only(top: 6, bottom: 4)),
-          // Lunar date - ngay bên dưới số ngày
           Opacity(
             opacity: isCurrentMonth ? 1 : 0.5,
             child: Text(
-              lunarDate,
+              '${lunar.getDay()}/${lunar.getMonth()}',
               style: context.textStyle.bodySssRegular.black(context),
             ),
           ),
@@ -224,7 +190,6 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: dayEvents
                     .map(
                       (event) => Container(
@@ -241,7 +206,6 @@ class _CalendarMonthViewState extends State<CalendarMonthView> with SingleTicker
                             style: context.textStyle.bodySssMedium.copyWith(color: event.color),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),

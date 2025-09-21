@@ -10,6 +10,7 @@ import '../../blocs/calendar/calendar_cubit.dart';
 import '../../blocs/calendar/calendar_state.dart';
 import '../../blocs/main/main_cubit.dart';
 import '../../blocs/main/main_state.dart';
+import '../../navigation/navigation.dart';
 import '../../navigation/router/app_router.gr.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
@@ -142,14 +143,19 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
         _scrollToCurrentYear();
         break;
       case CalendarViewMode.month:
+        logD('Navigate to month view: ${bloc.state.focusedDate}');
+        context.router.replaceAll([
+          CalendarMonthView(year: bloc.state.focusedDate!.year, month: bloc.state.focusedDate!.month),
+        ]);
       case CalendarViewMode.week:
         break;
     }
   }
 
   void _onMonthTap(BuildContext context, int year, int month, Rect itemRect) {
-    bloc.setCalendarViewMode(CalendarViewMode.month);
-    navigator.push(CalendarMonthView(year: year, month: month));
+    logD('On month tap: $month-$year');
+    bloc.onSetFocusedDate(DateTime(year, month));
+    bloc.onSetCalendarViewMode(CalendarViewMode.month);
   }
 
   @override

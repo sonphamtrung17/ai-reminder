@@ -20,6 +20,8 @@ abstract class AppNavigator {
 
   Future<T?> replace<T extends Object?>(PageRouteInfo route);
 
+  Future<void> replaceAll(List<PageRouteInfo> listAppRouteInfo);
+
   void pop<T extends Object?>({T? result, bool useRootNavigator = false});
 
   Future<T?> popAndPush<T extends Object?, R extends Object?>(

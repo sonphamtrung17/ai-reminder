@@ -38,7 +38,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         mode: _calendarCubit.state.calendarViewMode,
         onClose: () => overlayEntry.remove(),
         onItemSelected: (value) {
-          _calendarCubit.setCalendarViewMode(value);
+          // _calendarCubit.onSetCalendarViewMode(value);
           overlayEntry.remove();
         },
       ),
