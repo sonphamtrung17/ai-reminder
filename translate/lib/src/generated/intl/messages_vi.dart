@@ -47,6 +47,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chinhSua": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
     "chonKieuAnh": MessageLookupByLibrary.simpleMessage("Chọn kiểu ảnh"),
+    "chuaCoSuKienNao": MessageLookupByLibrary.simpleMessage(
+      "Chưa có sự kiện nào",
+    ),
     "chuaCoThongBao": MessageLookupByLibrary.simpleMessage("Chưa có thông báo"),
     "daTaoBoiBan": MessageLookupByLibrary.simpleMessage("Đã tạo bởi bạn"),
     "dangNhap": MessageLookupByLibrary.simpleMessage("Đăng nhập"),

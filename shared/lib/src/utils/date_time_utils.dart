@@ -1,6 +1,58 @@
+extension DateTimeX on DateTime {
+  DateTime get startOfMonth => DateTime(year, month, 1);
+
+  DateTime get endOfMonth => DateTime(year, month + 1, 0);
+
+  /// Thứ 5 ngày 21 tháng 8 năm 2025
+  String get toVietnameseString {
+    const weekdays = [
+      'Chủ nhật',
+      'Thứ 2',
+      'Thứ 3',
+      'Thứ 4',
+      'Thứ 5',
+      'Thứ 6',
+      'Thứ 7',
+    ];
+
+    return '${weekdays[weekday % 7]} ngày $day tháng $month năm $year';
+  }
+}
+
 class DateTimeUtils {
   const DateTimeUtils._();
 
+  static int findWeekIndexOfDate(DateTime month, DateTime date) {
+    final monthGrid = generateDayInMonth(month); // 42 ô
+    for (int i = 0; i < monthGrid.length; i++) {
+      if (isSameDate(monthGrid[i], date)) {
+        return i ~/ 7; // chia lấy tuần
+      }
+    }
+    return 0; // fallback
+  }
+
+  static bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return isSameDate(now, date);
+  }
+
+  static bool isSameDate(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  /// Sinh ra 7 ngày của 1 tuần trong tháng
+  static List<DateTime> generateDayInWeek(DateTime month, int weekIndex) {
+    final monthGrid = generateDayInMonth(month); // 42 ô
+    final start = weekIndex * 7;
+    final end = start + 7;
+
+    return monthGrid.sublist(start, end);
+  }
+
+  /// Sinh ra các ngày của 1 tháng
   static List<DateTime> generateDayInMonth(DateTime month) {
     final firstDayOfMonth = DateTime(month.year, month.month, 1);
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;

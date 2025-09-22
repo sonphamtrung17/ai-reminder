@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lunar/lunar.dart';
 import 'package:shared/shared.dart';
 
 import '../../../../blocs/calendar/calendar_cubit.dart';
@@ -10,8 +9,6 @@ import '../../../../blocs/calendar/calendar_state.dart';
 import '../../../../components/components.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
-import '../../calendar_screen.dart';
-import '../week/calendar_week_view.dart';
 import 'calendar_switch_day_view_mode.dart';
 
 @RoutePage()
@@ -29,7 +26,6 @@ class _CalendarMonthViewState extends State<CalendarMonthView> {
   final _calendarCubit = GetIt.instance.get<CalendarCubit>();
 
   late DateTime currentMonth;
-  late DateTime selectedDate;
 
   // Sample events data
   final Map<DateTime, List<CalendarEvent>> events = {};
@@ -42,7 +38,6 @@ class _CalendarMonthViewState extends State<CalendarMonthView> {
     currentMonth = widget.year != null && widget.month != null
         ? DateTime(widget.year!, widget.month!, 1)
         : DateTime(now.year, now.month, 1);
-    selectedDate = now;
 
     // Fake sample events
     events[DateTime(now.year, now.month, 1)] = [CalendarEvent('Gặp đối tác', AppColors.cyan)];
@@ -54,168 +49,150 @@ class _CalendarMonthViewState extends State<CalendarMonthView> {
   }
 
   void _onWeekTap(int weekIndex) {
-    _calendarCubit.onSetCalendarViewMode(CalendarViewMode.week);
+    _calendarCubit.onSetCalendarViewModeWeek(weekIndex, currentMonth.year, currentMonth.month);
   }
 
   @override
   Widget build(BuildContext context) {
     final gridDates = DateTimeUtils.generateDayInMonth(currentMonth);
 
-    return BlocListener<CalendarCubit, CalendarState>(
-      bloc: _calendarCubit,
-      listenWhen: (previous, current) => previous.calendarViewMode != current.calendarViewMode,
-      listener: (context, state) {
-        if (state.calendarViewMode == CalendarViewMode.week) {
-          final weekIndex = DateTimeUtils.getWeekOfMonth(selectedDate);
-          Navigator.of(context).push(
-              PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  CalendarWeekView(weekIndex: week, year: currentMonth.year, month: currentMonth.month),
-              transitionDuration: const Duration(milliseconds: 500),
-              reverseTransitionDuration: const Duration(milliseconds: 500),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const CalendarSwitchViewMode(),
+            const Spacer(),
+            AppButton.textIcon(
+              text: 'Đồng bộ',
+              iconPath: Assets.icons.icCalendarSync,
+              backgroundColor: Colors.transparent,
+              textStyle: context.textStyle.bodyMMedium.primary(context),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              spacing: 4,
+              onPressed: () {},
             ),
-          );
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const CalendarSwitchViewMode(),
-              const Spacer(),
-              AppButton.textIcon(
-                text: 'Đồng bộ',
-                iconPath: Assets.icons.icCalendarSync,
-                backgroundColor: Colors.transparent,
-                textStyle: context.textStyle.bodyMMedium.primary(context),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                spacing: 4,
-                onPressed: () {},
-              ),
-            ],
-          ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-            ),
-            child: Row(
-              children: CalendarConstants.weekDays
-                  .map(
-                    (day) => Expanded(
-                      child: Center(
-                        child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-          Expanded(
-            child: Column(
-              children: List.generate(6, (week) {
-                final rowDates = gridDates.skip(week * 7).take(7).toList();
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => _onWeekTap(week),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-                      ),
-                      child: Row(
-                        children: rowDates.map((d) => Expanded(child: _buildCalendarCell(d))).toList(),
-                      ),
+          ],
+        ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+          ),
+          child: Row(
+            children: CalendarConstants.weekDays
+                .map(
+                  (day) => Expanded(
+                    child: Center(
+                      child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
                     ),
                   ),
-                );
-              }),
-            ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+                )
+                .toList(),
           ),
-        ],
-      ),
+        ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+        BlocBuilder<CalendarCubit, CalendarState>(
+          bloc: _calendarCubit,
+          buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
+          builder: (context, state) {
+            return Expanded(
+              child: Column(
+                children: List.generate(6, (week) {
+                  final rowDates = gridDates.skip(week * 7).take(7).toList();
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () => _onWeekTap(week),
+                      behavior: HitTestBehavior.opaque,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+                        ),
+                        child: Row(
+                          children: rowDates.map((d) => Expanded(child: _buildCalendarCell(d))).toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+            );
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildCalendarCell(DateTime cellDate) {
     final isCurrentMonth = cellDate.month == currentMonth.month;
-    final isSelected =
-        cellDate.year == selectedDate.year && cellDate.month == selectedDate.month && cellDate.day == selectedDate.day;
 
     final dayEvents = events[cellDate] ?? [];
-    final lunar = Lunar.fromDate(cellDate);
+    final showLunar = _calendarCubit.state.dayViewMode != DayViewMode.dl;
+    String lunarDisplay = '';
+    if (showLunar) {
+      final lunar = LunarUtils.solarToLunar(cellDate);
+      lunarDisplay = '${lunar.day}/${lunar.month}';
+    }
+    final double opacityLunar = !showLunar ? 0 : (isCurrentMonth ? 1 : 0.5);
 
-    return GestureDetector(
-      onTap: () {
-        if (isCurrentMonth) {
-          setState(() {
-            selectedDate = cellDate;
-          });
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Opacity(
-            opacity: isCurrentMonth ? 1 : 0.5,
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: isSelected ? context.color.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Center(
-                child: Text(
-                  '${cellDate.day}',
-                  style: context.textStyle.bodyMSemiBold.copyWith(
-                    color: isSelected ? context.color.white : context.color.black,
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Opacity(
+          opacity: isCurrentMonth ? 1 : 0.5,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Center(
+              child: Text(
+                '${cellDate.day}',
+                style: context.textStyle.bodyMSemiBold.copyWith(
+                  color: context.color.black,
                 ),
               ),
             ),
-          ).wrapPadding(const EdgeInsets.only(top: 6, bottom: 4)),
-          Opacity(
-            opacity: isCurrentMonth ? 1 : 0.5,
-            child: Text(
-              '${lunar.getDay()}/${lunar.getMonth()}',
-              style: context.textStyle.bodySssRegular.black(context),
-            ),
           ),
-          Space.h2(),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                children: dayEvents
-                    .map(
-                      (event) => Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(bottom: 2, left: 2, right: 2),
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        decoration: BoxDecoration(
-                          color: event.color.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Center(
-                          child: Text(
-                            event.title,
-                            style: context.textStyle.bodySssMedium.copyWith(color: event.color),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+        ).wrapPadding(const EdgeInsets.only(top: 6, bottom: 4)),
+        Opacity(
+          opacity: opacityLunar,
+          child: Text(
+            lunarDisplay,
+            style: context.textStyle.bodySssRegular.black(context),
+          ),
+        ),
+        Space.h2(),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: dayEvents
+                  .map(
+                    (event) => Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 2, left: 2, right: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      decoration: BoxDecoration(
+                        color: event.color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Center(
+                        child: Text(
+                          event.title,
+                          style: context.textStyle.bodySssMedium.copyWith(color: event.color),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

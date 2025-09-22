@@ -578,6 +578,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Chưa có sự kiện nào`
+  String get chuaCoSuKienNao {
+    return Intl.message(
+      'Chưa có sự kiện nào',
+      name: 'chuaCoSuKienNao',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

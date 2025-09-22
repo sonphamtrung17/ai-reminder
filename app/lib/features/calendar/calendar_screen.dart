@@ -133,29 +133,68 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
     }
   }
 
-  void _handleViewModeChange(CalendarViewMode newMode) {
-    if (!mounted) {
-      return;
-    }
+  Future<void> _handleViewModeChange(CalendarViewMode newMode) async {
+    final stack = context.router.stack.map((e) => e.name).toList();
+    logD('Current navigation CalendarTab stack: $stack');
 
     switch (newMode) {
       case CalendarViewMode.year:
-        _scrollToCurrentYear();
-        break;
+        context.router.popUntilRoot();
+        return;
       case CalendarViewMode.month:
-        logD('Navigate to month view: ${bloc.state.focusedDate}');
-        context.router.replaceAll([
-          CalendarMonthView(year: bloc.state.focusedDate!.year, month: bloc.state.focusedDate!.month),
-        ]);
+        if (stack.contains(CalendarMonthView.name)) {
+          // Nếu có Week trên stack thì pop về Month
+          context.router.popUntilRouteWithName(CalendarMonthView.name);
+        } else {
+          // Nếu chỉ có Year thì push Month
+          await context.router.push(
+            CalendarMonthView(year: bloc.state.focusedDate?.year, month: bloc.state.focusedDate?.month),
+          );
+        }
+        return;
       case CalendarViewMode.week:
+        if (stack.contains(CalendarWeekView.name)) {
+          // Đã ở Week rồi thì thôi
+          return;
+        } else if (stack.contains(CalendarMonthView.name)) {
+          // Có B rồi thì push C
+          await context.router.push(
+            CalendarWeekView(
+              weekIndex: bloc.state.week!,
+              year: bloc.state.focusedDate?.year,
+              month: bloc.state.focusedDate?.month,
+            ),
+          );
+        } else {
+          // Chưa có Month → push Month rồi push Week
+          await context.router.pushAll([
+            CalendarMonthView(year: bloc.state.focusedDate?.year, month: bloc.state.focusedDate?.month),
+            CalendarWeekView(
+              weekIndex: bloc.state.week!,
+              year: bloc.state.focusedDate?.year,
+              month: bloc.state.focusedDate?.month,
+            ),
+          ]);
+        }
+        return;
+        // Navigator.of(context).push(
+        //   PageRouteBuilder(
+        //     pageBuilder: (context, animation, secondaryAnimation) =>
+        //         CalendarWeekView(weekIndex: bloc.state.week!, year: bloc.state.year, month: bloc.state.month),
+        //     transitionDuration: const Duration(milliseconds: 500),
+        //     reverseTransitionDuration: const Duration(milliseconds: 500),
+        //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        //       return FadeTransition(opacity: animation, child: child);
+        //     },
+        //   ),
+        // );
         break;
     }
   }
 
   void _onMonthTap(BuildContext context, int year, int month, Rect itemRect) {
     logD('On month tap: $month-$year');
-    bloc.onSetFocusedDate(DateTime(year, month));
-    bloc.onSetCalendarViewMode(CalendarViewMode.month);
+    bloc.onSetCalendarViewModeMonth(DateTime(year, month));
   }
 
   @override

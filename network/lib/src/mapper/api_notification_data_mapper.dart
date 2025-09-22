@@ -1,7 +1,6 @@
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
-import 'package:network/src/model/notification/api_notification_data.dart';
 
 @Injectable()
 class ApiNotificationDataMapper extends BaseDataMapper<ApiNotificationData, NotificationEntity> {

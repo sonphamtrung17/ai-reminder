@@ -60,4 +60,4 @@ dependency_overrides:
 
   flutter_slidable: ^4.0.1
 
-  lunar: ^1.7.5
+  dotted_dashed_line: ^0.0.3

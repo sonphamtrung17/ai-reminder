@@ -1,4 +1,3 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -7,7 +6,6 @@ import 'package:shared/shared.dart';
 import '../../../blocs/calendar/calendar_cubit.dart';
 import '../../../blocs/calendar/calendar_state.dart';
 import '../../../components/components.dart';
-import '../../../navigation/navigation.dart';
 import '../../../resource/resource.dart';
 import '../../../theme/theme.dart';
 import '../calendar_screen.dart';
@@ -26,7 +24,6 @@ class AppBarCalendar extends StatefulWidget implements PreferredSizeWidget {
 class _AppBarCalendarState extends State<AppBarCalendar> {
   final _moreButtonKey = GlobalKey();
   final _calendarCubit = GetIt.instance.get<CalendarCubit>();
-  final _appNavigator = GetIt.instance.get<AppNavigator>() as AppNavigatorImpl;
 
   void _showCalendarMode() {
     final overlay = Overlay.of(context);
@@ -38,7 +35,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
         mode: _calendarCubit.state.calendarViewMode,
         onClose: () => overlayEntry.remove(),
         onItemSelected: (value) {
-          // _calendarCubit.onSetCalendarViewMode(value);
+          _calendarCubit.onSetCalendarViewModeFromPopup(value);
           overlayEntry.remove();
         },
       ),
@@ -73,7 +70,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
                   padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10, right: 12),
                   backgroundColor: Colors.transparent,
                   onPressed: () {
-                    _appNavigator.pop();
+                    _calendarCubit.onBackPressed();
                   },
                 ),
               Expanded(

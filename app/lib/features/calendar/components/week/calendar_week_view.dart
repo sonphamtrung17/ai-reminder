@@ -1,11 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 
+import '../../../../blocs/calendar/calendar_cubit.dart';
+import '../../../../blocs/calendar/calendar_state.dart';
 import '../../../../components/components.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
 import '../month/calendar_switch_day_view_mode.dart';
+import 'calendar_week_event_view.dart';
 
 @RoutePage()
 class CalendarWeekView extends StatefulWidget {
@@ -25,42 +30,59 @@ class CalendarWeekView extends StatefulWidget {
 }
 
 class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Rect?> _rectAnimation;
+  final _calendarCubit = GetIt.instance.get<CalendarCubit>();
 
-  late DateTime currentDate;
-  late int selectedDay;
+  late DateTime currentMonth;
+  late DateTime selectedDate;
 
   // Sample events data
-  Map<int, List<CalendarEvent>> events = {
-    1: [CalendarEvent('Gặp đối tác', AppColors.cyan)],
-    3: [
-      CalendarEvent('Sinh nhật', AppColors.blue),
-      CalendarEvent('Gặp đối tác', AppColors.cyan),
-      CalendarEvent('Kỉ niệm ngày cưới', const Color(0xFFEE0AA9)),
-    ],
-    14: [CalendarEvent('Sinh nhật', AppColors.blue)],
-    22: [CalendarEvent('Gặp đối tác', AppColors.cyan), CalendarEvent('Sinh nhật', AppColors.blue)],
-    29: [CalendarEvent('Kỉ niệm ngày cưới', const Color(0xFFEE0AA9))],
-  };
+  final Map<DateTime, List<CalendarEvent>> events = {};
 
   @override
   void initState() {
     super.initState();
 
     final now = DateTime.now();
-    currentDate = widget.year != null && widget.month != null
+    currentMonth = widget.year != null && widget.month != null
         ? DateTime(widget.year!, widget.month!, 1)
         : DateTime(now.year, now.month, 1);
-    selectedDay = now.day;
+    selectedDate = now;
 
-    _initializeAnimations();
+    // Fake sample events
+    events[DateTime(now.year, now.month, 1)] = [
+      CalendarEvent(
+        'Gặp đối tác',
+        AppColors.cyan,
+        DateTime(now.year, now.month, 1, 1, 0),
+        DateTime(now.year, now.month, 1, 3, 0),
+      ),
+    ];
+    events[DateTime(now.year, now.month, 3)] = [
+      CalendarEvent(
+        'Sinh nhật',
+        AppColors.blue,
+        DateTime(now.year, now.month, 3, 1, 0),
+        DateTime(now.year, now.month, 3, 3, 0),
+      ),
+      CalendarEvent(
+        'Gặp đối tác',
+        AppColors.cyan,
+        DateTime(now.year, now.month, 3, 4, 0),
+        DateTime(now.year, now.month, 3, 6, 0),
+      ),
+      CalendarEvent(
+        'Kỉ niệm ngày cưới',
+        const Color(0xFFEE0AA9),
+        DateTime(now.year, now.month, 3, 6, 0),
+        DateTime(now.year, now.month, 3, 9, 0),
+      ),
+    ];
   }
-
-  void _initializeAnimations() {}
 
   @override
   Widget build(BuildContext context) {
+    final weekDates = DateTimeUtils.generateDayInWeek(currentMonth, widget.weekIndex);
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +102,6 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
               ),
             ],
           ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-          // Weekday headers
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
@@ -98,93 +119,96 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
                   .toList(),
             ),
           ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+          Space.h4(),
           Hero(
             tag: 'week_${widget.weekIndex}',
             child: Material(
               color: Colors.transparent,
-              child: Row(
-                children: List.generate(7, (dayIndex) {
-                  final int index = widget.weekIndex * 7 + dayIndex;
-                  return Expanded(child: _buildCalendarCell(index));
-                }),
+              child: BlocBuilder<CalendarCubit, CalendarState>(
+                buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
+                bloc: _calendarCubit,
+                builder: (context, state) {
+                  return Row(
+                    children: weekDates.map((date) {
+                      return Expanded(child: _buildCalendarCell(date));
+                    }).toList(),
+                  ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
+                },
               ),
             ),
           ),
+          Center(
+            child: Text(
+              selectedDate.toVietnameseString,
+              style: context.textStyle.bodyLSemiBold.black(context),
+            ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+          ),
+          CalendarWeekEventView(events: events[selectedDate] ?? []),
         ],
       ),
     );
   }
 
-  Widget _buildCalendarCell(int index) {
-    // Calculate the day number
-    final int firstDayOfWeek = DateTime(currentDate.year, currentDate.month, 1).weekday;
-    final int adjustedFirstDay = firstDayOfWeek == 7 ? 0 : firstDayOfWeek; // Adjust Sunday to 0
+  Widget _buildCalendarCell(DateTime cellDate) {
+    final isCurrentMonth = cellDate.month == currentMonth.month;
+    final isSelected = DateTimeUtils.isSameDate(cellDate, selectedDate);
+    final isToday = DateTimeUtils.isToday(cellDate);
 
-    final int dayNumber = index - adjustedFirstDay + 1;
-    final int daysInMonth = DateTime(currentDate.year, currentDate.month + 1, 0).day;
-    final int daysInPrevMonth = DateTime(currentDate.year, currentDate.month, 0).day;
-
-    final bool isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth;
-    final bool isPrevMonth = dayNumber <= 0;
-    final bool isNextMonth = dayNumber > daysInMonth;
-
-    int displayDay;
-    String lunarDate = '';
-
-    if (isPrevMonth) {
-      displayDay = daysInPrevMonth + dayNumber;
-      lunarDate = '${displayDay + 3}/${currentDate.month - 1 == 0 ? 12 : currentDate.month - 1}';
-    } else if (isNextMonth) {
-      displayDay = dayNumber - daysInMonth;
-      lunarDate = '${displayDay + 7}/${currentDate.month + 1 > 12 ? 1 : currentDate.month + 1}';
-    } else {
-      displayDay = dayNumber;
-      lunarDate = '${displayDay + 3}/6'; // Sample lunar dates
+    final showLunar = _calendarCubit.state.dayViewMode != DayViewMode.dl;
+    String lunarDisplay = '';
+    if (showLunar) {
+      final lunar = LunarUtils.solarToLunar(cellDate);
+      lunarDisplay = '${lunar.day}/${lunar.month}';
     }
+    final double opacityLunar = !showLunar ? 0 : (isCurrentMonth ? 1 : 0.5);
 
-    final bool isSelected = isCurrentMonth && displayDay == selectedDay;
-
-    final List<CalendarEvent> dayEvents = isCurrentMonth ? (events[displayDay] ?? []) : [];
-
-    return GestureDetector(
-      onTap: () {
-        if (isCurrentMonth) {
-          setState(() {
-            selectedDay = displayDay;
-          });
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Opacity(
-            opacity: isCurrentMonth ? 1 : 0.5,
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: isSelected ? context.color.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Center(
-                child: Text(
-                  displayDay.toString(),
-                  style: context.textStyle.bodyMSemiBold.copyWith(
-                    color: isSelected ? context.color.white : context.color.black,
+    return Container(
+      decoration: isSelected
+          ? BoxDecoration(
+              border: Border.all(color: context.color.primary, width: 1),
+              borderRadius: BorderRadius.circular(10),
+            )
+          : null,
+      child: InkWell(
+        onTap: () {
+          if (isCurrentMonth) {
+            setState(() {
+              selectedDate = cellDate;
+            });
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Opacity(
+              opacity: isCurrentMonth ? 1 : 0.5,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: isToday ? context.color.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Center(
+                  child: Text(
+                    cellDate.day.toString(),
+                    style: context.textStyle.bodyMSemiBold.copyWith(
+                      color: isToday ? context.color.white : context.color.black,
+                    ),
                   ),
                 ),
               ),
+            ).wrapPadding(const EdgeInsets.only(top: 8, bottom: 2)),
+            Opacity(
+              opacity: opacityLunar,
+              child: Text(
+                lunarDisplay,
+                style: context.textStyle.bodySssRegular.black(context),
+              ),
             ),
-          ).wrapPadding(const EdgeInsets.only(top: 6, bottom: 4)),
-          // Lunar date - ngay bên dưới số ngày
-          Opacity(
-            opacity: isCurrentMonth ? 1 : 0.5,
-            child: Text(
-              lunarDate,
-              style: context.textStyle.bodySssRegular.black(context),
-            ),
-          ),
-        ],
+            Space.h8(),
+          ],
+        ),
       ),
     );
   }
@@ -193,6 +217,13 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
 class CalendarEvent {
   final String title;
   final Color color;
+  final DateTime start;
+  final DateTime end;
 
-  CalendarEvent(this.title, this.color);
+  CalendarEvent(
+    this.title,
+    this.color,
+    this.start,
+    this.end,
+  );
 }

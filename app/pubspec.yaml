@@ -55,7 +55,7 @@ dependencies:
 
   image_picker:
 
-  lunar:
+  dotted_dashed_line:
 
 dev_dependencies:
   flutter_test:
