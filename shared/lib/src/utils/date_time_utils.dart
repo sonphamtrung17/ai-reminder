@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeX on DateTime {
   DateTime get startOfMonth => DateTime(year, month, 1);
 
@@ -17,6 +19,13 @@ extension DateTimeX on DateTime {
 
     return '${weekdays[weekday % 7]} ngày $day tháng $month năm $year';
   }
+
+  /// ex: 14/02/2023
+  String get convertTimeToDDMMYY {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    final String formatted = formatter.format(this);
+    return formatted;
+  }
 }
 
 class DateTimeUtils {
@@ -30,6 +39,19 @@ class DateTimeUtils {
       }
     }
     return 0; // fallback
+  }
+
+  static bool isCurrentMonth(DateTime month) {
+    final now = DateTime.now();
+    return month.year == now.year && month.month == now.month;
+  }
+
+  static bool isSameMonth(DateTime month1, DateTime month2) {
+    return month1.year == month2.year && month1.month == month2.month;
+  }
+
+  static bool isInMonth(DateTime month, DateTime date) {
+    return month.year == date.year && month.month == date.month;
   }
 
   static bool isToday(DateTime date) {
@@ -52,30 +74,40 @@ class DateTimeUtils {
     return monthGrid.sublist(start, end);
   }
 
-  /// Sinh ra các ngày của 1 tháng
+  /// Sinh ra các ngày của 1 tháng (6x7)
   static List<DateTime> generateDayInMonth(DateTime month) {
+    /// Ngày đầu tiên của tháng hiện tại
     final firstDayOfMonth = DateTime(month.year, month.month, 1);
+
+    /// Số ngày trong tháng hiện tại
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+
+    /// Thứ của ngày đầu tiên trong tháng (1 = Thứ 2, 7 = Chủ nhật)
     final firstWeekday = firstDayOfMonth.weekday; // 1 = Mon, 7 = Sun
+
+    /// Số ô trống ở đầu (leading) để căn chỉnh ngày đầu tiên của tháng vào đúng vị trí trong tuần
     final leading = firstWeekday - 1;
 
+    /// Số ngày trong tháng trước
     final prevMonth = DateTime(month.year, month.month - 1, 1);
     final daysInPrevMonth = DateTime(month.year, month.month, 0).day;
 
     final List<DateTime> grid = [];
 
-    // prev month days
+    /// Thêm ngày của tháng trước
+    /// Ví dụ: nếu ngày 1 của tháng hiện tại là Thứ 6, thì firstWeekday = 5
+    /// -> leading = 4 -> cần hiển thị 4 ngày cuối cùng của tháng trước.
     for (int i = 0; i < leading; i++) {
       final int day = daysInPrevMonth - leading + 1 + i;
       grid.add(DateTime(prevMonth.year, prevMonth.month, day));
     }
 
-    // current month days
+    /// Thêm toàn bộ ngày từ 1 → hết tháng.
     for (int d = 1; d <= daysInMonth; d++) {
       grid.add(DateTime(month.year, month.month, d));
     }
 
-    // next month days
+    /// Sau khi thêm tháng trước và tháng hiện tại, có thể tuần cuối cùng chưa đủ 7 ngày → tính trailing để bù cho đủ.
     final trailing = (7 - grid.length % 7) % 7;
     final nextMonth = DateTime(month.year, month.month + 1, 1);
     for (int i = 0; i < trailing; i++) {

@@ -57,12 +57,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "dieuKhoanDichVu": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ của chúng tôi.",
     ),
+    "doiTuong": MessageLookupByLibrary.simpleMessage("Đối tượng"),
     "doiTuongQuanTam": MessageLookupByLibrary.simpleMessage(
       "Đối tượng quan tâm",
     ),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
     "emptyEmail": MessageLookupByLibrary.simpleMessage("emptyEmail"),
     "ghiChu": MessageLookupByLibrary.simpleMessage("Ghi chú"),
+    "gio": MessageLookupByLibrary.simpleMessage("Giờ"),
     "giupBanKhongQuen": MessageLookupByLibrary.simpleMessage(
       "Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU",
     ),
@@ -80,12 +82,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "invalidPhoneNumber",
     ),
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
+    "khongLapLai": MessageLookupByLibrary.simpleMessage("Không lặp lại"),
     "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
+    "loaiSuKien": MessageLookupByLibrary.simpleMessage("Loại sự kiện"),
     "luuLai": MessageLookupByLibrary.simpleMessage("Lưu lại"),
     "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "moiQuanHe": MessageLookupByLibrary.simpleMessage("Mối quan hệ"),
     "nam": MessageLookupByLibrary.simpleMessage("Nam"),
     "ngay": MessageLookupByLibrary.simpleMessage("ngày"),
+    "ngayEvent": MessageLookupByLibrary.simpleMessage("Ngày"),
     "ngayLeSapDen": MessageLookupByLibrary.simpleMessage("Ngày lễ sắp đến"),
     "ngaySinh": MessageLookupByLibrary.simpleMessage("Ngày sinh"),
     "ngheNghiep": MessageLookupByLibrary.simpleMessage("Nghề nghiệp"),
@@ -99,6 +104,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.",
     ),
     "nhanBan": MessageLookupByLibrary.simpleMessage("Nhân bản"),
+    "nhapSoThich": MessageLookupByLibrary.simpleMessage(
+      "Nhập sở thích, mô tả hoặc tính cách đối tượng",
+    ),
     "noInternetException": MessageLookupByLibrary.simpleMessage(
       "noInternetException",
     ),
@@ -112,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
     "sinhNhat": MessageLookupByLibrary.simpleMessage("Sinh nhật"),
     "soDienThoai": MessageLookupByLibrary.simpleMessage("Số điện thoại"),
+    "suKienMoi": MessageLookupByLibrary.simpleMessage("Sự kiện mới"),
     "suKienSapDienRa": MessageLookupByLibrary.simpleMessage(
       "Sự kiện sắp diễn ra",
     ),
@@ -119,7 +128,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "taoDoiTuong": MessageLookupByLibrary.simpleMessage("Tạo đối tượng"),
     "tatCa": MessageLookupByLibrary.simpleMessage("Tất cả"),
     "thang": MessageLookupByLibrary.simpleMessage("Tháng"),
+    "thoiGian": MessageLookupByLibrary.simpleMessage("Thời gian"),
     "thongBao": MessageLookupByLibrary.simpleMessage("Thông báo"),
+    "tieuDeSuKien": MessageLookupByLibrary.simpleMessage("Tiêu đề sự kiện"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
     ),
@@ -129,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tuan": MessageLookupByLibrary.simpleMessage("Tuần"),
     "unknownException": m0,
     "vuiLongNhapTen": MessageLookupByLibrary.simpleMessage("Vui lòng nhập tên"),
+    "xacNhan": MessageLookupByLibrary.simpleMessage("Xác nhận"),
     "xinChao": MessageLookupByLibrary.simpleMessage("Xin chào !"),
     "xinChaoHomNayBanTheNao": MessageLookupByLibrary.simpleMessage(
       "Xin chào! Hôm nay bạn thế nào?",

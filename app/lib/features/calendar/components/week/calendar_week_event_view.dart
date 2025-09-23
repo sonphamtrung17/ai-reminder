@@ -1,9 +1,12 @@
+import 'package:domain/domain.dart';
 import 'package:dotted_dashed_line/dotted_dashed_line.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../../../components/components.dart';
+import '../../../../navigation/navigation.dart';
 import '../../../../resource/resource.dart';
 import '../../../../theme/theme.dart';
 import 'calendar_week_view.dart';
@@ -18,11 +21,14 @@ class CalendarWeekEventView extends StatefulWidget {
 }
 
 class _CalendarWeekEventViewState extends State<CalendarWeekEventView> {
+  final _appNavigator = GetIt.instance.get<AppNavigator>();
+
   final double hourHeight = 50;
   final double timeColumnWidth = 40;
-  double eventsAreaWidth = 720.0;
   final int hours = 24;
   final double eventWidth = 44;
+
+  double eventsAreaWidth = 720.0;
 
   void _calculateEventsAreaWidth() {
     final areaWidth = eventWidth * widget.events.length;
@@ -123,7 +129,9 @@ class _CalendarWeekEventViewState extends State<CalendarWeekEventView> {
             backgroundColor: Colors.white,
             spacing: Dimens.d8,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            onPressed: () {},
+            onPressed: () {
+              _appNavigator.push(const CreateEventScreen());
+            },
           ),
         ],
       ),

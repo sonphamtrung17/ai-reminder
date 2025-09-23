@@ -588,6 +588,71 @@ class S {
       args: [],
     );
   }
+
+  /// `Sự kiện mới`
+  String get suKienMoi {
+    return Intl.message('Sự kiện mới', name: 'suKienMoi', desc: '', args: []);
+  }
+
+  /// `Tiêu đề sự kiện`
+  String get tieuDeSuKien {
+    return Intl.message(
+      'Tiêu đề sự kiện',
+      name: 'tieuDeSuKien',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loại sự kiện`
+  String get loaiSuKien {
+    return Intl.message('Loại sự kiện', name: 'loaiSuKien', desc: '', args: []);
+  }
+
+  /// `Thời gian`
+  String get thoiGian {
+    return Intl.message('Thời gian', name: 'thoiGian', desc: '', args: []);
+  }
+
+  /// `Ngày`
+  String get ngayEvent {
+    return Intl.message('Ngày', name: 'ngayEvent', desc: '', args: []);
+  }
+
+  /// `Giờ`
+  String get gio {
+    return Intl.message('Giờ', name: 'gio', desc: '', args: []);
+  }
+
+  /// `Đối tượng`
+  String get doiTuong {
+    return Intl.message('Đối tượng', name: 'doiTuong', desc: '', args: []);
+  }
+
+  /// `Không lặp lại`
+  String get khongLapLai {
+    return Intl.message(
+      'Không lặp lại',
+      name: 'khongLapLai',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nhập sở thích, mô tả hoặc tính cách đối tượng`
+  String get nhapSoThich {
+    return Intl.message(
+      'Nhập sở thích, mô tả hoặc tính cách đối tượng',
+      name: 'nhapSoThich',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Xác nhận`
+  String get xacNhan {
+    return Intl.message('Xác nhận', name: 'xacNhan', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
