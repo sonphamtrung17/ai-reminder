@@ -70,6 +70,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "goiYTuAI": MessageLookupByLibrary.simpleMessage("Gợi ý từ AI"),
     "hAIReminder": MessageLookupByLibrary.simpleMessage("H-AI Reminder"),
+    "hangNam": MessageLookupByLibrary.simpleMessage("Hàng năm"),
+    "hangNgay": MessageLookupByLibrary.simpleMessage("Hàng ngày"),
+    "hangThang": MessageLookupByLibrary.simpleMessage("Hàng tháng"),
+    "hangTuan": MessageLookupByLibrary.simpleMessage("Hàng tuần"),
     "hayGhiLai": MessageLookupByLibrary.simpleMessage(
       "Hãy ghi lại, ghi nhớ và trân trọng những khoảnh khắc ý nghĩa.",
     ),
@@ -83,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
     "khongLapLai": MessageLookupByLibrary.simpleMessage("Không lặp lại"),
+    "lapLai": MessageLookupByLibrary.simpleMessage("Lặp lại"),
     "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
     "loaiSuKien": MessageLookupByLibrary.simpleMessage("Loại sự kiện"),
     "luuLai": MessageLookupByLibrary.simpleMessage("Lưu lại"),

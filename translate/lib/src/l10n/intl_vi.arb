@@ -79,5 +79,10 @@
   "doiTuong": "Đối tượng",
   "khongLapLai": "Không lặp lại",
   "nhapSoThich": "Nhập sở thích, mô tả hoặc tính cách đối tượng",
-  "xacNhan": "Xác nhận"
+  "xacNhan": "Xác nhận",
+  "lapLai": "Lặp lại",
+  "hangNgay": "Hàng ngày",
+  "hangTuan": "Hàng tuần",
+  "hangThang": "Hàng tháng",
+  "hangNam": "Hàng năm"
 }

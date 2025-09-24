@@ -70,9 +70,7 @@ class CommonDialog extends StatelessWidget {
       case PopupType.ios:
         return _buildIosDialog(context);
       case PopupType.adaptive:
-        return Platform.isIOS
-            ? _buildIosDialog(context)
-            : _buildAndroidDialog(context);
+        return Platform.isIOS ? _buildIosDialog(context) : _buildAndroidDialog(context);
     }
   }
 
@@ -81,7 +79,7 @@ class CommonDialog extends StatelessWidget {
       actions: actions
           .map(
             (e) => TextButton(
-              onPressed: e.onPressed?.call(),
+              onPressed: () => e.onPressed?.call(),
               child: Text(
                 e.text ?? S.current.ok,
                 style: e.isDefault
@@ -117,7 +115,7 @@ class CommonDialog extends StatelessWidget {
       actions: actions
           .map(
             (e) => CupertinoDialogAction(
-              onPressed: e.onPressed?.call(),
+              onPressed: () => e.onPressed?.call(),
               child: Text(
                 e.text ?? S.current.ok,
                 style: e.isDefault

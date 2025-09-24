@@ -5,21 +5,21 @@ import '../../../components/components.dart';
 import '../../../resource/resource.dart';
 import '../../../theme/theme.dart';
 
-class CustomDatePicker extends StatefulWidget {
-  final DateTime initialDate;
-  final Function(DateTime)? onDateSelected;
+class CreateEventDatePicker extends StatefulWidget {
+  final DateTime? initialDate;
+  final Function(DateTime) onDateSelected;
 
-  const CustomDatePicker({
-    required this.initialDate,
+  const CreateEventDatePicker({
+    required this.onDateSelected,
+    this.initialDate,
     super.key,
-    this.onDateSelected,
   });
 
   @override
-  State<CustomDatePicker> createState() => _CustomDatePickerState();
+  State<CreateEventDatePicker> createState() => _CreateEventDatePickerState();
 }
 
-class _CustomDatePickerState extends State<CustomDatePicker> {
+class _CreateEventDatePickerState extends State<CreateEventDatePicker> {
   late DateTime currentMonth;
   late DateTime selectedDate;
 
@@ -30,15 +30,30 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   void initState() {
     super.initState();
 
-    currentMonth = widget.initialDate;
-    selectedDate = widget.initialDate;
+    if (widget.initialDate == null) {
+      return;
+    }
+    currentMonth = widget.initialDate!;
+    selectedDate = widget.initialDate!;
+  }
+
+  @override
+  void didUpdateWidget(covariant CreateEventDatePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.initialDate != oldWidget.initialDate && widget.initialDate != null) {
+      setState(() {
+        currentMonth = widget.initialDate!;
+        selectedDate = widget.initialDate!;
+      });
+    }
   }
 
   void _selectDate(DateTime date) {
     setState(() {
       selectedDate = date;
     });
-    widget.onDateSelected?.call(date);
+    widget.onDateSelected.call(date);
   }
 
   void _previousMonth() {
@@ -74,6 +89,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.initialDate == null) {
+      return const SizedBox.shrink();
+    }
+
     final daysInMonth = DateTimeUtils.generateDayInMonth(currentMonth);
 
     return Container(

@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
+import '../../blocs/base/base_screen_state.dart';
+import '../../blocs/create_event/create_event_cubit.dart';
 import '../../components/components.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
-import 'components/custom_date_picker.dart';
+import 'components/bottom_sheet/bottom_sheet_event_type.dart';
+import 'components/bottom_sheet/bottom_sheet_repeat.dart';
+import 'components/create_event_date_picker.dart';
+import 'components/create_event_time_picker.dart';
+import 'components/item_container_date_time.dart';
+import 'components/item_container_event.dart';
 
 @RoutePage()
 class CreateEventScreen extends StatefulWidget {
@@ -16,23 +23,27 @@ class CreateEventScreen extends StatefulWidget {
   State<CreateEventScreen> createState() => _CreateEventScreenState();
 }
 
-class _CreateEventScreenState extends State<CreateEventScreen> {
+class _CreateEventScreenState extends BaseScreenState<CreateEventScreen, CreateEventCubit> {
   final _titleController = TextEditingController();
   final _typeController = TextEditingController();
   final _objectController = TextEditingController();
   final _repeatController = TextEditingController();
   final _noteController = TextEditingController();
 
-  final DateTime _startDate = DateTime.now();
-  final DateTime _endDate = DateTime.now().add(const Duration(hours: 3));
+  EventType? _eventType;
+  RepeatType? _repeatType;
+
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(const Duration(days: 1));
+
+  TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
 
   bool _isSelectStartDate = false;
   bool _isSelectEndDate = false;
-  bool _isSelectStartTime = false;
-  bool _isSelectEndTime = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildPage(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
         title: S.current.suKienMoi,
@@ -53,15 +64,24 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               iconPath: Assets.icons.icEventType,
               hint: S.current.loaiSuKien,
               isSingleLine: true,
-              onTap: () {},
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
+                  builder: (_) => BottomSheetEventType(
+                    onSelected: (type) {
+                      _eventType = type;
+                      _typeController.text = type.name;
+                    },
+                    selectedEventType: _eventType,
+                  ),
+                );
+              },
             ),
             Container(
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Column(
                 children: [
                   Row(
@@ -82,78 +102,53 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           style: context.textStyle.bodyMSemiBold.black(context),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 17),
-                        decoration: BoxDecoration(
-                          border: _isSelectStartDate ? Border.all(width: 1, color: context.color.primary) : null,
-                          color: context.color.gray1,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          _startDate.convertTimeToDDMMYY,
-                          style: context.textStyle.bodyMMedium.copyWith(
-                            color: _isSelectStartDate ? context.color.primary : context.color.black,
-                          ),
-                        ),
+                      ItemContainerDateTime(
+                        isSelect: _isSelectStartDate,
+                        title: _startDate.convertTimeToDDMMYY,
+                        onTap: () {
+                          setState(() {
+                            _isSelectStartDate = !_isSelectStartDate;
+                            _isSelectEndDate = false;
+                          });
+                        },
                       ),
                       Text(
                         '-',
                         style: context.textStyle.bodyMMedium.black(context),
                       ).wrapPadding(const EdgeInsets.symmetric(horizontal: 4)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 17),
-                        decoration: BoxDecoration(
-                          border: _isSelectEndDate ? Border.all(width: 1, color: context.color.primary) : null,
-                          color: context.color.gray1,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          _endDate.convertTimeToDDMMYY,
-                          style: context.textStyle.bodyMMedium.copyWith(
-                            color: _isSelectEndDate ? context.color.primary : context.color.black,
-                          ),
-                        ),
+                      ItemContainerDateTime(
+                        isSelect: _isSelectEndDate,
+                        title: _endDate.convertTimeToDDMMYY,
+                        onTap: () {
+                          setState(() {
+                            _isSelectEndDate = !_isSelectEndDate;
+                            _isSelectStartDate = false;
+                          });
+                        },
                       ),
                     ],
                   ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-                  CustomDatePicker(initialDate: DateTime.now()),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          S.current.gio,
-                          style: context.textStyle.bodyMSemiBold.black(context),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 17),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: context.color.primary),
-                          color: context.color.gray1,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '23/08/2025',
-                          style: context.textStyle.bodyMMedium.primary(context),
-                        ),
-                      ),
-                      Text(
-                        '-',
-                        style: context.textStyle.bodyMMedium.black(context),
-                      ).wrapPadding(const EdgeInsets.symmetric(horizontal: 4)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 17),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: context.color.primary),
-                          color: context.color.gray1,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '23/08/2025',
-                          style: context.textStyle.bodyMMedium.primary(context),
-                        ),
-                      ),
-                    ],
+                  CreateEventDatePicker(
+                    initialDate: _isSelectStartDate ? _startDate : (_isSelectEndDate ? _endDate : null),
+                    onDateSelected: (date) {
+                      setState(() {
+                        if (_isSelectStartDate) {
+                          _startDate = date;
+                        } else if (_isSelectEndDate) {
+                          _endDate = date;
+                        }
+                      });
+                    },
+                  ),
+                  CreateEventTimePicker(
+                    startTime: _startTime,
+                    endTime: _endTime,
+                    onStartTimeSelected: (time) {
+                      _startTime = time;
+                    },
+                    onEndTimeSelected: (time) {
+                      _endTime = time;
+                    },
                   ),
                 ],
               ),
@@ -170,7 +165,19 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               iconPath: Assets.icons.icEventSync,
               hint: S.current.khongLapLai,
               isSingleLine: true,
-              onTap: () {},
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
+                  builder: (_) => BottomSheetRepeat(
+                    onSelected: (type) {
+                      _repeatType = type;
+                      _repeatController.text = type.name;
+                    },
+                    selectedRepeatType: _repeatType,
+                  ),
+                );
+              },
             ),
             ItemContainerEvent(
               controller: _noteController,
@@ -180,64 +187,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           ],
         ),
       ).wrapPadding(const EdgeInsets.symmetric(horizontal: 16)),
-    );
-  }
-}
-
-class ItemContainerEvent extends StatelessWidget {
-  final TextEditingController controller;
-  final String iconPath;
-  final String hint;
-  final bool isSingleLine;
-  final Function? onTap;
-
-  const ItemContainerEvent({
-    required this.controller,
-    required this.iconPath,
-    required this.hint,
-    this.isSingleLine = false,
-    this.onTap,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppImage.asset(path: iconPath),
-          Space.w8(),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              enabled: onTap == null,
-              style: context.textStyle.bodyLMedium.black(context),
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: hint,
-                hintStyle: context.textStyle.bodyLMedium.gray5(context),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-              ),
-              minLines: isSingleLine ? 1 : 4,
-              maxLines: isSingleLine ? 1 : 6,
-            ),
-          ),
-          onTap != null
-              ? GestureDetector(
-                  onTap: () => onTap?.call(),
-                  child: AppImage.asset(path: Assets.icons.icEventArrowRight),
-                )
-              : const SizedBox.shrink(),
-        ],
-      ),
+      bottomNavigationBar: AppButton.textIcon(
+        text: S.current.xacNhan,
+        iconPath: Assets.icons.icCheck,
+        spacing: 8,
+        textStyle: context.textStyle.bodyLSemiBold.white(context),
+      ).wrapPadding(const EdgeInsets.all(16)),
     );
   }
 }

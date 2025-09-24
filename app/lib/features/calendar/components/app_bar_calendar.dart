@@ -1,13 +1,12 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared/shared.dart';
 
+import '../../../../core.dart';
 import '../../../blocs/calendar/calendar_cubit.dart';
 import '../../../blocs/calendar/calendar_state.dart';
-import '../../../components/components.dart';
-import '../../../resource/resource.dart';
-import '../../../theme/theme.dart';
 import '../calendar_screen.dart';
 import 'calendar_view_mode_popup.dart';
 
@@ -24,6 +23,7 @@ class AppBarCalendar extends StatefulWidget implements PreferredSizeWidget {
 class _AppBarCalendarState extends State<AppBarCalendar> {
   final _moreButtonKey = GlobalKey();
   final _calendarCubit = GetIt.instance.get<CalendarCubit>();
+  final _appNavigator = GetIt.instance.get<AppNavigator>();
 
   void _showCalendarMode() {
     final overlay = Overlay.of(context);
@@ -92,7 +92,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 backgroundColor: Colors.transparent,
                 onPressed: () {
-                  // Navigator.of(context).pop();
+                  _appNavigator.push(const CreateEventScreen());
                 },
               ),
               AppButton.icon(

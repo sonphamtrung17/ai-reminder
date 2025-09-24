@@ -653,6 +653,31 @@ class S {
   String get xacNhan {
     return Intl.message('Xác nhận', name: 'xacNhan', desc: '', args: []);
   }
+
+  /// `Lặp lại`
+  String get lapLai {
+    return Intl.message('Lặp lại', name: 'lapLai', desc: '', args: []);
+  }
+
+  /// `Hàng ngày`
+  String get hangNgay {
+    return Intl.message('Hàng ngày', name: 'hangNgay', desc: '', args: []);
+  }
+
+  /// `Hàng tuần`
+  String get hangTuan {
+    return Intl.message('Hàng tuần', name: 'hangTuan', desc: '', args: []);
+  }
+
+  /// `Hàng tháng`
+  String get hangThang {
+    return Intl.message('Hàng tháng', name: 'hangThang', desc: '', args: []);
+  }
+
+  /// `Hàng năm`
+  String get hangNam {
+    return Intl.message('Hàng năm', name: 'hangNam', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

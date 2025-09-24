@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeX on DateTime {
@@ -25,6 +26,14 @@ extension DateTimeX on DateTime {
     final DateFormat formatter = DateFormat('dd/MM/yyyy');
     final String formatted = formatter.format(this);
     return formatted;
+  }
+}
+
+extension TimeOfDayX on TimeOfDay {
+  String get convertTimeToHHMM {
+    final hour = this.hour.toString().padLeft(2, '0');
+    final minute = this.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 }
 
