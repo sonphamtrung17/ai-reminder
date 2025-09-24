@@ -10,6 +10,9 @@ extension TextStyleExtension on TextStyle {
   TextStyle black(BuildContext context, {double? fontSize, FontWeight? fontWeight}) =>
       merge(TextStyle(fontSize: fontSize, color: context.color.black, fontWeight: fontWeight));
 
+  TextStyle red(BuildContext context, {double? fontSize, FontWeight? fontWeight}) =>
+      merge(TextStyle(fontSize: fontSize, color: context.color.red));
+
   TextStyle white(BuildContext context, {double? fontSize}) =>
       merge(TextStyle(fontSize: fontSize, color: context.color.white));
 
@@ -23,6 +26,9 @@ extension TextStyleExtension on TextStyle {
       fontWeight: fontWeight ?? FontWeight.w500,
     ),
   );
+
+  TextStyle gray5(BuildContext context, {double? fontSize}) =>
+      merge(TextStyle(fontSize: fontSize, color: context.color.gray5));
 
   TextStyle gray9(BuildContext context, {double? fontSize}) =>
       merge(TextStyle(fontSize: fontSize, color: context.color.gray9));
