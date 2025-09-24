@@ -9,8 +9,9 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(page: SplashScreen.page),
-    AutoRoute(page: IntroScreen.page, initial: true),
-    AutoRoute(page: MainScreen.page),
+    AutoRoute(page: IntroScreen.page),
+    AutoRoute(page: MainScreen.page, initial: true),
     AutoRoute(page: LoginScreen.page),
+    AutoRoute(page: SettingProfileScreen.page),
   ];
 }
