@@ -245,6 +245,24 @@ class AppNavigatorImpl extends AppNavigator with LogMixin {
   }
 
   @override
+  Future<T?> showCustomBottomSheet<T extends Object?>({
+    required m.BuildContext context,
+    required m.Widget child,
+    m.Color? backgroundColor,
+    m.EdgeInsets? padding,
+    m.BoxConstraints? constraints,
+  }) {
+    return m.showModalBottomSheet<T>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: backgroundColor ?? m.Colors.white,
+      shape: const m.RoundedRectangleBorder(borderRadius: m.BorderRadius.vertical(top: m.Radius.circular(12))),
+      constraints: constraints ?? m.BoxConstraints(maxHeight: context.screenHeight - context.statusBarHeight - 54),
+      builder: (builderContext) => child,
+    );
+  }
+
+  @override
   Future<T?> showModalBottomSheet<T extends Object?>(
     AppPopupInfo appPopupInfo, {
     bool isScrollControlled = false,

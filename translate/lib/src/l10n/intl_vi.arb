@@ -69,5 +69,21 @@
   "xoa": "Xoá",
   "chuaCoThongBao": "Chưa có thông báo",
   "cacThongBaoMoiNhatSeXuatHienOday": "Các thông báo mới sẽ xuất hiện ở đây",
-  "chuaCoSuKienNao": "Chưa có sự kiện nào"
+  "chuaCoSuKienNao": "Chưa có sự kiện nào",
+  "suKienMoi": "Sự kiện mới",
+  "tieuDeSuKien": "Tiêu đề sự kiện",
+  "loaiSuKien": "Loại sự kiện",
+  "thoiGian": "Thời gian",
+  "ngayEvent": "Ngày",
+  "gio": "Giờ",
+  "doiTuong": "Đối tượng",
+  "khongLapLai": "Không lặp lại",
+  "nhapSoThich": "Nhập sở thích, mô tả hoặc tính cách đối tượng",
+  "xacNhan": "Xác nhận",
+  "lapLai": "Lặp lại",
+  "hangNgay": "Hàng ngày",
+  "hangTuan": "Hàng tuần",
+  "hangThang": "Hàng tháng",
+  "hangNam": "Hàng năm",
+  "taoDoiTuongMoi": "Tạo đối tượng mới"
 }

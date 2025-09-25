@@ -11,6 +11,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Color backgroundColor;
   final double height;
+  final String? iconBackPath;
 
   const BaseAppBar({
     required this.title,
@@ -19,6 +20,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.backgroundColor = Colors.white,
     this.height = 52,
+    this.iconBackPath,
   });
 
   @override
@@ -31,7 +33,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (showBack)
             AppButton.icon(
-              iconPath: Assets.icons.icArrowBack,
+              iconPath: iconBackPath ?? Assets.icons.icArrowBack,
               padding: const EdgeInsets.only(left: 16, top: 14, bottom: 14, right: 12),
               backgroundColor: Colors.transparent,
               onPressed: () {

@@ -68,6 +68,14 @@ abstract class AppNavigator {
     Color? backgroundColor,
   });
 
+  Future<T?> showCustomBottomSheet<T extends Object?>({
+    required BuildContext context,
+    required Widget child,
+    Color? backgroundColor,
+    EdgeInsets? padding,
+    BoxConstraints? constraints,
+  });
+
   void showErrorSnackBar(String message, {Duration? duration});
 
   void showSuccessSnackBar(String message, {Duration? duration});

@@ -50,6 +50,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: CreateInterestScreen.page),
     AutoRoute(page: ListEventScreen.page),
     AutoRoute(page: NotificationScreen.page),
+    AutoRoute(page: CreateEventScreen.page),
   ];
 }
 

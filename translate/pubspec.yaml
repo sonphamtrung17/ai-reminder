@@ -11,10 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.20.2
+  intl:
 
 dev_dependencies:
-  intl_utils: ^2.8.11
+  intl_utils:
 
 flutter_intl:
   enabled: true

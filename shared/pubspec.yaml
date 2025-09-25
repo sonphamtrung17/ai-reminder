@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  intl:
   device_info_plus:
   flutter_udid:
   android_id:

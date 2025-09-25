@@ -63,7 +63,10 @@ class _AppState extends BaseScreenState<App, AppCubit> {
 
               return MediaQuery(
                 data: data.copyWith(textScaler: const TextScaler.linear(1.0)),
-                child: child ?? const SizedBox.shrink(),
+                child: GestureDetector(
+                  onTap: () => ViewUtils.hideKeyboard(context),
+                  child: child ?? const SizedBox.shrink(),
+                ),
               );
             },
             routerDelegate: _appRouter.delegate(
