@@ -33,5 +33,8 @@
   "lich": "Lịch",
   "tinNhan": "Tin nhắn",
   "caiDat": "Cài đặt",
-  "xinChaoHomNayBanTheNao": "Xin chào! Hôm nay bạn thế nào?"
+  "xinChaoHomNayBanTheNao": "Xin chào! Hôm nay bạn thế nào?",
+  "languageEnglish": "English",
+  "languageVietnamese": "Vietnamese",
+  "selectLanguageTitle": "Language"
 }

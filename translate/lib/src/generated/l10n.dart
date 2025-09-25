@@ -343,6 +343,31 @@ class S {
       args: [],
     );
   }
+
+  /// `English`
+  String get languageEnglish {
+    return Intl.message('English', name: 'languageEnglish', desc: '', args: []);
+  }
+
+  /// `Vietnamese`
+  String get languageVietnamese {
+    return Intl.message(
+      'Vietnamese',
+      name: 'languageVietnamese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get selectLanguageTitle {
+    return Intl.message(
+      'Language',
+      name: 'selectLanguageTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

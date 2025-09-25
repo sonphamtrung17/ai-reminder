@@ -58,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "invalidPhoneNumber",
     ),
     "invalidUserName": MessageLookupByLibrary.simpleMessage("invalidUserName"),
+    "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
+    "languageVietnamese": MessageLookupByLibrary.simpleMessage("Vietnamese"),
     "lich": MessageLookupByLibrary.simpleMessage("Lịch"),
     "matKhau": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "nhacBanNgayDacBiet": MessageLookupByLibrary.simpleMessage(
@@ -78,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "passwordsAreNotMatch",
     ),
     "retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
+    "selectLanguageTitle": MessageLookupByLibrary.simpleMessage("Language"),
     "timeoutException": MessageLookupByLibrary.simpleMessage(
       "timeoutException",
     ),

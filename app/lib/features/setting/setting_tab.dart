@@ -75,9 +75,7 @@ class SettingTab extends StatelessWidget {
                   SettingMenuItem(
                     leading: Image.asset(Assets.icons.icGTranslate.path, width: 22, height: 22,),
                     title: 'Ngôn ngữ',
-                    onPressed: () {
-                      
-                    },
+                    onPressed: () => context.router.push(const LanguageScreen()),
                   ),
                   const Divider(height: 1),
                   SettingMenuItem(
@@ -104,8 +102,7 @@ class SettingTab extends StatelessWidget {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: ElevatedButton(
-                  onPressed: () {
-                  },
+                  onPressed: () => context.router.replaceAll([const IntroScreen()]),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0x1FEE0A24),
                     foregroundColor: Colors.red,

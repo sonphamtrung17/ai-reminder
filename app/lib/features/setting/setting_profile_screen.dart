@@ -68,44 +68,6 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
         child: Column(
           children: [
             SizedBox(height: screenHeight * 0.05),
-
-            /// Avatar
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage(Assets.images.imgAvatar.path),
-                ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage(Assets.images.imgAvatar.path),
-                    ),
-                    Positioned(
-                      bottom: -10,
-                      right: -10,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: Image.asset(
-                          Assets.icons.icCamera.path,
-                          width: 28,
-                          height: 28,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ],
-                )
-
-              ],
-            ),
-            const SizedBox(height: 24),
-
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -114,6 +76,42 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
               ),
               child: Column(
                 children: [
+                  /// Avatar
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage(Assets.images.imgAvatar.path),
+                      ),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: AssetImage(Assets.images.imgAvatar.path),
+                          ),
+                          Positioned(
+                            bottom: -10,
+                            right: -10,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: Image.asset(
+                                Assets.icons.icCamera.path,
+                                width: 28,
+                                height: 28,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      )
+
+                    ],
+                  ),
+                  const SizedBox(height: 24),
                   /// Name
                   TextField(
                     controller: nameController,
@@ -136,7 +134,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.calendar_today),
+                        icon: const Icon(Icons.calendar_month_outlined),
                         onPressed: _pickDate,
                       ),
                     ),

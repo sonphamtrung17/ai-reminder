@@ -13,5 +13,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: MainScreen.page, initial: true),
     AutoRoute(page: LoginScreen.page),
     AutoRoute(page: SettingProfileScreen.page),
+    AutoRoute(page: LanguageScreen.page),
   ];
 }
