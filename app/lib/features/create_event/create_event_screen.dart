@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/create_event/create_event_cubit.dart';
-import '../../components/components.dart';
-import '../../resource/resource.dart';
-import '../../theme/theme.dart';
+import '../../core.dart';
 import 'components/bottom_sheet/bottom_sheet_event_type.dart';
+import 'components/bottom_sheet/bottom_sheet_object.dart';
 import 'components/bottom_sheet/bottom_sheet_repeat.dart';
 import 'components/create_event_date_picker.dart';
 import 'components/create_event_time_picker.dart';
@@ -26,12 +26,12 @@ class CreateEventScreen extends StatefulWidget {
 class _CreateEventScreenState extends BaseScreenState<CreateEventScreen, CreateEventCubit> {
   final _titleController = TextEditingController();
   final _typeController = TextEditingController();
-  final _objectController = TextEditingController();
   final _repeatController = TextEditingController();
   final _noteController = TextEditingController();
 
   EventType? _eventType;
   RepeatType? _repeatType;
+  Person? _person;
 
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(const Duration(days: 1));
@@ -65,10 +65,9 @@ class _CreateEventScreenState extends BaseScreenState<CreateEventScreen, CreateE
               hint: S.current.loaiSuKien,
               isSingleLine: true,
               onTap: () {
-                showModalBottomSheet(
+                navigator.showCustomBottomSheet(
                   context: context,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
-                  builder: (_) => BottomSheetEventType(
+                  child: BottomSheetEventType(
                     onSelected: (type) {
                       _eventType = type;
                       _typeController.text = type.name;
@@ -153,12 +152,76 @@ class _CreateEventScreenState extends BaseScreenState<CreateEventScreen, CreateE
                 ],
               ),
             ),
-            ItemContainerEvent(
-              controller: _objectController,
-              iconPath: Assets.icons.icEventObject,
-              hint: S.current.doiTuong,
-              isSingleLine: true,
-              onTap: () {},
+            GestureDetector(
+              onTap: () {
+                navigator.showCustomBottomSheet(
+                  context: context,
+                  child: BottomSheetObject(
+                    onSelected: (person) {
+                      if (person == null) {
+                        navigator.push(const CreateInterestScreen());
+                        return;
+                      }
+                      _person = person;
+                      setState(() {});
+                    },
+                    selectedPerson: _person,
+                  ),
+                );
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppImage.asset(path: Assets.icons.icEventObject),
+                        Space.w8(),
+                        Expanded(
+                          child: Text(
+                            S.current.doiTuong,
+                            style: context.textStyle.bodyLMedium.black(context),
+                          ),
+                        ),
+                        AppImage.asset(path: Assets.icons.icEventArrowRight),
+                      ],
+                    ),
+                    _person != null
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: context.color.background,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AppImage.circle(
+                                  size: 24,
+                                  url: _person?.avatar,
+                                  boxFit: BoxFit.cover,
+                                ),
+                                Space.w4(),
+                                Text(
+                                  _person?.name ?? '',
+                                  style: context.textStyle.bodyMRegular.black(context),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+              ),
             ),
             ItemContainerEvent(
               controller: _repeatController,
@@ -166,10 +229,9 @@ class _CreateEventScreenState extends BaseScreenState<CreateEventScreen, CreateE
               hint: S.current.khongLapLai,
               isSingleLine: true,
               onTap: () {
-                showModalBottomSheet(
+                navigator.showCustomBottomSheet(
                   context: context,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
-                  builder: (_) => BottomSheetRepeat(
+                  child: BottomSheetRepeat(
                     onSelected: (type) {
                       _repeatType = type;
                       _repeatController.text = type.name;

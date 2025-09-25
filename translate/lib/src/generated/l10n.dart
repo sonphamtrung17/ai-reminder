@@ -678,6 +678,16 @@ class S {
   String get hangNam {
     return Intl.message('Hàng năm', name: 'hangNam', desc: '', args: []);
   }
+
+  /// `Tạo đối tượng mới`
+  String get taoDoiTuongMoi {
+    return Intl.message(
+      'Tạo đối tượng mới',
+      name: 'taoDoiTuongMoi',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

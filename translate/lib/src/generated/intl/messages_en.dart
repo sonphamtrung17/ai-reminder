@@ -131,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "tao": MessageLookupByLibrary.simpleMessage("Tạo"),
     "taoDoiTuong": MessageLookupByLibrary.simpleMessage("Tạo đối tượng"),
+    "taoDoiTuongMoi": MessageLookupByLibrary.simpleMessage("Tạo đối tượng mới"),
     "tatCa": MessageLookupByLibrary.simpleMessage("Tất cả"),
     "thang": MessageLookupByLibrary.simpleMessage("Tháng"),
     "thoiGian": MessageLookupByLibrary.simpleMessage("Thời gian"),
