@@ -688,6 +688,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Hôm nay`
+  String get homNay {
+    return Intl.message('Hôm nay', name: 'homNay', desc: '', args: []);
+  }
+
+  /// `Nhắn tin cho`
+  String get nhanTinCho {
+    return Intl.message('Nhắn tin cho', name: 'nhanTinCho', desc: '', args: []);
+  }
+
+  /// `Nhập tin nhắn`
+  String get nhapTinNhan {
+    return Intl.message(
+      'Nhập tin nhắn',
+      name: 'nhapTinNhan',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

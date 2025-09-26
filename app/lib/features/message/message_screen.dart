@@ -1,5 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:translate/translate.dart';
+
+import '../../core.dart';
+import '../home/home_screen.dart';
+import 'components/bottom_sheet_new_message.dart';
 
 @RoutePage()
 class MessageScreen extends StatefulWidget {
@@ -10,162 +17,168 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
-  final months = List.generate(12, (i) => "Tháng ${i + 1}");
-  final _overlayKey = GlobalKey();
+  final _appNavigator = GetIt.instance.get<AppNavigator>();
 
-  OverlayEntry? _overlayEntry;
-
-  void _showMonthDetail(BuildContext context, int index, Rect itemRect) {
-    final month = months[index];
-    final screenSize = MediaQuery.of(context).size;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        return AnimatedMonthOverlay(
-          month: month,
-          startRect: itemRect,
-          endRect: Rect.fromLTWH(0, 0, screenSize.width, screenSize.height),
-          onClose: () {
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-          },
-        );
-      },
-    );
-
-    Overlay.of(context, debugRequiredFor: widget)?.insert(_overlayEntry!);
-  }
+  final _messages = <MessageModel>[
+    MessageModel(
+      0,
+      url,
+      'Còn 3 hôm nữa là sinh nhật Tuấn Anh, bạn đã chuẩn  bị cho sự kiện này chưa?',
+      'H-AI Reminder',
+      65,
+      '10 phút',
+    ),
+    MessageModel(
+      1,
+      url,
+      'Nhắc nhở sự kiện gần đến',
+      'Admin',
+      2,
+      '3 ngày',
+    ),
+    MessageModel(
+      2,
+      url,
+      'Hôm nay khoẻ không em?',
+      'Nguyễn Minh Thư',
+      1,
+      '12/8/2025',
+    ),
+    MessageModel(
+      3,
+      url,
+      'Ok em ơi',
+      'Trần Đình Tuấn',
+      0,
+      '25/7/2025',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Calendar")),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: months.length,
-        itemBuilder: (context, index) {
-          final month = months[index];
-          return Builder(
-            builder: (context) {
-              return GestureDetector(
-                onTap: () {
-                  // Lấy vị trí & kích thước của widget trong màn hình
-                  final renderBox =
-                  context.findRenderObject() as RenderBox?;
-                  final offset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-                  final size = renderBox?.size ?? Size.zero;
-                  final rect = Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
-
-                  _showMonthDetail(context, index, rect);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.red.shade100,
-                  ),
-                  child: Text(month,
-                      style: const TextStyle(fontSize: 16, color: Colors.black)),
+      appBar: BaseAppBar(
+        title: S.current.tinNhan,
+        showBack: false,
+        backgroundColor: Colors.transparent,
+        actions: [
+          AppButton.textIcon(
+            text: S.current.tao,
+            textStyle: context.textStyle.bodyMSemiBold.primary(context),
+            iconPath: Assets.icons.icMessageAdd,
+            backgroundColor: Colors.transparent,
+            spacing: 4,
+            onPressed: () {
+              _appNavigator.showCustomBottomSheet(
+                context: GetIt.instance.get<AppRouter>().navigatorKey.currentContext!,
+                child: BottomSheetNewMessage(
+                  onSelected: (person) {
+                    if (person == null) {
+                      _appNavigator.push(const CreateInterestScreen());
+                      return;
+                    }
+                    _appNavigator.push(const ChatScreen());
+                  },
                 ),
               );
             },
-          );
-        },
+          ),
+        ],
       ),
-    );
-  }
-}
+      body: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        separatorBuilder: (context, index) => Space.h6(),
+        itemBuilder: (context, index) {
+          final item = _messages[index];
 
-/// Widget overlay animating from a rect to fullscreen
-class AnimatedMonthOverlay extends StatefulWidget {
-  final String month;
-  final Rect startRect;
-  final Rect endRect;
-  final VoidCallback onClose;
-
-  const AnimatedMonthOverlay({
-    super.key,
-    required this.month,
-    required this.startRect,
-    required this.endRect,
-    required this.onClose,
-  });
-
-  @override
-  State<AnimatedMonthOverlay> createState() => _AnimatedMonthOverlayState();
-}
-
-class _AnimatedMonthOverlayState extends State<AnimatedMonthOverlay>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Rect?> _rectAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
-
-    _rectAnimation = RectTween(
-      begin: widget.startRect,
-      end: widget.endRect,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-    _controller.forward();
-  }
-
-  void _close() async {
-    await _controller.reverse();
-    widget.onClose();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: AnimatedBuilder(
-        animation: _rectAnimation,
-        builder: (context, child) {
-          final rect = _rectAnimation.value!;
-          return Stack(
-            children: [
-              Positioned(
-                left: rect.left,
-                top: rect.top,
-                width: rect.width,
-                height: rect.height,
-                child: Material(
-                  borderRadius: BorderRadius.circular(
-                      (1 - _controller.value) * 12), // bo góc khi nhỏ
-                  color: Colors.red.shade300,
-                  child: InkWell(
-                    onTap: _close,
-                    child: Center(
-                      child: Text(
-                        widget.month,
-                        style: TextStyle(
-                          fontSize: 20 + 12 * _controller.value,
-                          color: Colors.white,
+          final child = InkWell(
+            onTap: () {
+              _appNavigator.push(const ChatScreen());
+            },
+            child: Row(
+              children: [
+                AppImage.circle(
+                  size: 48,
+                  url: item.avatar,
+                ),
+                Space.w12(),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: context.textStyle.bodyLSemiBold.black(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Space.h4(),
+                      Text(
+                        item.content,
+                        style: context.textStyle.bodyMRegular.black(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Space.w12(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      item.time,
+                      style: context.textStyle.bodySRegular.black(context),
+                    ),
+                    Space.h5(),
+                    Opacity(
+                      opacity: item.unreadCount != 0 ? 1 : 0,
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: context.color.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            item.unreadCount.toString(),
+                            style: context.textStyle.bodySsMedium.white(context),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
+          );
+
+          if (item.id == 0 || item.id == 1) {
+            return GradientBorderContainer(
+              padding: const EdgeInsets.all(12),
+              child: child,
+            );
+          }
+
+          return Container(
+            padding: const EdgeInsets.all(12),
+            child: child,
           );
         },
+        itemCount: _messages.length,
       ),
     );
   }
+}
+
+class MessageModel {
+  final int id;
+  final String avatar;
+  final String content;
+  final String name;
+  final int unreadCount;
+  final String time;
+
+  MessageModel(this.id, this.avatar, this.content, this.name, this.unreadCount, this.time);
 }

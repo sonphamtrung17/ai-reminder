@@ -79,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "hoVaTen": MessageLookupByLibrary.simpleMessage("Họ và tên"),
     "hoac": MessageLookupByLibrary.simpleMessage("Hoặc"),
+    "homNay": MessageLookupByLibrary.simpleMessage("Hôm nay"),
     "invalidDateTime": MessageLookupByLibrary.simpleMessage("invalidDateTime"),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("invalidEmail"),
     "invalidPassword": MessageLookupByLibrary.simpleMessage("invalidPassword"),
@@ -109,9 +110,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.",
     ),
     "nhanBan": MessageLookupByLibrary.simpleMessage("Nhân bản"),
+    "nhanTinCho": MessageLookupByLibrary.simpleMessage("Nhắn tin cho"),
     "nhapSoThich": MessageLookupByLibrary.simpleMessage(
       "Nhập sở thích, mô tả hoặc tính cách đối tượng",
     ),
+    "nhapTinNhan": MessageLookupByLibrary.simpleMessage("Nhập tin nhắn"),
     "noInternetException": MessageLookupByLibrary.simpleMessage(
       "noInternetException",
     ),
