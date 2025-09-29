@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/app_image.dart';
+import '../../navigation/router/app_router.gr.dart';
 import '../../resource/generated/assets.gen.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
@@ -73,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           SizedBox(height: screenHeight * 0.03),
 
-                          // Logo
                           Center(
                             child: AppImage.asset(
                               path: Assets.images.splashIcon.path,
@@ -84,7 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           SizedBox(height: screenHeight * 0.03),
 
-                          // Title
                           Text(
                             'Xin chào !',
                             style: context.textStyle.bodyMSemiBold.black(
@@ -96,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           SizedBox(height: screenHeight * 0.01),
 
-                          // Subtitle
                           Text(
                             'Hãy ghi lại, ghi nhớ và trân trọng những khoảnh\n khắc ý nghĩa.',
                             style: context.textStyle.bodyMSemiBold.black(
@@ -108,7 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           SizedBox(height: screenHeight * 0.04),
 
-                          // Form container
                           Container(
                             padding: EdgeInsets.all(screenWidth * 0.04),
                             decoration: BoxDecoration(
@@ -117,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Column(
                               children: [
-                                // Email field
                                 InlineLabelTextField(
                                   controller: _emailController,
                                   focusNode: _emailFocus,
@@ -126,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 SizedBox(height: screenHeight * 0.02),
 
-                                // Password field
                                 InlineLabelTextField(
                                   controller: _passwordController,
                                   focusNode: _passwordFocus,
@@ -142,9 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 SizedBox(height: screenHeight * 0.025),
 
-                                // Login button
                                 InkWell(
-                                  onTap: _isFilled ? () {} : null,
+                                  onTap: _isFilled ? () {context.router.replace(const MainScreen());} : null,
                                   borderRadius: BorderRadius.circular(screenWidth * 0.03),
                                   child: Container(
                                     width: screenWidth * 0.702,
@@ -165,7 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 SizedBox(height: screenHeight * 0.025),
 
-                                // Or
                                 Text(
                                   'Hoặc',
                                   style: context.textStyle.bodyMSemiBold.gray(
@@ -176,7 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 SizedBox(height: screenHeight * 0.02),
 
-                                // Social login
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -223,7 +215,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: context.textStyle.bodyMSemiBold.primary(context, fontSize: 14),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // WebView hoặc route khác
                                         // context.pushRoute(WebViewRoute(url: "https://example.com/terms"));
                                       },
                                   ),
@@ -277,9 +268,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-///
-/// ✅ Reusable InlineLabelTextField
-///
 class InlineLabelTextField extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -322,9 +310,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
 
     final hasText = widget.controller.text.isNotEmpty;
 
-    // Hiển thị label khi KHÔNG focus.
-    // - Nếu không focus & rỗng  -> label normal (như hint)
-    // - Nếu không focus & có text -> label small (nằm trên value)
     final showLabel = !_isFocused;
     final labelIsSmall = !_isFocused && hasText;
 
@@ -340,7 +325,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
       ),
       child: Stack(
         children: [
-          // TextField
           TextField(
             controller: widget.controller,
             focusNode: widget.focusNode,
@@ -348,8 +332,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
             keyboardType: widget.keyboardType,
             decoration: InputDecoration(
               border: InputBorder.none,
-              // Khi label small (blur & có text) => chừa thêm khoảng top
-              // Khi đang focus (ẩn label) => padding đều
               contentPadding: EdgeInsets.fromLTRB(
                 screenWidth * 0.04,
                 labelIsSmall ? screenHeight * 0.02 : screenHeight * 0.02,
@@ -360,7 +342,6 @@ class _InlineLabelTextFieldState extends State<InlineLabelTextField> {
             ),
           ),
 
-          // Inline label (ẩn hoàn toàn khi focus)
           if (showLabel)
             AnimatedPositioned(
               duration: const Duration(milliseconds: 160),
