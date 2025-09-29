@@ -26,15 +26,15 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit> {
   final _mainCubit = GetIt.instance.get<MainCubit>();
+  final _appRouter = GetIt.instance.get<AppRouter>();
 
   late final ScrollController _scrollController;
 
   static const int _startYear = 1975;
   static const int _endYear = 2100;
-  static const int _currentYear = 2025;
 
   double _yearHeight = 800;
-  int _displayedYear = _currentYear;
+  double _statusBarHeight = 0;
 
   @override
   void initState() {
@@ -44,7 +44,9 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _calculateYearHeight();
-      _performInitialScroll();
+      if (bloc.state.calendarViewMode == CalendarViewMode.year) {
+        _scrollToCurrentYear();
+      }
     });
   }
 
@@ -58,27 +60,18 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
       return;
     }
 
+    _statusBarHeight = MediaQuery.of(_appRouter.navigatorKey.currentContext!).viewPadding.top;
+
     final newHeight =
         context.screenHeight -
         UiConstants.appBarCalendarHeight -
-        context.statusBarHeight -
-        _mainCubit.state.heightBottomNavigationBar -
-        16; // 16 là margin bottom
+        _statusBarHeight -
+        _mainCubit.state.heightBottomNavigationBar;
 
     if (newHeight != _yearHeight) {
       setState(() {
         _yearHeight = newHeight;
       });
-    }
-  }
-
-  void _performInitialScroll() {
-    if (!mounted) {
-      return;
-    }
-
-    if (bloc.state.calendarViewMode == CalendarViewMode.year) {
-      _scrollToCurrentYear();
     }
   }
 
@@ -97,7 +90,7 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
   }
 
   void _scrollToCurrentYearImmediate() {
-    final initialOffset = (_displayedYear - _startYear) * _yearHeight;
+    final initialOffset = (bloc.state.focusedDate!.year - _startYear) * _yearHeight + 10;
 
     // Đảm bảo offset không vượt quá giới hạn
     final maxOffset = _scrollController.position.maxScrollExtent;
@@ -125,13 +118,24 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
     }
 
     final offset = _scrollController.offset;
-    final newYear = _startYear + (offset / _yearHeight).round();
+    final newYear = _startYear + (offset / _yearHeight).floor();
 
-    if (newYear != _displayedYear && newYear >= _startYear && newYear <= _endYear) {
-      setState(() {
-        _displayedYear = newYear;
-      });
+    if (newYear != bloc.state.focusedDate?.year && newYear >= _startYear && newYear <= _endYear) {
+      bloc.onSetFocusedDate(DateTime(newYear, bloc.state.focusedDate?.month ?? 1, 1));
     }
+  }
+
+  double _calculateTitleOpacity(int year) {
+    if (!_scrollController.hasClients) {
+      return 1.0;
+    }
+
+    final offset = _scrollController.offset;
+    final yearStartOffset = (year - _startYear) * _yearHeight;
+    final titlePosition = yearStartOffset + 28; // 22 (bottom padding) + 6 (top padding)
+    final distanceToAppBar = titlePosition - offset;
+    const fadeBegin = 28.0;
+    return distanceToAppBar >= fadeBegin ? 1.0 : 0.0;
   }
 
   Future<void> _handleViewModeChange(CalendarViewMode newMode) async {
@@ -190,25 +194,32 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
   Widget buildPage(BuildContext context) {
     return Scaffold(
       backgroundColor: context.color.bgBrand,
-      body: CustomScrollView(
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverList.builder(
-            itemCount: _endYear - _startYear + 1,
-            itemBuilder: (context, index) {
-              final year = _startYear + index;
-              return SizedBox(
-                height: _yearHeight,
-                child: CalendarYearView(
-                  key: ValueKey('year_$year'),
-                  year: year,
-                  onMonthTap: (month, rect) => _onMonthTap(context, year, month, rect),
-                ),
-              );
-            },
-          ),
-        ],
+      body: AnimatedBuilder(
+        animation: _scrollController,
+        builder: (context, child) {
+          return CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverList.builder(
+                itemCount: _endYear - _startYear + 1,
+                itemBuilder: (context, index) {
+                  final year = _startYear + index;
+                  final titleOpacity = _calculateTitleOpacity(year);
+                  return SizedBox(
+                    height: _yearHeight,
+                    child: CalendarYearView(
+                      key: ValueKey('year_$year'),
+                      year: year,
+                      titleOpacity: titleOpacity,
+                      onMonthTap: (month, rect) => _onMonthTap(context, year, month, rect),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
