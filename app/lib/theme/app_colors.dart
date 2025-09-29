@@ -33,6 +33,9 @@ class AppColors {
   static const Color background = Color(0xFFF7F8FA);
   static const Color background2 = Color(0xFFF5F5F5);
   static const Color bgBrand = Color(0xFFF4F6FF);
+  static const Color background3 = Color(0xffeaeeff);
+
+  static const Color buttonColor = Color(0xff252C6D);
 
   static List<BoxShadow> buttonShadows = [
     BoxShadow(

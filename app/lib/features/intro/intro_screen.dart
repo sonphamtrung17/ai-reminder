@@ -95,89 +95,91 @@ class _IntroScreenState extends State<IntroScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          // Background fade
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              final state = _pageState(count);
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  Opacity(
-                    opacity: 1 - state.progress,
-                    child: _backgroundItem(backgrounds[state.base]),
-                  ),
-                  Opacity(
-                    opacity: state.progress,
-                    child: _backgroundItem(backgrounds[state.next]),
-                  ),
-                ],
-              );
-            },
-          ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Background fade
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final state = _pageState(count);
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Opacity(
+                      opacity: 1 - state.progress,
+                      child: _backgroundItem(backgrounds[state.base]),
+                    ),
+                    Opacity(
+                      opacity: state.progress,
+                      child: _backgroundItem(backgrounds[state.next]),
+                    ),
+                  ],
+                );
+              },
+            ),
 
-          // PageView (swipe được toàn màn hình)
-          PageView.builder(
-            controller: _controller,
-            itemCount: count,
-            onPageChanged: (i) => setState(() => _settledPage = i),
-            itemBuilder: (_, __) => const SizedBox.expand(),
-          ),
+            // PageView
+            PageView.builder(
+              controller: _controller,
+              itemCount: count,
+              onPageChanged: (i) => setState(() => _settledPage = i),
+              itemBuilder: (_, __) => const SizedBox.expand(),
+            ),
 
-          // Center image
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              final state = _pageState(count);
+            // Center image
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final state = _pageState(count);
 
-              final imageSize = screen.width * 0.7;
-              final top = (screen.height - imageSize) / 2;
-              final baseOffset = -state.progress * screen.width;
-              final nextOffset = (1 - state.progress) * screen.width;
+                final imageSize = screen.width * 0.7;
+                final top = (screen.height - imageSize) / 3;
+                final baseOffset = -state.progress * screen.width;
+                final nextOffset = (1 - state.progress) * screen.width;
 
-              return Positioned(
-                top: top.clamp(0, double.infinity),
-                left: (screen.width - imageSize) / 2,
-                child: IgnorePointer(
-                  child: SizedBox(
-                    width: imageSize,
-                    height: imageSize,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Transform.translate(
-                          offset: Offset(baseOffset, 0),
-                          child: Image.asset(
-                            centerImages[state.base],
-                            fit: BoxFit.contain,
+                return Positioned(
+                  top: top.clamp(0, double.infinity),
+                  left: (screen.width - imageSize) / 2,
+                  child: IgnorePointer(
+                    child: SizedBox(
+                      width: imageSize,
+                      height: imageSize,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Transform.translate(
+                            offset: Offset(baseOffset, 0),
+                            child: Image.asset(
+                              centerImages[state.base],
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                        Transform.translate(
-                          offset: Offset(nextOffset, 0),
-                          child: Image.asset(
-                            centerImages[state.next],
-                            fit: BoxFit.contain,
+                          Transform.translate(
+                            offset: Offset(nextOffset, 0),
+                            child: Image.asset(
+                              centerImages[state.next],
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-
-          // Bottom content
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: _buildBottomContent(),
+                );
+              },
             ),
-          ),
-        ],
+
+            // Bottom content
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: _buildBottomContent(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -207,7 +209,6 @@ class _IntroScreenState extends State<IntroScreen> {
                 next: titles[state.next],
                 progress: state.progress,
                 style: const TextStyle(
-                  fontFamily: 'PlusJakartaSans',
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -225,7 +226,6 @@ class _IntroScreenState extends State<IntroScreen> {
                   next: subtitles[state.next],
                   progress: state.progress,
                   style: const TextStyle(
-                    fontFamily: 'PlusJakartaSans',
                     fontSize: 14,
                     color: Colors.white,
                   ),
