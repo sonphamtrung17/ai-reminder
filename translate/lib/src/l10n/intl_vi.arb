@@ -88,9 +88,8 @@
   "taoDoiTuongMoi": "Tạo đối tượng mới",
   "homNay": "Hôm nay",
   "nhanTinCho": "Nhắn tin cho",
-  "nhapTinNhan": "Nhập tin nhắn"
-  "xinChaoHomNayBanTheNao": "Xin chào! Hôm nay bạn thế nào?",
+  "nhapTinNhan": "Nhập tin nhắn",
   "languageEnglish": "English",
-  "languageVietnamese": "Tiếng Việt",
-  "selectLanguageTitle": "Ngôn ngữ"
+  "languageVietnamese": "Vietnamese",
+  "selectLanguageTitle": "Language"
 }

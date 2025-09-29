@@ -13,9 +13,9 @@ class SettingProfileScreen extends StatefulWidget {
 }
 
 class _SettingProfileScreenState extends State<SettingProfileScreen> {
-  final TextEditingController nameController = TextEditingController(text: "Nguyễn Bá Thanh");
-  final TextEditingController dobController = TextEditingController(text: "14/12/1989");
-  final TextEditingController emailController = TextEditingController(text: "bathanhnguyen@gmail.com");
+  final TextEditingController nameController = TextEditingController(text: 'Nguyễn Bá Thanh');
+  final TextEditingController dobController = TextEditingController(text: '14/12/1989');
+  final TextEditingController emailController = TextEditingController(text: 'bathanhnguyen@gmail.com');
 
   @override
   void dispose() {
@@ -26,8 +26,8 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
   }
 
   Future<void> _pickDate() async {
-    DateTime initialDate = DateFormat("dd/MM/yyyy").parse(dobController.text);
-    DateTime? pickedDate = await showDatePicker(
+    final DateTime initialDate = DateFormat('dd/MM/yyyy').parse(dobController.text);
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: DateTime(1900),
@@ -36,7 +36,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        dobController.text = DateFormat("dd/MM/yyyy").format(pickedDate);
+        dobController.text = DateFormat('dd/MM/yyyy').format(pickedDate);
       });
     }
   }
@@ -55,7 +55,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
           onPressed: () => context.router.pop(),
         ),
         title: const Text(
-          "Hồ sơ của tôi",
+          'Hồ sơ của tôi',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -116,7 +116,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(
-                      labelText: "Họ và tên",
+                      labelText: 'Họ và tên',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -129,7 +129,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
                     controller: dobController,
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelText: "Ngày sinh",
+                      labelText: 'Ngày sinh',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -145,7 +145,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
                   TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText: "Email",
+                      labelText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -166,9 +166,9 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                debugPrint("Tên: ${nameController.text}");
-                debugPrint("Ngày sinh: ${dobController.text}");
-                debugPrint("Email: ${emailController.text}");
+                debugPrint('Tên: ${nameController.text}');
+                debugPrint('Ngày sinh: ${dobController.text}');
+                debugPrint('Email: ${emailController.text}');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1E2A78),
@@ -179,7 +179,7 @@ class _SettingProfileScreenState extends State<SettingProfileScreen> {
                 ),
               ),
               child: const Text(
-                "Lưu lại",
+                'Lưu lại',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),

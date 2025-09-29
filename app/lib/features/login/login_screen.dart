@@ -3,11 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../components/app_image.dart';
-import '../../resource/generated/assets.gen.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
-import '../../theme/app_themes.dart';
+import '../../core.dart';
 
 @RoutePage()
 class LoginScreen extends StatefulWidget {
@@ -144,7 +140,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 // Login button
                                 InkWell(
-                                  onTap: _isFilled ? () {} : null,
+                                  onTap: _isFilled
+                                      ? () {
+                                          context.router.replace(const MainScreen());
+                                        }
+                                      : null,
                                   borderRadius: BorderRadius.circular(screenWidth * 0.03),
                                   child: Container(
                                     width: screenWidth * 0.702,
@@ -158,7 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'Đăng nhập',
                                       style: _isFilled
                                           ? context.textStyle.bodyMSemiBold.white(context, fontSize: 16)
-                                          : context.textStyle.bodyMSemiBold.gray(context, color: AppColors.gray3, fontSize: 16),
+                                          : context.textStyle.bodyMSemiBold.gray(
+                                              context,
+                                              color: AppColors.gray3,
+                                              fontSize: 16,
+                                            ),
                                     ),
                                   ),
                                 ),

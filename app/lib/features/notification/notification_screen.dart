@@ -56,7 +56,7 @@ class _NotificationScreenState extends BaseScreenState<NotificationScreen, Notif
               : ListView.builder(
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    var item = notifications[index];
+                    final item = notifications[index];
                     return Row(
                       children: [
                         AppImage.url(

@@ -30,23 +30,27 @@ class _IntroScreenState extends State<IntroScreen> {
   ];
 
   final List<String> titles = [
-    "H-AI Reminder",
-    "Nhắc bạn ngày đặc biệt",
-    "Chatbot AI",
+    'H-AI Reminder',
+    'Nhắc bạn ngày đặc biệt',
+    'Chatbot AI',
   ];
 
   final List<String> subtitles = [
-    "Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.",
-    "Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU.",
-    "Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.",
+    'Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.',
+    'Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU.',
+    'Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.',
   ];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (var bg in backgrounds) precacheImage(AssetImage(bg), context);
-      for (var img in centerImages) precacheImage(AssetImage(img), context);
+      for (var bg in backgrounds) {
+        precacheImage(AssetImage(bg), context);
+      }
+      for (var img in centerImages) {
+        precacheImage(AssetImage(img), context);
+      }
     });
   }
 
@@ -57,9 +61,7 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   _PageState _pageState(int count) {
-    final rawPage = _controller.hasClients && _controller.page != null
-        ? _controller.page!
-        : _settledPage.toDouble();
+    final rawPage = _controller.hasClients && _controller.page != null ? _controller.page! : _settledPage.toDouble();
 
     final base = rawPage.floor().clamp(0, count - 1);
     final prog = (rawPage - base).clamp(0.0, 1.0);
@@ -95,91 +97,89 @@ class _IntroScreenState extends State<IntroScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Background fade
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) {
-                final state = _pageState(count);
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Opacity(
-                      opacity: 1 - state.progress,
-                      child: _backgroundItem(backgrounds[state.base]),
-                    ),
-                    Opacity(
-                      opacity: state.progress,
-                      child: _backgroundItem(backgrounds[state.next]),
-                    ),
-                  ],
-                );
-              },
-            ),
+      body: Stack(
+        children: [
+          // Background fade
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              final state = _pageState(count);
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  Opacity(
+                    opacity: 1 - state.progress,
+                    child: _backgroundItem(backgrounds[state.base]),
+                  ),
+                  Opacity(
+                    opacity: state.progress,
+                    child: _backgroundItem(backgrounds[state.next]),
+                  ),
+                ],
+              );
+            },
+          ),
 
-            // PageView
-            PageView.builder(
-              controller: _controller,
-              itemCount: count,
-              onPageChanged: (i) => setState(() => _settledPage = i),
-              itemBuilder: (_, __) => const SizedBox.expand(),
-            ),
+          // PageView
+          PageView.builder(
+            controller: _controller,
+            itemCount: count,
+            onPageChanged: (i) => setState(() => _settledPage = i),
+            itemBuilder: (_, _) => const SizedBox.expand(),
+          ),
 
-            // Center image
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) {
-                final state = _pageState(count);
+          // Center image
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              final state = _pageState(count);
 
-                final imageSize = screen.width * 0.7;
-                final top = (screen.height - imageSize) / 3;
-                final baseOffset = -state.progress * screen.width;
-                final nextOffset = (1 - state.progress) * screen.width;
+              final imageSize = screen.width * 0.7;
+              final top = (screen.height - imageSize) / 3;
+              final baseOffset = -state.progress * screen.width;
+              final nextOffset = (1 - state.progress) * screen.width;
 
-                return Positioned(
-                  top: top.clamp(0, double.infinity),
-                  left: (screen.width - imageSize) / 2,
-                  child: IgnorePointer(
-                    child: SizedBox(
-                      width: imageSize,
-                      height: imageSize,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Transform.translate(
-                            offset: Offset(baseOffset, 0),
-                            child: Image.asset(
-                              centerImages[state.base],
-                              fit: BoxFit.contain,
-                            ),
+              return Positioned(
+                top: top.clamp(0, double.infinity),
+                left: (screen.width - imageSize) / 2,
+                child: IgnorePointer(
+                  child: SizedBox(
+                    width: imageSize,
+                    height: imageSize,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Transform.translate(
+                          offset: Offset(baseOffset, 0),
+                          child: Image.asset(
+                            centerImages[state.base],
+                            fit: BoxFit.contain,
                           ),
-                          Transform.translate(
-                            offset: Offset(nextOffset, 0),
-                            child: Image.asset(
-                              centerImages[state.next],
-                              fit: BoxFit.contain,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(nextOffset, 0),
+                          child: Image.asset(
+                            centerImages[state.next],
+                            fit: BoxFit.contain,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          ),
 
-            // Bottom content
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 40),
-                child: _buildBottomContent(),
-              ),
+          // Bottom content
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: _buildBottomContent(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -247,10 +247,9 @@ class _IntroScreenState extends State<IntroScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () =>
-                      context.router.replace(const LoginScreen()),
+                  onPressed: () => context.router.replace(const LoginScreen()),
                   child: const Text(
-                    "Đăng nhập",
+                    'Đăng nhập',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -267,8 +266,7 @@ class _IntroScreenState extends State<IntroScreen> {
 }
 
 extension on int {
-  int clampIndex(int max) =>
-      (this < 0) ? 0 : (this >= max ? max - 1 : this);
+  int clampIndex(int max) => (this < 0) ? 0 : (this >= max ? max - 1 : this);
 }
 
 class _PageState {
@@ -276,5 +274,6 @@ class _PageState {
   final int base;
   final int next;
   final double progress;
+
   _PageState(this.rawPage, this.base, this.next, this.progress);
 }

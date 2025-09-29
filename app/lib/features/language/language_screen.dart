@@ -83,7 +83,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     selected: _items[i].code == _selectedCode,
                     onTap: () => setState(() {
                       _selectedCode = _items[i].code;
-                      // TODO: changeLocale(_selectedCode);
                     }),
                   ),
                   if (i < _items.length - 1)

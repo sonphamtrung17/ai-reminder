@@ -8,10 +8,10 @@ class CrossFadeText extends StatelessWidget {
   final TextAlign? align;
 
   const CrossFadeText({
-    super.key,
     required this.base,
     required this.next,
     required this.progress,
+    super.key,
     this.style,
     this.align,
   });
