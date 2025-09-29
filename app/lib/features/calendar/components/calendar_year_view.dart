@@ -7,10 +7,12 @@ import '../../../theme/theme.dart';
 class CalendarYearView extends StatefulWidget {
   final int year;
   final Function(int month, Rect rect) onMonthTap;
+  final double titleOpacity;
 
   const CalendarYearView({
     required this.year,
     required this.onMonthTap,
+    this.titleOpacity = 1.0,
     super.key,
   });
 
@@ -66,7 +68,17 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
             ),
           )
         : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              AnimatedOpacity(
+                opacity: widget.titleOpacity,
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+                child: Text(
+                  '${widget.year}',
+                  style: context.textStyle.bodyMSemiBold.primary(context),
+                ).wrapPadding(const EdgeInsets.only(bottom: 22,top: 6)),
+              ),
               for (int row = 0; row < 4; row++)
                 Expanded(
                   child: Padding(

@@ -52,6 +52,10 @@ class CalendarCubit extends BaseCubit<CalendarState> {
     emit(state.copyWith(dayViewMode: dayViewMode));
   }
 
+  void onSetFocusedDate(DateTime focusedDate) {
+    emit(state.copyWith(focusedDate: focusedDate));
+  }
+
   void onBackPressed() {
     switch (state.calendarViewMode) {
       case CalendarViewMode.year:

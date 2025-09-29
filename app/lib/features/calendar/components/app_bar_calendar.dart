@@ -58,11 +58,10 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
             titleAppbar = 'Tháng ${state.focusedDate!.month} năm ${state.focusedDate!.year}';
         }
 
-        return Container(
-          padding: EdgeInsets.only(top: context.statusBarHeight),
-          color: context.color.bgBrand,
+        return SizedBox(
+          height: double.infinity,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (state.calendarViewMode != CalendarViewMode.year)
                 AppButton.icon(
@@ -83,6 +82,7 @@ class _AppBarCalendarState extends State<AppBarCalendar> {
                     ).wrapPadding(
                       EdgeInsets.only(
                         top: 8,
+                        bottom: 10,
                         left: state.calendarViewMode != CalendarViewMode.year ? 0 : 12,
                       ),
                     ),

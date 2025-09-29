@@ -31,5 +31,5 @@ class UiConstants {
 
   static const textFieldTextStyleHeight = 1.3;
 
-  static const double appBarCalendarHeight = 52;
+  static const double appBarCalendarHeight = 48;
 }
