@@ -10,6 +10,5 @@ sealed class MainState extends BaseState with _$MainState {
 
   const factory MainState({
     @Default(0.0) double heightBottomNavigationBar,
-    @Default(0) int indexBottomTab,
   }) = _MainState;
 }

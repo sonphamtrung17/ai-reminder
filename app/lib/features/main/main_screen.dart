@@ -1,12 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 import 'package:translate/translate.dart';
 
 import '../../blocs/base/base_screen_state.dart';
 import '../../blocs/main/main_cubit.dart';
-import '../../blocs/main/main_state.dart';
 import '../../navigation/navigation.dart';
 import '../../resource/resource.dart';
 import '../calendar/components/app_bar_calendar.dart';
@@ -22,6 +20,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends BaseScreenState<MainScreen, MainCubit> {
   @override
+  bool get isKeepInstanceBloc => true;
+
+  @override
   void initState() {
     super.initState();
 
@@ -33,34 +34,28 @@ class _MainScreenState extends BaseScreenState<MainScreen, MainCubit> {
 
   @override
   Widget buildPage(BuildContext context) {
-    return BlocBuilder<MainCubit, MainState>(
-      buildWhen: (pre, cur) => pre.indexBottomTab != cur.indexBottomTab,
-      builder: (context, state) {
-        return AutoTabsScaffold(
-          appBarBuilder: (context, tabsRouter) {
-            if (tabsRouter.activeIndex == 1) {
-              return const AppBarCalendar();
-            }
-            return PreferredSize(
-              preferredSize: Size(0, context.statusBarHeight),
-              child: SizedBox(height: context.statusBarHeight),
-            );
-          },
-          routes: [
-            const HomeTab(),
-            const CalendarTab(),
-            const MessageTab(),
-            const SettingTab(),
-          ],
-          bottomNavigationBuilder: (context, tabsRouter) {
-            (navigator as AppNavigatorImpl).tabsRouter = tabsRouter;
+    return AutoTabsScaffold(
+      appBarBuilder: (context, tabsRouter) {
+        if (tabsRouter.activeIndex == 1) {
+          return const AppBarCalendar();
+        }
+        return PreferredSize(
+          preferredSize: Size(0, context.statusBarHeight),
+          child: SizedBox(height: context.statusBarHeight),
+        );
+      },
+      routes: [
+        const HomeTab(),
+        const CalendarTab(),
+        const MessageTab(),
+        const SettingTab(),
+      ],
+      bottomNavigationBuilder: (context, tabsRouter) {
+        (navigator as AppNavigatorImpl).tabsRouter = tabsRouter;
 
-            return AppBottomNavigationBar(
-              onTap: (index) {
-                tabsRouter.setActiveIndex(index);
-                bloc.setIndexBottomTab(index);
-              },
-            );
+        return AppBottomNavigationBar(
+          onTap: (index) {
+            tabsRouter.setActiveIndex(index);
           },
         );
       },

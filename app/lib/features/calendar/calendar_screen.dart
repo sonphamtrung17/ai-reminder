@@ -62,7 +62,8 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
         context.screenHeight -
         UiConstants.appBarCalendarHeight -
         context.statusBarHeight -
-        _mainCubit.state.heightBottomNavigationBar;
+        _mainCubit.state.heightBottomNavigationBar -
+        16; // 16 là margin bottom
 
     if (newHeight != _yearHeight) {
       setState(() {
@@ -177,18 +178,6 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
           ]);
         }
         return;
-        // Navigator.of(context).push(
-        //   PageRouteBuilder(
-        //     pageBuilder: (context, animation, secondaryAnimation) =>
-        //         CalendarWeekView(weekIndex: bloc.state.week!, year: bloc.state.year, month: bloc.state.month),
-        //     transitionDuration: const Duration(milliseconds: 500),
-        //     reverseTransitionDuration: const Duration(milliseconds: 500),
-        //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        //       return FadeTransition(opacity: animation, child: child);
-        //     },
-        //   ),
-        // );
-        break;
     }
   }
 
@@ -226,8 +215,8 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
 
   @override
   Widget buildPageListeners({required Widget child}) {
-    return BlocProvider<MainCubit>(
-      create: (context) => _mainCubit,
+    return BlocProvider.value(
+      value: _mainCubit,
       child: MultiBlocListener(
         listeners: [
           BlocListener<CalendarCubit, CalendarState>(

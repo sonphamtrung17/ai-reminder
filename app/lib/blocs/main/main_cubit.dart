@@ -7,10 +7,6 @@ import 'main_state.dart';
 class MainCubit extends BaseCubit<MainState> {
   MainCubit() : super(const MainState());
 
-  void setIndexBottomTab(int index) {
-    emit(state.copyWith(indexBottomTab: index));
-  }
-
   void setHeightBottomNavigationBar(double heightBottomNavigationBar) {
     emit(state.copyWith(heightBottomNavigationBar: heightBottomNavigationBar));
   }

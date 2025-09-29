@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../blocs/base/base_screen_state.dart';
+import '../../blocs/login/login_cubit.dart';
 import '../../core.dart';
 
 @RoutePage()
@@ -13,7 +15,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends BaseScreenState<LoginScreen, LoginCubit> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
@@ -40,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildPage(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final screenWidth = size.width;
     final screenHeight = size.height;
@@ -142,7 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 InkWell(
                                   onTap: _isFilled
                                       ? () {
-                                          context.router.replace(const MainScreen());
+
+                                          navigator.replace(const MainScreen());
                                         }
                                       : null,
                                   borderRadius: BorderRadius.circular(screenWidth * 0.03),

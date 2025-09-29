@@ -12,19 +12,14 @@ import '../common/common_cubit.dart';
 import '../common/common_state.dart';
 import 'base_cubit.dart';
 
-abstract class BaseScreenState<T extends StatefulWidget, B extends BaseCubit>
-    extends BaseScreenStateDelegate<T, B>
+abstract class BaseScreenState<T extends StatefulWidget, B extends BaseCubit> extends BaseScreenStateDelegate<T, B>
     with LogMixin {}
 
-abstract class BaseScreenStateDelegate<
-  T extends StatefulWidget,
-  B extends BaseCubit
->
-    extends State<T>
+abstract class BaseScreenStateDelegate<T extends StatefulWidget, B extends BaseCubit> extends State<T>
     implements ExceptionHandlerListener {
-  final navigator = GetIt.instance.get<AppNavigator>();
-  final appCubit = GetIt.instance.get<AppCubit>();
-  final exceptionMessageMapper = const ExceptionMessageMapper();
+  late final navigator = GetIt.instance.get<AppNavigator>();
+  late final appCubit = GetIt.instance.get<AppCubit>();
+  late final exceptionMessageMapper = const ExceptionMessageMapper();
   late final exceptionHandler = ExceptionHandler(
     navigator: navigator,
     listener: this,
@@ -45,17 +40,25 @@ abstract class BaseScreenStateDelegate<
 
   bool get isAppWidget => false;
 
+  /// If true, the bloc will be kept alive when the widget is disposed.
+  /// Dùng trong trường hợp Bloc là Singleton và cần giữ bloc khi màn dispose và có thể mở lại màn
+  bool get isKeepInstanceBloc => false;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => bloc),
-        BlocProvider(create: (_) => commonCubit),
-      ],
+      providers: isKeepInstanceBloc
+          ? [
+              BlocProvider.value(value: bloc),
+              BlocProvider.value(value: commonCubit),
+            ]
+          : [
+              BlocProvider(create: (_) => bloc),
+              BlocProvider(create: (_) => commonCubit),
+            ],
       child: BlocListener<CommonCubit, CommonState>(
         listenWhen: (previous, current) =>
-            previous.appExceptionWrapper != current.appExceptionWrapper &&
-            current.appExceptionWrapper != null,
+            previous.appExceptionWrapper != current.appExceptionWrapper && current.appExceptionWrapper != null,
         listener: (context, state) {
           _handleException(state.appExceptionWrapper!);
         },
@@ -66,8 +69,7 @@ abstract class BaseScreenStateDelegate<
                   children: [
                     buildPage(context),
                     BlocBuilder<CommonCubit, CommonState>(
-                      buildWhen: (previous, current) =>
-                          previous.isLoading != current.isLoading,
+                      buildWhen: (previous, current) => previous.isLoading != current.isLoading,
                       builder: (context, state) => Visibility(
                         visible: state.isLoading,
                         child: buildPageLoading(),

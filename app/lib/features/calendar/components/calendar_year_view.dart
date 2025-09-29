@@ -61,7 +61,7 @@ class _CalendarYearViewState extends State<CalendarYearView> with AutomaticKeepA
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
+                valueColor: AlwaysStoppedAnimation<Color>(context.color.primary),
               ),
             ),
           )

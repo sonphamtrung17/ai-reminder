@@ -17,11 +17,11 @@ abstract class BaseCubit<S extends BaseState> extends BaseCubitDelegate<S> with 
 abstract class BaseCubitDelegate<S extends BaseState> extends Cubit<S> {
   BaseCubitDelegate(super.initialState);
 
-  late final AppNavigator navigator;
-  late final AppCubit appCubit;
-  late final ExceptionHandler exceptionHandler;
-  late final ExceptionMessageMapper exceptionMessageMapper;
-  late final CommonCubit _commonCubit;
+  late AppNavigator navigator;
+  late AppCubit appCubit;
+  late ExceptionHandler exceptionHandler;
+  late ExceptionMessageMapper exceptionMessageMapper;
+  late CommonCubit _commonCubit;
 
   set commonCubit(CommonCubit commonCubit) {
     _commonCubit = commonCubit;

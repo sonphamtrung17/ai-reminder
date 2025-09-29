@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared/shared.dart';
+import 'package:translate/translate.dart';
 
-import '../../navigation/router/app_router.gr.dart';
+import '../../core.dart';
 import 'widgets/cross_fade_text.dart';
 import 'widgets/gooey_indicator.dart';
 
@@ -14,31 +17,33 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  final _appPreferences = GetIt.instance.get<AppPreferences>();
+
   final PageController _controller = PageController(initialPage: 0);
   int _settledPage = 0;
 
   final List<String> backgrounds = [
-    'assets/images/img_intro_1.png',
-    'assets/images/img_intro_2.png',
-    'assets/images/img_intro_3.png',
+    Assets.images.imgIntro1.path,
+    Assets.images.imgIntro2.path,
+    Assets.images.imgIntro3.path,
   ];
 
   final List<String> centerImages = [
-    'assets/images/img_intro_1_center.png',
-    'assets/images/img_intro_2_center.png',
-    'assets/images/img_intro_3_center.png',
+    Assets.images.imgIntro1Center.path,
+    Assets.images.imgIntro2Center.path,
+    Assets.images.imgIntro3Center.path,
   ];
 
   final List<String> titles = [
     'H-AI Reminder',
-    'Nhắc bạn ngày đặc biệt',
+    S.current.nhacBanNgayDacBiet,
     'Chatbot AI',
   ];
 
   final List<String> subtitles = [
-    'Nhắc nhở ngày sinh, ngày kỉ niệm, sự kiện, thông tin khách hàng, và nhiều hơn thế.',
-    'Giúp bạn không quên những ngày kỉ niệm với gia đình, bạn bè, những sự kiện quan trọng của BU.',
-    'Nhắc nhở sự kiện, gợi ý công việc cần chuẩn bị.',
+    S.current.nhacNhoNgaySinh,
+    S.current.giupBanKhongQuen,
+    S.current.nhacNhoSuKien,
   ];
 
   @override
@@ -247,13 +252,13 @@ class _IntroScreenState extends State<IntroScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () => context.router.replace(const LoginScreen()),
-                  child: const Text(
-                    'Đăng nhập',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  onPressed: () {
+                    _appPreferences.saveIsFirsLaunchApp(false);
+                    context.router.replace(const LoginScreen());
+                  },
+                  child: Text(
+                    S.current.dangNhap,
+                    style: context.textStyle.bodyLSemiBold.black(context),
                   ),
                 ),
               ),

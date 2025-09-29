@@ -29,8 +29,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainCubit, MainState>(
-      buildWhen: (pre, cur) =>
-          pre.indexBottomTab != cur.indexBottomTab || pre.heightBottomNavigationBar != cur.heightBottomNavigationBar,
+      buildWhen: (pre, cur) => pre.heightBottomNavigationBar != cur.heightBottomNavigationBar,
       builder: (context, state) {
         return Container(
           height: state.heightBottomNavigationBar,
@@ -48,7 +47,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: BottomTab.values.map((e) {
               final index = BottomTab.values.indexOf(e);
-              final isSelected = index == state.indexBottomTab;
+              final isSelected = index == appNavigator.currentBottomTab;
               return Expanded(
                 child: InkWell(
                   onTap: () => widget.onTap(index),

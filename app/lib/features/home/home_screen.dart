@@ -95,7 +95,7 @@ class _HomeScreenState extends BaseScreenState<HomeScreen, HomeCubit> {
             child: AppButton.icon(
               iconPath: Assets.icons.icHomeAdd,
               onPressed: () {
-                navigator.push(const CreateInterestScreen());
+                navigator.push(const CreateEventScreen());
               },
               padding: const EdgeInsets.all(10),
               iconWidth: 32,
