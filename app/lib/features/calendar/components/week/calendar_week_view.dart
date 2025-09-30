@@ -120,22 +120,16 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
             ),
           ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
           Space.h4(),
-          Hero(
-            tag: 'week_${widget.weekIndex}',
-            child: Material(
-              color: Colors.transparent,
-              child: BlocBuilder<CalendarCubit, CalendarState>(
-                buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
-                bloc: _calendarCubit,
-                builder: (context, state) {
-                  return Row(
-                    children: weekDates.map((date) {
-                      return Expanded(child: _buildCalendarCell(date));
-                    }).toList(),
-                  ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
-                },
-              ),
-            ),
+          BlocBuilder<CalendarCubit, CalendarState>(
+            buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
+            bloc: _calendarCubit,
+            builder: (context, state) {
+              return Row(
+                children: weekDates.map((date) {
+                  return Expanded(child: _buildCalendarCell(date));
+                }).toList(),
+              ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
+            },
           ),
           Center(
             child: Text(

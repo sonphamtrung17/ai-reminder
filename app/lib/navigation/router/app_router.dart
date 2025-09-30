@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../guard/intro_guard.dart';
@@ -33,18 +32,8 @@ class AppRouter extends RootStackRouter {
           maintainState: true,
           children: [
             AutoRoute(page: CalendarScreen.page, initial: true),
-            CustomRoute(
-              page: CalendarMonthView.page,
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-              duration: const Duration(milliseconds: 300),
-              reverseDuration: const Duration(milliseconds: 300),
-            ),
-            CustomRoute(
-              page: CalendarWeekView.page,
-              transitionsBuilder: TransitionsBuilders.fadeIn,
-            ),
+            AutoRoute(page: CalendarMonthView.page),
+            AutoRoute(page: CalendarWeekView.page),
           ],
         ),
         AutoRoute(
