@@ -11,7 +11,6 @@ import '../../blocs/calendar/calendar_state.dart';
 import '../../blocs/main/main_cubit.dart';
 import '../../blocs/main/main_state.dart';
 import '../../navigation/navigation.dart';
-import '../../navigation/router/app_router.gr.dart';
 import '../../resource/resource.dart';
 import '../../theme/theme.dart';
 import 'components/calendar_year_view.dart';
@@ -192,34 +191,37 @@ class _CalendarScreenState extends BaseScreenState<CalendarScreen, CalendarCubit
 
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.color.bgBrand,
-      body: AnimatedBuilder(
-        animation: _scrollController,
-        builder: (context, child) {
-          return CustomScrollView(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverList.builder(
-                itemCount: _endYear - _startYear + 1,
-                itemBuilder: (context, index) {
-                  final year = _startYear + index;
-                  final titleOpacity = _calculateTitleOpacity(year);
-                  return SizedBox(
-                    height: _yearHeight,
-                    child: CalendarYearView(
-                      key: ValueKey('year_$year'),
-                      year: year,
-                      titleOpacity: titleOpacity,
-                      onMonthTap: (month, rect) => _onMonthTap(context, year, month, rect),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: context.color.bgBrand,
+        body: AnimatedBuilder(
+          animation: _scrollController,
+          builder: (context, child) {
+            return CustomScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverList.builder(
+                  itemCount: _endYear - _startYear + 1,
+                  itemBuilder: (context, index) {
+                    final year = _startYear + index;
+                    final titleOpacity = _calculateTitleOpacity(year);
+                    return SizedBox(
+                      height: _yearHeight,
+                      child: CalendarYearView(
+                        key: ValueKey('year_$year'),
+                        year: year,
+                        titleOpacity: titleOpacity,
+                        onMonthTap: (month, rect) => _onMonthTap(context, year, month, rect),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

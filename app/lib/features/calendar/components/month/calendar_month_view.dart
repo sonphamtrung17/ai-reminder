@@ -6,11 +6,8 @@ import 'package:shared/shared.dart';
 
 import '../../../../blocs/calendar/calendar_cubit.dart';
 import '../../../../blocs/calendar/calendar_state.dart';
-import '../../../../components/components.dart';
-import '../../../../resource/resource.dart';
-import '../../../../theme/theme.dart';
+import '../../../../core.dart';
 import '../flying_week_animation.dart';
-import '../week/calendar_week_view.dart';
 import 'calendar_switch_day_view_mode.dart';
 
 @RoutePage()
@@ -25,7 +22,9 @@ class CalendarMonthView extends StatefulWidget {
 }
 
 class _CalendarMonthViewState extends State<CalendarMonthView> {
+  final _appRouter = GetIt.instance.get<AppRouter>();
   final _calendarCubit = GetIt.instance.get<CalendarCubit>();
+
   final Map<int, GlobalKey> _weekKeys = {}; // Keys cho từng tuần
 
   late DateTime currentMonth;
@@ -56,168 +55,138 @@ class _CalendarMonthViewState extends State<CalendarMonthView> {
     ];
   }
 
-  void _onWeekTap(int weekIndex) async {
+  void _onWeekTap(int weekIndex) {
+    // Lấy position của week được tap
+    final sourceKey = _weekKeys[weekIndex];
+    if (sourceKey?.currentContext == null) {
+      return;
+    }
+
+    final sourceRenderBox = sourceKey!.currentContext!.findRenderObject() as RenderBox;
+    final sourcePosition = sourceRenderBox.localToGlobal(Offset.zero);
+    final sourceSize = sourceRenderBox.size;
+    final sourceRect = Rect.fromLTWH(
+      sourcePosition.dx,
+      sourcePosition.dy - 76, // Điều chỉnh vị trí Y để khớp với header
+      sourceSize.width,
+      sourceSize.height,
+    );
+
+    // Destination rect - vị trí mong muốn ở week view (ở đầu màn hình)
+    final statusBarHeight = MediaQuery.of(_appRouter.navigatorKey.currentContext!).viewPadding.top;
+    final destinationRect = Rect.fromLTWH(
+      sourcePosition.dx, // vị trí X giữ nguyên
+      statusBarHeight + 70, // vị trí Y ở week view
+      sourceSize.width,
+      sourceSize.height,
+    );
+
+    // Tạo widget copy cho animation
+    final gridDates = DateTimeUtils.generateDayInMonth(currentMonth);
+    final rowDates = gridDates.skip(weekIndex * 7).take(7).toList();
+
+    final child = SizedBox(
+      child: Material(
+        color: Colors.transparent,
+        child: Row(
+          children: rowDates.map((date) => Expanded(child: _buildCalendarCell(date))).toList(),
+        ),
+      ),
+    );
+
     _calendarCubit.onSetCalendarViewModeWeek(weekIndex, currentMonth.year, currentMonth.month);
 
-    // Lấy position của week được tap
-    // final sourceKey = _weekKeys[weekIndex];
-    // if (sourceKey?.currentContext == null) {
-    //   return;
-    // }
-    //
-    // final sourceRenderBox = sourceKey!.currentContext!.findRenderObject() as RenderBox;
-    // final sourcePosition = sourceRenderBox.localToGlobal(Offset.zero);
-    // final sourceSize = sourceRenderBox.size;
-    // final sourceRect = Rect.fromLTWH(
-    //   sourcePosition.dx,
-    //   sourcePosition.dy,
-    //   sourceSize.width,
-    //   sourceSize.height,
-    // );
-    //
-    // // Destination rect - vị trí mong muốn ở week view (ở đầu màn hình)
-    // final screenWidth = MediaQuery.of(context).size.width;
-    // final destinationRect = Rect.fromLTWH(
-    //   16, // padding left
-    //   50, // vị trí Y ở week view
-    //   screenWidth - 32, // width trừ padding
-    //   60, // height của week row
-    // );
-    //
-    // // Tạo widget copy cho animation
-    // final gridDates = DateTimeUtils.generateDayInMonth(currentMonth);
-    // final rowDates = gridDates.skip(weekIndex * 7).take(7).toList();
-    //
-    // final sourceWidget = Container(
-    //   decoration: BoxDecoration(
-    //     color: Colors.yellow.withOpacity(0.3),
-    //     borderRadius: BorderRadius.circular(8),
-    //   ),
-    //   child: Material(
-    //     color: Colors.transparent,
-    //     child: Row(
-    //       children: rowDates.map((date) => Expanded(child: _buildCalendarCell(date))).toList(),
-    //     ),
-    //   ),
-    // );
-    //
-    // final destinationWidget = Container(
-    //   decoration: BoxDecoration(
-    //     color: Colors.green.withOpacity(0.3),
-    //     borderRadius: BorderRadius.circular(8),
-    //   ),
-    //   child: Material(
-    //     color: Colors.transparent,
-    //     child: Row(
-    //       children: rowDates.map((date) => Expanded(child: _buildCalendarCell(date))).toList(),
-    //     ),
-    //   ),
-    // );
-    //
-    // // Bắt đầu flying animation
-    // await FlyingWeekAnimation.animateWeekTransition(
-    //   context: context,
-    //   sourceWidget: sourceWidget,
-    //   destinationWidget: destinationWidget,
-    //   sourceRect: sourceRect,
-    //   destinationRect: destinationRect,
-    //   duration: const Duration(milliseconds: 1000),
-    //   onComplete: () {
-    //     // Navigate đến week view sau khi animation hoàn thành
-    //     // Navigator.of(context).push(
-    //     //   PageRouteBuilder(
-    //     //     pageBuilder: (context, animation, secondaryAnimation) => CalendarWeekView(
-    //     //       weekIndex: weekIndex,
-    //     //       year: currentMonth.year,
-    //     //       month: currentMonth.month,
-    //     //     ),
-    //     //     transitionDuration: const Duration(milliseconds: 300),
-    //     //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //     //       return FadeTransition(opacity: animation, child: child);
-    //     //     },
-    //     //   ),
-    //     // );
-    //   },
-    // );
+    // Bắt đầu flying animation
+    FlyingWeekAnimation.animateWeekTransition(
+      context: context,
+      child: child,
+      sourceRect: sourceRect,
+      destinationRect: destinationRect,
+      duration: const Duration(milliseconds: 500),
+      onComplete: () {},
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final gridDates = DateTimeUtils.generateDayInMonth(currentMonth);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const CalendarSwitchViewMode(),
-            const Spacer(),
-            AppButton.textIcon(
-              text: 'Đồng bộ',
-              iconPath: Assets.icons.icCalendarSync,
-              backgroundColor: Colors.transparent,
-              textStyle: context.textStyle.bodyMMedium.primary(context),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              spacing: 4,
-              onPressed: () {},
+    return PopScope(
+      canPop: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const CalendarSwitchViewMode(),
+              const Spacer(),
+              AppButton.textIcon(
+                text: 'Đồng bộ',
+                iconPath: Assets.icons.icCalendarSync,
+                backgroundColor: Colors.transparent,
+                textStyle: context.textStyle.bodyMMedium.primary(context),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                spacing: 4,
+                onPressed: () {},
+              ),
+            ],
+          ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
             ),
-          ],
-        ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-          ),
-          child: Row(
-            children: CalendarConstants.weekDays
-                .map(
-                  (day) => Expanded(
-                    child: Center(
-                      child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-        BlocBuilder<CalendarCubit, CalendarState>(
-          bloc: _calendarCubit,
-          buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
-          builder: (context, state) {
-            return Expanded(
-              child: Column(
-                children: List.generate(6, (week) {
-                  final rowDates = gridDates.skip(week * 7).take(7).toList();
-                  return Expanded(
-                    key: _weekKeys[week], // Thêm key để lấy position
-                    child: GestureDetector(
-                      onTap: () => _onWeekTap(week),
-                      behavior: HitTestBehavior.opaque,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-                        ),
-                        child: Row(
-                          children: rowDates.asMap().entries.map((entry) {
-                            final date = entry.value;
-                            return Expanded(
-                              child: InkWell(
-                                onTap: () => _onWeekTap(week),
-                                child: _buildCalendarCell(date),
-                              ),
-                            );
-                          }).toList(),
-                        ),
+            child: Row(
+              children: CalendarConstants.weekDays
+                  .map(
+                    (day) => Expanded(
+                      child: Center(
+                        child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
                       ),
                     ),
-                  );
-                }),
-              ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-            );
-          },
-        ),
-      ],
+                  )
+                  .toList(),
+            ),
+          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+          BlocBuilder<CalendarCubit, CalendarState>(
+            bloc: _calendarCubit,
+            buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
+            builder: (context, state) {
+              return Expanded(
+                child: Column(
+                  children: List.generate(6, (week) {
+                    final rowDates = gridDates.skip(week * 7).take(7).toList();
+                    return Expanded(
+                      key: _weekKeys[week], // Thêm key để lấy position
+                      child: GestureDetector(
+                        onTap: () => _onWeekTap(week),
+                        behavior: HitTestBehavior.opaque,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+                          ),
+                          child: Row(
+                            children: rowDates.asMap().entries.map((entry) {
+                              final date = entry.value;
+                              return Expanded(
+                                child: InkWell(
+                                  onTap: () => _onWeekTap(week),
+                                  child: _buildCalendarCell(date),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 

@@ -32,21 +32,25 @@ class CalendarWeekView extends StatefulWidget {
 class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerProviderStateMixin {
   final _calendarCubit = GetIt.instance.get<CalendarCubit>();
 
-  late DateTime currentMonth;
-  late DateTime selectedDate;
+  late DateTime _currentMonth;
+  late DateTime _selectedDate;
 
   // Sample events data
   final Map<DateTime, List<CalendarEvent>> events = {};
+
+  bool _showCalendar = false;
+  List<DateTime> _weekDates = [];
 
   @override
   void initState() {
     super.initState();
 
     final now = DateTime.now();
-    currentMonth = widget.year != null && widget.month != null
+    _currentMonth = widget.year != null && widget.month != null
         ? DateTime(widget.year!, widget.month!, 1)
         : DateTime(now.year, now.month, 1);
-    selectedDate = now;
+    _weekDates = DateTimeUtils.generateDayInWeek(_currentMonth, widget.weekIndex);
+    _selectedDate = _weekDates.first;
 
     // Fake sample events
     events[DateTime(now.year, now.month, 1)] = [
@@ -77,75 +81,88 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
         DateTime(now.year, now.month, 3, 9, 0),
       ),
     ];
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _showCalendar = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final weekDates = DateTimeUtils.generateDayInWeek(currentMonth, widget.weekIndex);
-
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const CalendarSwitchViewMode(),
-              const Spacer(),
-              AppButton.textIcon(
-                text: 'Đồng bộ',
-                iconPath: Assets.icons.icCalendarSync,
-                backgroundColor: Colors.transparent,
-                textStyle: context.textStyle.bodyMMedium.primary(context),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                spacing: 4,
-                onPressed: () {},
-              ),
-            ],
-          ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
-            ),
-            child: Row(
-              children: CalendarConstants.weekDays
-                  .map(
-                    (day) => Expanded(
-                      child: Center(
-                        child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
-          Space.h4(),
-          BlocBuilder<CalendarCubit, CalendarState>(
-            buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
-            bloc: _calendarCubit,
-            builder: (context, state) {
-              return Row(
-                children: weekDates.map((date) {
-                  return Expanded(child: _buildCalendarCell(date));
-                }).toList(),
-              ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8));
-            },
-          ),
-          Center(
-            child: Text(
-              selectedDate.toVietnameseString,
-              style: context.textStyle.bodyLSemiBold.black(context),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const CalendarSwitchViewMode(),
+                const Spacer(),
+                AppButton.textIcon(
+                  text: 'Đồng bộ',
+                  iconPath: Assets.icons.icCalendarSync,
+                  backgroundColor: Colors.transparent,
+                  textStyle: context.textStyle.bodyMMedium.primary(context),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  spacing: 4,
+                  onPressed: () {},
+                ),
+              ],
             ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
-          ),
-          CalendarWeekEventView(events: events[selectedDate] ?? []),
-        ],
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: context.color.border, width: 1)),
+              ),
+              child: Row(
+                children: CalendarConstants.weekDays
+                    .map(
+                      (day) => Expanded(
+                        child: Center(
+                          child: Text(day, style: context.textStyle.bodyMRegular.gray7(context)),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+            Space.h4(),
+            BlocBuilder<CalendarCubit, CalendarState>(
+              buildWhen: (previous, current) => previous.dayViewMode != current.dayViewMode,
+              bloc: _calendarCubit,
+              builder: (context, state) {
+                return Opacity(
+                  opacity: _showCalendar ? 1 : 0,
+                  child: Row(
+                    children: _weekDates.map((date) {
+                      return Expanded(child: _buildCalendarCell(date));
+                    }).toList(),
+                  ).wrapPadding(const EdgeInsets.symmetric(horizontal: 8)),
+                );
+              },
+            ),
+            Center(
+              child: Text(
+                _selectedDate.toVietnameseString,
+                style: context.textStyle.bodyLSemiBold.black(context),
+              ).wrapPadding(const EdgeInsets.symmetric(vertical: 8)),
+            ),
+            CalendarWeekEventView(events: events[_selectedDate] ?? []),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCalendarCell(DateTime cellDate) {
-    final isCurrentMonth = cellDate.month == currentMonth.month;
-    final isSelected = DateTimeUtils.isSameDate(cellDate, selectedDate);
+    final isCurrentMonth = cellDate.month == _currentMonth.month;
+    final isSelected = DateTimeUtils.isSameDate(cellDate, _selectedDate);
     final isToday = DateTimeUtils.isToday(cellDate);
 
     final showLunar = _calendarCubit.state.dayViewMode != DayViewMode.dl;
@@ -167,7 +184,7 @@ class _CalendarWeekViewState extends State<CalendarWeekView> with SingleTickerPr
         onTap: () {
           if (isCurrentMonth) {
             setState(() {
-              selectedDate = cellDate;
+              _selectedDate = cellDate;
             });
           }
         },
