@@ -66,14 +66,14 @@ melos bootstrap
 goto :eof
 
 :sync
-melos bootstrap
-melos run l10n
-melos run build_runner_all
+call melos bootstrap
+call melos run l10n
+call melos run build_runner_all
 goto :eof
 
 :gen_env
-dart pub get --directory=tools
-dart run tools/lib/main.dart
+call dart pub get --directory=tools
+call dart run tools/lib/main.dart
 goto :eof
 
 :build_runner_all
